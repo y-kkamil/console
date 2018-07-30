@@ -15,7 +15,6 @@ export class LoginErrorComponent implements OnInit {
     const loginError = sessionStorage.getItem('loginError');
     if (loginError) {
       const parsedError = JSON.parse(loginError);
-
       this.errorMsg = parsedError.type;
 
       if (
