@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
 export class LoginErrorComponent implements OnInit {
   constructor(private router: Router) {}
 
-  private errorMsg = '';
-  private possiblyMissingCert = false;
+  public errorMsg = '';
+  public possiblyMissingCert = false;
 
   ngOnInit() {
     const loginError = sessionStorage.getItem('loginError');
