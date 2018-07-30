@@ -1,0 +1,12 @@
+<div class="sf-panel">
+  <div class="sf-panel__content">
+    <div class="row">
+      <div class="tn-form__group col-sm-12 login-error-message">
+        <h3>There was an error while logging in:</h3>
+        <p>{{ errorMsg }}</p>
+        <p *ngIf="possiblyMissingCert">(This might be caused by missing TLS certificate. Visit our <a href="https://github.com/kyma-project/console/tree/master/core#import-the-tls-cerificate">GitHub page</a> for more information.)</p>
+        <button class="sf-button--primary tn-button tn-button--small" [routerLink]="['']">Re-Login</button>
+      </div>
+    </div>
+  </div>
+</div>
