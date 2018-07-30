@@ -36,7 +36,7 @@ import { InstancesContainerComponent } from '../content/environments/instances-c
 import { LogoutComponent } from '../content/logout/logout.component';
 import { IdpPresetsComponent } from '../content/settings/idp-presets/idp-presets.component';
 import { ResourcesComponent } from '../content/environments/configuration/resources/resources.component';
-import {LoginErrorComponent} from "../shared/components/error-placeholder/login-error.component";
+import { LoginErrorComponent } from '../shared/components/error-placeholder/login-error.component';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -178,8 +178,10 @@ const appRoutes: Routes = [
     ]
   },
   {
-   path: 'loginError', component: LoginErrorComponent, pathMatch: 'full'
-}
+    path: 'loginError',
+    component: LoginErrorComponent,
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({

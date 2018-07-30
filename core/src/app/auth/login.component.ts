@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { OAuthService, JwksValidationHandler, OAuthErrorEvent } from 'angular-oauth2-oidc';
+import {
+  OAuthService,
+  JwksValidationHandler,
+  OAuthErrorEvent
+} from 'angular-oauth2-oidc';
 
 import { authConfig } from './auth.config';
 import { LoginService } from './login.service';
@@ -21,7 +25,6 @@ export class LoginComponent {
   }
 
   private configureAuthService() {
-
     this.oauthService.events.subscribe(event => {
       if (event instanceof OAuthErrorEvent) {
         sessionStorage.setItem('loginError', JSON.stringify(event));
