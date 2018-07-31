@@ -40,7 +40,6 @@ const ExtensionsServiceStub = {
 describe('ExternalAppComponent', () => {
   let component: ExternalAppComponent;
   let fixture: ComponentFixture<ExternalAppComponent>;
-  let extensionsService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
