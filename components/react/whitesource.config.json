@@ -1,0 +1,7 @@
+{
+  "apiKey": "b39d1328-52e2-42e3-98f0-932709daf3f0",
+  "productName": "SHC - KYMA 1.0",
+  "devDep": "false",
+  "checkPolicies": true,
+  "failOnError": true
+}
