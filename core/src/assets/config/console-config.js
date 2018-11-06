@@ -224,34 +224,34 @@ LuigiConfig = {
    *  - customIdpProvider (if you provide a class to LuigiConfig.auth.customIdpProvider)
    *
    */
-  auth: {
-    use: 'openIdConnect',
-    openIdConnect: {
-      authority: 'https://dex.' + k8sDomain,
-      client_id: 'console',
-      scope:
-        'audience:server:client_id:kyma-client audience:server:client_id:console openid profile email groups',
-      // redirect_uri: 'http://console-dev.kyma.local:4200',
-      automaticSilentRenew: true,
-      loadUserInfo: false
-    },
+  // auth: {
+  //   use: 'openIdConnect',
+  //   openIdConnect: {
+  //     authority: 'https://dex.' + k8sDomain,
+  //     client_id: 'console',
+  //     scope:
+  //       'audience:server:client_id:kyma-client audience:server:client_id:console openid profile email groups',
+  //     // redirect_uri: 'http://console-dev.kyma.local:4200',
+  //     automaticSilentRenew: true,
+  //     loadUserInfo: false
+  //   },
 
-    events: {
-      onLogout: () => {
-        console.log('onLogout');
-      },
-      onAuthSuccessful: data => {
-        console.log('onAuthSuccessful', data);
-      },
-      onAuthExpired: () => {
-        console.log('onAuthExpired');
-      },
-      // TODO: define luigi-client api for getting errors
-      onAuthError: err => {
-        console.log('authErrorHandler 1', err);
-      }
-    }
-  },
+  //   events: {
+  //     onLogout: () => {
+  //       console.log('onLogout');
+  //     },
+  //     onAuthSuccessful: data => {
+  //       console.log('onAuthSuccessful', data);
+  //     },
+  //     onAuthExpired: () => {
+  //       console.log('onAuthExpired');
+  //     },
+  //     // TODO: define luigi-client api for getting errors
+  //     onAuthError: err => {
+  //       console.log('authErrorHandler 1', err);
+  //     }
+  //   }
+  // },
   navigation: {
     nodes: () => [
       {
