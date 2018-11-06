@@ -233,7 +233,8 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(appRoutes, {
       enableTracing: false,
-      initialNavigation: true
+      initialNavigation: true,
+      useHash: true
     })
   ],
   exports: [RouterModule]
