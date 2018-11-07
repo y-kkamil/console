@@ -16,140 +16,224 @@ function capitalizeFirstLetter(string) {
 }
 
 function getNodes(environment) {
-  reloginIfTokenExpired();
+  var nodes = [
+    {
+      pathSegment: 'details',
+      label: 'Overview',
+      viewUrl: '/consoleapp.html#/home/environments/' + environment + '/details'
+    },
+    {
+      pathSegment: 'service-catalog',
+      label: 'Service Catalog',
+      viewUrl:
+        '/consoleapp.html#/home/environments/' +
+        environment +
+        '/service-catalog'
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'service-instances',
+      label: 'Service Instances',
+      viewUrl:
+        '/consoleapp.html#/home/environments/' + environment + '/instances'
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'apis',
+      label: 'APIs',
+      viewUrl: '/consoleapp.html#/home/environments/' + environment + '/apis'
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'permissions',
+      label: 'Permissions',
+      viewUrl:
+        '/consoleapp.html#/home/environments/' + environment + '/permissions'
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'resources',
+      label: 'Resources',
+      viewUrl:
+        '/consoleapp.html#/home/environments/' + environment + '/resources'
+    },
+    {
+      category: 'Development',
+      pathSegment: 'lambdas',
+      label: 'Lambdas',
+      viewUrl: '/consoleapp.html#/home/environments/' + environment + '/lambdas'
+    },
+    {
+      category: 'Operation',
+      pathSegment: 'deployments',
+      label: 'Deployments',
+      viewUrl:
+        '/consoleapp.html#/home/environments/' + environment + '/deployments'
+    },
+    {
+      category: 'Operation',
+      pathSegment: 'replica-sets',
+      label: 'Replica Sets',
+      viewUrl:
+        '/consoleapp.html#/home/environments/' + environment + '/replicaSets'
+    },
+    {
+      category: 'Operation',
+      pathSegment: 'pods',
+      label: 'Pods',
+      viewUrl: '/consoleapp.html#/home/environments/' + environment + '/pods'
+    },
+    {
+      category: 'Operation',
+      pathSegment: 'services',
+      label: 'Services',
+      viewUrl:
+        '/consoleapp.html#/home/environments/' + environment + '/services'
+    },
+    {
+      category: 'Operation',
+      pathSegment: 'secrets',
+      label: 'Secrets',
+      viewUrl: '/consoleapp.html#/home/environments/' + environment + '/secrets'
+    }
+  ];
 
-  return new Promise(function(resolve, reject) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        var nodes = [
-          {
-            pathSegment: 'details',
-            label: 'Overview',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' + environment + '/details'
-          },
-          {
-            pathSegment: 'service-catalog',
-            label: 'Service Catalog',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' +
-              environment +
-              '/service-catalog'
-          },
-          {
-            category: 'Configuration',
-            pathSegment: 'service-instances',
-            label: 'Service Instances',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' +
-              environment +
-              '/instances'
-          },
-          {
-            category: 'Configuration',
-            pathSegment: 'apis',
-            label: 'APIs',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' + environment + '/apis'
-          },
-          {
-            category: 'Configuration',
-            pathSegment: 'permissions',
-            label: 'Permissions',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' +
-              environment +
-              '/permissions'
-          },
-          {
-            category: 'Configuration',
-            pathSegment: 'resources',
-            label: 'Resources',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' +
-              environment +
-              '/resources'
-          },
-          {
-            category: 'Development',
-            pathSegment: 'lambdas',
-            label: 'Lambdas',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' + environment + '/lambdas'
-          },
-          {
-            category: 'Operation',
-            pathSegment: 'deployments',
-            label: 'Deployments',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' +
-              environment +
-              '/deployments'
-          },
-          {
-            category: 'Operation',
-            pathSegment: 'replica-sets',
-            label: 'Replica Sets',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' +
-              environment +
-              '/replicaSets'
-          },
-          {
-            category: 'Operation',
-            pathSegment: 'pods',
-            label: 'Pods',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' + environment + '/pods'
-          },
-          {
-            category: 'Operation',
-            pathSegment: 'services',
-            label: 'Services',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' + environment + '/services'
-          },
-          {
-            category: 'Operation',
-            pathSegment: 'secrets',
-            label: 'Secrets',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' + environment + '/secrets'
-          }
-        ];
-        JSON.parse(xmlHttp.response).items.forEach(extension => {
-          nodes.push({
-            category: extension.spec.navigation.category,
-            label: extension.spec.displayName,
-            pathSegment: 'extensions',
-            viewUrl:
-              '/consoleapp.html#/home/environments/' +
-              environment +
-              '/extensions/' +
-              extension.metadata.name
-          }); // we need dynamic nodes for it to work :) now only the first extension can be shown
-        });
-        resolve(nodes);
-      } else if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
-        if (xmlHttp.status === 401) {
-          relogin();
-        }
-        reject(xmlHttp.response);
-      }
-    };
+  return nodes;
 
-    // xmlHttp.open(
-    //   'GET',
-    //   k8sServerUrl +
-    //     '/apis/ui.kyma.cx/v1alpha1/namespaces/' +
-    //     environment +
-    //     '/microfrontends',
-    //   true
-    // );
-    // xmlHttp.setRequestHeader('Authorization', token);
-    // xmlHttp.send(null);
-  });
+  //   reloginIfTokenExpired();
+
+  //   return new Promise(function(resolve, reject) {
+  //     var xmlHttp = new XMLHttpRequest();
+  //     xmlHttp.onreadystatechange = function() {
+  //       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+  //         var nodes = [
+  //           {
+  //             pathSegment: 'details',
+  //             label: 'Overview',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' + environment + '/details'
+  //           },
+  //           {
+  //             pathSegment: 'service-catalog',
+  //             label: 'Service Catalog',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' +
+  //               environment +
+  //               '/service-catalog'
+  //           },
+  //           {
+  //             category: 'Configuration',
+  //             pathSegment: 'service-instances',
+  //             label: 'Service Instances',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' +
+  //               environment +
+  //               '/instances'
+  //           },
+  //           {
+  //             category: 'Configuration',
+  //             pathSegment: 'apis',
+  //             label: 'APIs',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' + environment + '/apis'
+  //           },
+  //           {
+  //             category: 'Configuration',
+  //             pathSegment: 'permissions',
+  //             label: 'Permissions',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' +
+  //               environment +
+  //               '/permissions'
+  //           },
+  //           {
+  //             category: 'Configuration',
+  //             pathSegment: 'resources',
+  //             label: 'Resources',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' +
+  //               environment +
+  //               '/resources'
+  //           },
+  //           {
+  //             category: 'Development',
+  //             pathSegment: 'lambdas',
+  //             label: 'Lambdas',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' + environment + '/lambdas'
+  //           },
+  //           {
+  //             category: 'Operation',
+  //             pathSegment: 'deployments',
+  //             label: 'Deployments',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' +
+  //               environment +
+  //               '/deployments'
+  //           },
+  //           {
+  //             category: 'Operation',
+  //             pathSegment: 'replica-sets',
+  //             label: 'Replica Sets',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' +
+  //               environment +
+  //               '/replicaSets'
+  //           },
+  //           {
+  //             category: 'Operation',
+  //             pathSegment: 'pods',
+  //             label: 'Pods',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' + environment + '/pods'
+  //           },
+  //           {
+  //             category: 'Operation',
+  //             pathSegment: 'services',
+  //             label: 'Services',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' + environment + '/services'
+  //           },
+  //           {
+  //             category: 'Operation',
+  //             pathSegment: 'secrets',
+  //             label: 'Secrets',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' + environment + '/secrets'
+  //           }
+  //         ];
+  //         JSON.parse(xmlHttp.response).items.forEach(extension => {
+  //           nodes.push({
+  //             category: extension.spec.navigation.category,
+  //             label: extension.spec.displayName,
+  //             pathSegment: 'extensions',
+  //             viewUrl:
+  //               '/consoleapp.html#/home/environments/' +
+  //               environment +
+  //               '/extensions/' +
+  //               extension.metadata.name
+  //           }); // we need dynamic nodes for it to work :) now only the first extension can be shown
+  //         });
+  //         resolve(nodes);
+  //       } else if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
+  //         if (xmlHttp.status === 401) {
+  //           relogin();
+  //         }
+  //         reject(xmlHttp.response);
+  //       }
+  //     };
+
+  // xmlHttp.open(
+  //   'GET',
+  //   k8sServerUrl +
+  //     '/apis/ui.kyma.cx/v1alpha1/namespaces/' +
+  //     environment +
+  //     '/microfrontends',
+  //   true
+  // );
+  // xmlHttp.setRequestHeader('Authorization', token);
+  // xmlHttp.send(null);
+  // });
 }
 
 function getEnvs() {
