@@ -278,8 +278,7 @@ Luigi.setConfig({
   },
   settings: {
     header: () => ({
-      logo: '/assets/logo.svg',
-      favicon: '/assets/logo.svg'
+      logo: '/assets/logo.svg'
     })
   }
 });
