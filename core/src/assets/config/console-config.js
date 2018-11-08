@@ -275,5 +275,11 @@ Luigi.setConfig({
   routing: {
     nodeParamPrefix: '~',
     useHashRouting: true
+  },
+  settings: {
+    header: () => ({
+      logo: '/assets/logo.svg',
+      favicon: '/assets/logo.svg'
+    })
   }
 });
