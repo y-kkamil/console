@@ -17,10 +17,18 @@ export class AuthGuard implements CanActivateChild {
     requestedState: RouterStateSnapshot
   ) {
     if (!this.oauthService.hasValidIdToken()) {
+      const luigiAuth = JSON.parse(localStorage.getItem('luigi.auth'));
+      sessionStorage.setItem('id_token', luigiAuth.idToken);
+      sessionStorage.setItem('access_token', luigiAuth.accessToken);
+      sessionStorage.setItem('expires_at', luigiAuth.accessTokenExpirationDate);
+    }
+
+    if (!this.oauthService.hasValidIdToken()) {
       sessionStorage.setItem('consoleNavigationPath', requestedState.url);
       this.router.navigate(['']);
       return false;
     }
+
     return true;
   }
 }

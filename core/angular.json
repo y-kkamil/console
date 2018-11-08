@@ -13,7 +13,7 @@
           "options": {
             "preserveSymlinks": true,
             "outputPath": "dist",
-            "index": "src/index.html",
+            "index": "src/consoleapp.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
@@ -24,6 +24,12 @@
               "src/assets",
               "src/favicon.ico",
               "src/version.html",
+              "src/index.html",
+              {
+                "glob": "**",
+                "input": "node_modules/@kyma-project/luigi-core",
+                "output": "luigi-core"
+              },
               {
                 "glob": "**/*",
                 "input": "src/undefined",

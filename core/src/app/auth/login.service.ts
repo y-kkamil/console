@@ -27,7 +27,7 @@ export class LoginService {
         this.router.navigateByUrl(navigationPath);
         this.loggedIn.next(true);
       } else {
-        this.oauthService.initImplicitFlow();
+        // this.oauthService.initImplicitFlow();
       }
     });
   }
