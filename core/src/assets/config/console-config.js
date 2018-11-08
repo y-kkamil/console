@@ -9,12 +9,6 @@ if (localStorage.getItem('luigi.auth')) {
   token = 'Bearer ' + JSON.parse(localStorage.getItem('luigi.auth')).idToken;
 }
 
-var isHashRoute = true;
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 function getNodes(environment) {
   var nodes = [
     {
@@ -23,19 +17,26 @@ function getNodes(environment) {
       viewUrl: '/consoleapp.html#/home/environments/' + environment + '/details'
     },
     {
+      category: 'Service Catalog',
       pathSegment: 'service-catalog',
-      label: 'Service Catalog',
+      label: 'Catalog',
       viewUrl:
         '/consoleapp.html#/home/environments/' +
         environment +
         '/service-catalog'
     },
     {
-      category: 'Configuration',
-      pathSegment: 'service-instances',
-      label: 'Service Instances',
+      category: 'Service Catalog',
+      pathSegment: 'instances',
+      label: 'Instances',
       viewUrl:
         '/consoleapp.html#/home/environments/' + environment + '/instances'
+    },
+    {
+      category: 'Service Catalog',
+      pathSegment: 'brokers',
+      label: 'Brokers',
+      viewUrl: '/consoleapp.html#/home/environments/' + environment + '/brokers'
     },
     {
       category: 'Configuration',
@@ -56,6 +57,13 @@ function getNodes(environment) {
       label: 'Resources',
       viewUrl:
         '/consoleapp.html#/home/environments/' + environment + '/resources'
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'config-maps',
+      label: 'Config maps',
+      viewUrl:
+        '/consoleapp.html#/home/environments/' + environment + '/configmaps'
     },
     {
       category: 'Development',
@@ -99,141 +107,6 @@ function getNodes(environment) {
   ];
 
   return nodes;
-
-  //   reloginIfTokenExpired();
-
-  //   return new Promise(function(resolve, reject) {
-  //     var xmlHttp = new XMLHttpRequest();
-  //     xmlHttp.onreadystatechange = function() {
-  //       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-  //         var nodes = [
-  //           {
-  //             pathSegment: 'details',
-  //             label: 'Overview',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' + environment + '/details'
-  //           },
-  //           {
-  //             pathSegment: 'service-catalog',
-  //             label: 'Service Catalog',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' +
-  //               environment +
-  //               '/service-catalog'
-  //           },
-  //           {
-  //             category: 'Configuration',
-  //             pathSegment: 'service-instances',
-  //             label: 'Service Instances',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' +
-  //               environment +
-  //               '/instances'
-  //           },
-  //           {
-  //             category: 'Configuration',
-  //             pathSegment: 'apis',
-  //             label: 'APIs',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' + environment + '/apis'
-  //           },
-  //           {
-  //             category: 'Configuration',
-  //             pathSegment: 'permissions',
-  //             label: 'Permissions',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' +
-  //               environment +
-  //               '/permissions'
-  //           },
-  //           {
-  //             category: 'Configuration',
-  //             pathSegment: 'resources',
-  //             label: 'Resources',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' +
-  //               environment +
-  //               '/resources'
-  //           },
-  //           {
-  //             category: 'Development',
-  //             pathSegment: 'lambdas',
-  //             label: 'Lambdas',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' + environment + '/lambdas'
-  //           },
-  //           {
-  //             category: 'Operation',
-  //             pathSegment: 'deployments',
-  //             label: 'Deployments',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' +
-  //               environment +
-  //               '/deployments'
-  //           },
-  //           {
-  //             category: 'Operation',
-  //             pathSegment: 'replica-sets',
-  //             label: 'Replica Sets',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' +
-  //               environment +
-  //               '/replicaSets'
-  //           },
-  //           {
-  //             category: 'Operation',
-  //             pathSegment: 'pods',
-  //             label: 'Pods',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' + environment + '/pods'
-  //           },
-  //           {
-  //             category: 'Operation',
-  //             pathSegment: 'services',
-  //             label: 'Services',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' + environment + '/services'
-  //           },
-  //           {
-  //             category: 'Operation',
-  //             pathSegment: 'secrets',
-  //             label: 'Secrets',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' + environment + '/secrets'
-  //           }
-  //         ];
-  //         JSON.parse(xmlHttp.response).items.forEach(extension => {
-  //           nodes.push({
-  //             category: extension.spec.navigation.category,
-  //             label: extension.spec.displayName,
-  //             pathSegment: 'extensions',
-  //             viewUrl:
-  //               '/consoleapp.html#/home/environments/' +
-  //               environment +
-  //               '/extensions/' +
-  //               extension.metadata.name
-  //           }); // we need dynamic nodes for it to work :) now only the first extension can be shown
-  //         });
-  //         resolve(nodes);
-  //       } else if (xmlHttp.readyState == 4 && xmlHttp.status != 200) {
-  //         if (xmlHttp.status === 401) {
-  //           relogin();
-  //         }
-  //         reject(xmlHttp.response);
-  //       }
-  //     };
-
-  // xmlHttp.open(
-  //   'GET',
-  //   k8sServerUrl +
-  //     '/apis/ui.kyma.cx/v1alpha1/namespaces/' +
-  //     environment +
-  //     '/microfrontends',
-  //   true
-  // );
-  // xmlHttp.setRequestHeader('Authorization', token);
-  // xmlHttp.send(null);
-  // });
 }
 
 function getEnvs() {
@@ -255,8 +128,6 @@ function getEnvs() {
           envs.push({
             // has to be visible for all views exept 'settings'
             category: 'Environments',
-            displayAs: 'dropdown', // TODO: implementation is not super nice (checking first child for displayAs in template), and only with categories
-            keepSticky: true, // TODO: not implemented, used to keep this navigation category in the child views
             label: envName,
             pathSegment: envName,
             context: {
@@ -297,17 +168,7 @@ function reloginIfTokenExpired() {
     relogin();
   }
 }
-LuigiConfig = {
-  /**
-   * auth identity provider settings
-   *
-   * use: enum of already implemented providers:
-   *  - openIdConnect (eg. Kyma/DEX)
-   *  - oAuth2ImplicitGrant (YaaS)
-   * custom:
-   *  - customIdpProvider (if you provide a class to LuigiConfig.auth.customIdpProvider)
-   *
-   */
+Luigi.setConfig({
   auth: {
     use: 'openIdConnect',
     openIdConnect: {
@@ -315,7 +176,8 @@ LuigiConfig = {
       client_id: 'console',
       scope:
         'audience:server:client_id:kyma-client audience:server:client_id:console openid profile email groups',
-      // redirect_uri: 'http://console-dev.kyma.local:4200',
+      redirect_uri: 'http://console-dev.kyma.local:4200',
+      logoutUrl: 'http://console-dev.kyma.local:4200',
       automaticSilentRenew: true,
       loadUserInfo: false
     },
@@ -339,7 +201,6 @@ LuigiConfig = {
   navigation: {
     nodes: () => [
       {
-        topnavChildsAsDropdown: true,
         pathSegment: 'environments',
         label: 'Overview',
         defaultPathSegment: 'workspace',
@@ -349,9 +210,8 @@ LuigiConfig = {
         children: getEnvs
       },
       {
-        hideFromNav: true,
         pathSegment: 'home',
-        label: 'Home',
+        label: 'Settings',
         context: {
           idToken: token
         },
@@ -391,26 +251,29 @@ LuigiConfig = {
                 viewUrl: '/consoleapp.html#/home/settings/globalPermissions'
               },
               {
-                pathSegment: 'diagnostics',
                 label: 'Stats & Metrics',
                 category: 'Diagnostics',
-                viewUrl: 'https://grafana.' + k8sDomain
+                externalLink: {
+                  url: 'https://grafana.' + k8sDomain,
+                  sameWindow: false
+                }
+              },
+              {
+                label: 'Tracing',
+                category: 'Diagnostics',
+                externalLink: {
+                  url: 'https://jaeger.' + k8sDomain,
+                  sameWindow: false
+                }
               }
             ]
           }
         ]
       }
-    ],
-    hideNav: false
+    ]
   },
   routing: {
     nodeParamPrefix: '~',
     useHashRouting: true
   }
-};
-
-// Resilience for newer Luigi versions
-// Luigi greater than 2.1.0 has new config API
-if (window.Luigi && Luigi.setConfig) {
-  Luigi.setConfig(LuigiConfig);
-}
+});
