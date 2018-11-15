@@ -18,12 +18,24 @@ function getNodes(environment) {
     },
     {
       category: 'Service Catalog',
+      navigationContext: 'service-catalog',
       pathSegment: 'service-catalog',
       label: 'Catalog',
-      viewUrl:
-        '/consoleapp.html#/home/environments/' +
-        environment +
-        '/service-catalog'
+      viewUrl: clusterConfig.serviceCatalogModuleUrl,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':serviceId',
+              viewUrl: `${
+                clusterConfig.serviceCatalogModuleUrl
+              }/details/:serviceId`
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Service Catalog',
@@ -128,6 +140,7 @@ function getEnvs() {
           envs.push({
             // has to be visible for all views exept 'settings'
             category: 'Environments',
+            navigationContext: 'environments',
             label: envName,
             pathSegment: envName,
             context: {

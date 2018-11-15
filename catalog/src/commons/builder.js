@@ -13,11 +13,9 @@ class Builder {
       }
       const timeout = setTimeout(resolve, 1000);
       window.addEventListener('message', e => {
-        if (!e.data || e.data[0] !== 'init') return;
-        const data = e.data[1];
-        this.currentEnvironmentId = data.currentEnvironmentId;
-        this.token = data.idToken;
-        this.sessionId = data.sessionId;
+        if (!e.data || !e.data.context || e.data.msg !== 'luigi.init') return;
+        this.currentEnvironmentId = e.data.context.environmentId;
+        this.token = e.data.context.idToken;
         clearTimeout(timeout);
         resolve();
       });
@@ -28,7 +26,7 @@ class Builder {
     if (!this.token) {
       return null;
     }
-    return `Bearer ${this.token}`;
+    return this.token;
   }
 
   getCurrentEnvironmentId() {
