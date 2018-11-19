@@ -1,7 +1,7 @@
 let k8sDomain = 'kyma.local';
 var clusterConfig = window['clusterConfig'];
 
-let serviceCatalogModuleUrl = 'http://localhost:8000';
+let serviceCatalogModuleUrl = `https://catalog.${k8sDomain}`;
 
 if (clusterConfig && clusterConfig['domain']) {
   k8sDomain = clusterConfig['domain'];
