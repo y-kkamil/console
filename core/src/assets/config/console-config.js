@@ -1,13 +1,23 @@
 let k8sDomain = 'kyma.local';
 var clusterConfig = window['clusterConfig'];
 
-let serviceCatalogModuleUrl = `https://catalog.${k8sDomain}`;
-
 if (clusterConfig && clusterConfig['domain']) {
   k8sDomain = clusterConfig['domain'];
-  serviceCatalogModuleUrl = `https://catalog.${k8sDomain}`;
 }
 var k8sServerUrl = `https://apiserver.${k8sDomain}`;
+
+const config = {
+  serviceCatalogModuleUrl: `https://catalog.${k8sDomain}`
+};
+
+if (clusterConfig) {
+  for (const propertyName in config) {
+    if (clusterConfig.hasOwnProperty(propertyName)) {
+      config[propertyName] = clusterConfig[propertyName];
+    }
+  }
+}
+
 var token;
 if (localStorage.getItem('luigi.auth')) {
   token = 'Bearer ' + JSON.parse(localStorage.getItem('luigi.auth')).idToken;
@@ -25,7 +35,7 @@ function getNodes(environment) {
       navigationContext: 'service-catalog',
       pathSegment: 'service-catalog',
       label: 'Catalog',
-      viewUrl: serviceCatalogModuleUrl,
+      viewUrl: config.serviceCatalogModuleUrl,
       keepSelectedForChildren: true,
       children: [
         {
@@ -33,7 +43,7 @@ function getNodes(environment) {
           children: [
             {
               pathSegment: ':serviceId',
-              viewUrl: `${serviceCatalogModuleUrl}/details/:serviceId`
+              viewUrl: `${config.serviceCatalogModuleUrl}/details/:serviceId`
             }
           ]
         }
