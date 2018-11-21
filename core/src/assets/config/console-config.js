@@ -1,17 +1,14 @@
-let k8sDomain = 'kyma.local';
 var clusterConfig = window['clusterConfig'];
 
-if (clusterConfig && clusterConfig['domain']) {
-  k8sDomain = clusterConfig['domain'];
-}
+var k8sDomain = (clusterConfig && clusterConfig['domain']) || 'kyma.local';
 var k8sServerUrl = `https://apiserver.${k8sDomain}`;
 
-const config = {
+var config = {
   serviceCatalogModuleUrl: `https://catalog.${k8sDomain}`
 };
 
 if (clusterConfig) {
-  for (const propertyName in config) {
+  for (var propertyName in config) {
     if (clusterConfig.hasOwnProperty(propertyName)) {
       config[propertyName] = clusterConfig[propertyName];
     }
