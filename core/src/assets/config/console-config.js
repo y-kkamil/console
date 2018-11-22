@@ -1,10 +1,10 @@
 var clusterConfig = window['clusterConfig'];
 
 var k8sDomain = (clusterConfig && clusterConfig['domain']) || 'kyma.local';
-var k8sServerUrl = `https://apiserver.${k8sDomain}`;
+var k8sServerUrl = 'https://apiserver.' + k8sDomain;
 
 var config = {
-  serviceCatalogModuleUrl: `https://catalog.${k8sDomain}`
+  serviceCatalogModuleUrl: 'https://catalog.' + k8sDomain
 };
 
 if (clusterConfig) {
@@ -40,7 +40,7 @@ function getNodes(environment) {
           children: [
             {
               pathSegment: ':serviceId',
-              viewUrl: `${config.serviceCatalogModuleUrl}/details/:serviceId`
+              viewUrl: config.serviceCatalogModuleUrl + '/details/:serviceId'
             }
           ]
         }
