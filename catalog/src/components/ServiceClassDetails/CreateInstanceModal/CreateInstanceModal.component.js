@@ -209,6 +209,8 @@ class CreateInstanceModal extends React.Component {
     const instanceCreateParameterSchema =
       (schema && schema.instanceCreateParameterSchema) || null;
 
+    const instanceCreateParameterSchemaExists = instanceCreateParameterSchema && (instanceCreateParameterSchema.$ref || instanceCreateParameterSchema.properties);
+
     const disabled = !firstStepFilled;
 
     const firstStepData = {
@@ -231,15 +233,14 @@ class CreateInstanceModal extends React.Component {
           serviceClass={serviceClass}
           callback={this.callback}
         />
-        {!instanceCreateParameterSchema ||
-        (instanceCreateParameterSchema &&
-          !instanceCreateParameterSchema.properties) ? null : (
+        {instanceCreateParameterSchemaExists && (
           <div>
             <Separator margin="16px -16px" />
             <SchemaData
               data={SecondStepData}
               instanceCreateParameterSchema={instanceCreateParameterSchema}
               onSubmitSchemaForm={this.onSubmitSchemaForm}
+              planName={schema.displayName}
               callback={this.callback}
             >
               {/* Styled components don't work here */}
