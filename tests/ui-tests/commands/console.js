@@ -5,15 +5,39 @@ import address from '../utils/address';
 async function _loginViaDex(page, config) {
   const loginButtonSelector = '.dex-btn';
   console.log(`Trying to log in ${config.login} via dex`);
-  await page.reload({ waitUntil: 'networkidle0' });
-  await page.type('#login', config.login);
-  await page.type('#password', config.password);
-  return await page.click(loginButtonSelector);
+  try {
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.waitForSelector('#login');
+    await page.type('#login', config.login);
+    await page.waitForSelector('#password');
+    await page.type('#password', config.password);
+    await page.waitForSelector(loginButtonSelector);
+    await page.click(loginButtonSelector);
+  } catch (err) {
+    throw new Error(`Couldn't log in`, err);
+  }
 }
 
 async function login(page, config) {
   await _loginViaDex(page, config);
-  return await page.waitForSelector('.sf-header');
+  const headerSelector = '.sf-header';
+  try {
+    await page.waitForSelector(headerSelector);
+  } catch (err) {
+    console.error(err);
+    console.log('Trying to obtain error message');
+    await obtainLoginErrorMessage();
+  }
+
+  async function obtainLoginErrorMessage() {
+    await page.waitForSelector('#login-error');
+    const loginError = await page.evaluate(
+      () => document.querySelector('#login-error').textContent
+    );
+    throw new Error(
+      `Page returned following error message: ${loginError.trim()}`
+    );
+  }
 }
 
 async function getFrame(page) {
@@ -126,9 +150,23 @@ async function createRemoteEnvironment(page, name) {
   await page.waitForSelector(createEnvModal, { hidden: true });
 }
 
+async function getRemoteEnvironmentsAfterDelete(
+  page,
+  initialRemoteEnvironments
+) {
+  await page.reload({ waitUntil: 'networkidle0' });
+  const remoteEnvironments = await getRemoteEnvironments(page);
+  if (initialRemoteEnvironments > remoteEnvironments) {
+    console.log('Remote environments was updated');
+    return remoteEnvironments;
+  }
+  throw new Error(`Remote environments was not updated`);
+}
+
 async function deleteRemoteEnvironment(page, name) {
   const remoteEnvironmentsSelector = '.row.sf-list__body';
   const modalSelector = '.sf-modal';
+  await page.waitForSelector(remoteEnvironmentsSelector);
   await page.$$eval(
     remoteEnvironmentsSelector,
     (item, name) => {
@@ -157,6 +195,7 @@ module.exports = {
   getEnvironments,
   createEnvironment,
   getRemoteEnvironments,
+  getRemoteEnvironmentsAfterDelete,
   createRemoteEnvironment,
   deleteRemoteEnvironment
 };
