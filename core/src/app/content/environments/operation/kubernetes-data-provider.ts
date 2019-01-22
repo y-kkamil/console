@@ -106,9 +106,7 @@ export class KubernetesDataProvider<S extends any, T extends any>
   }
 
   extractResourcesList(res) {
-    return this.dashboardApiResource
-      ? res[this.dashboardApiResource]
-      : res.items;
+    return res.items;
   }
 
   selectActiveEnvironments(item) {
