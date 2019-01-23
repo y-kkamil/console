@@ -1,6 +1,6 @@
 <div class="row sf-list__body" [ngClass]="{'sf-list__disabled': disabled === true}">
   <div class="col-2 sf-list__body--primary">
-    <a (click)="navigateToDetails(entry.objectMeta.name)">{{ entry.metadata.name }}</a>
+    <a (click)="navigateToDetails(entry.metadata.name)">{{ entry.metadata.name }}</a>
   </div>
   <div class="col-1 col-lg-1">{{ entry.spec.clusterIP }}</div>
   <div class="col-3">

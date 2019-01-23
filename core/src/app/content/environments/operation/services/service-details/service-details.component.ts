@@ -42,9 +42,9 @@ export class ServiceDetailsComponent implements OnInit, OnDestroy {
         this.route.params.subscribe(params => {
           this.serviceName = params['name'];
 
-          this.serviceDetailsUrl = `${AppConfig.k8sDashboardApiUrl}service/${
+          this.serviceDetailsUrl = `${AppConfig.k8sApiServerUrl}namespaces/${
             this.currentEnvironmentId
-          }/${this.serviceName}`;
+          }/services/`;
 
           this.serviceDetailsToEditUrl = `${
             AppConfig.k8sApiServerUrl
