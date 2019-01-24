@@ -9,7 +9,7 @@ describe('ReplicaSetsEntryRendererComponent', () => {
   let component: ReplicaSetsEntryRendererComponent;
   let fixture: ComponentFixture<ReplicaSetsEntryRendererComponent>;
   let componentCommunicationService: ComponentCommunicationService;
-
+  //spec.template.spec.containers
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [AppModule],
@@ -19,13 +19,22 @@ describe('ReplicaSetsEntryRendererComponent', () => {
           {
             provide: 'entry',
             useValue: {
-              objectMeta: {
-                name: 'name'
+              metadata: {
+                name: 'name',
+                labels: []
               },
               pods: {
                 warnings: [],
                 pending: []
-              }
+              },
+              spec: {
+                template: {
+                  spec: {
+                    containers: []
+                  }
+                }
+              },
+              status: {}
             }
           }
         ],
@@ -46,11 +55,11 @@ describe('ReplicaSetsEntryRendererComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it("should disable the replica set if 'disable' event with rigth data has been sent", async done => {
+  it("should disable the replica set if 'disable' event with right data has been sent", async done => {
     fixture.detectChanges();
     const subject = new Subject();
     const entry = {
-      objectMeta: {
+      metadata: {
         name: 'name'
       },
       disabled: true

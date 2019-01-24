@@ -28,7 +28,7 @@ export class ReplicaSetsEntryRendererComponent
         const event: any = e;
         if (
           'disable' === event.type &&
-          this.entry.objectMeta.name === event.entry.objectMeta.name
+          this.entry.metadata.name === event.entry.metadata.name
         ) {
           this.disabled = event.entry.disabled;
         }
