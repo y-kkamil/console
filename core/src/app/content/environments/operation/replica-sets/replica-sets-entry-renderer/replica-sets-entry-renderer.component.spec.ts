@@ -84,7 +84,7 @@ describe('ReplicaSetsEntryRendererComponent', () => {
     fixture.detectChanges();
     const subject = new Subject();
     const entry = {
-      objectMeta: {
+      metadata: {
         name: 'name2'
       },
       disabled: true
@@ -109,7 +109,7 @@ describe('ReplicaSetsEntryRendererComponent', () => {
     fixture.detectChanges();
     const subject = new Subject();
     const entry = {
-      objectMeta: {
+      metadata: {
         name: 'name'
       },
       disabled: false
