@@ -4,13 +4,13 @@
   </div>
   <div class="col-1 col-lg-1">{{ entry.spec.clusterIP }}</div>
   <div class="col-3">
-    <span *ngIf="entry.internalEndpoint">
-      <span *ngFor="let port of entry.ports">
-        <span>{{ entry.internalEndpoint.host }}:{{ port.port }} {{ port.protocol }}</span> <br>
-        <span>{{ entry.internalEndpoint.host }}:{{ port.nodePort }} {{ port.protocol }}</span> <br>
+    <span *ngIf="entry.spec.ports">
+      <span *ngFor="let port of entry.spec.ports">
+        <span>{{ entry.metadata.name }}.{{ entry.metadata.namespace }}:{{ port.port }} {{ port.protocol }}</span> <br>
+        <span>{{ entry.metadata.name }}.{{ entry.metadata.namespace }}:{{ port.nodePort || 0 }} {{ port.protocol }}</span> <br>
       </span>
     </span>
-    <span *ngIf="!entry.internalEndpoint">-</span>
+    <span *ngIf="!entry.spec.ports">-</span>
   </div>
   <div class="col-1">{{ entry.metadata.creationTimestamp | timeAgo }}</div>
   <div class="col-2 sf-list__label-column">
