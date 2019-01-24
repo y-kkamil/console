@@ -22,8 +22,7 @@ export class KubernetesDataProvider<S extends any, T extends any>
   constructor(
     private resourceUrl: string,
     private dataConverter: DataConverter<S, T>,
-    private http: HttpClient,
-    private dashboardApiResource?: string
+    private http: HttpClient
   ) {}
 
   getData(
