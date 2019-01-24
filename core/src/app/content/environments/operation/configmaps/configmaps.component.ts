@@ -9,7 +9,7 @@ import { KubernetesDataProvider } from '../kubernetes-data-provider';
 import { ComponentCommunicationService } from '../../../../shared/services/component-communication.service';
 import { ConfigMapsEntryRendererComponent } from './configmaps-entry-renderer/configmaps-entry-renderer.component';
 import { ConfigMapsHeaderRendererComponent } from './configmaps-header-renderer/configmaps-header-renderer.component';
-import { ConfigMap, IConfigMap } from 'shared/datamodel/k8s/configmaps';
+import { ConfigMap, IConfigMap } from 'shared/datamodel/k8s/configmap';
 
 @Component({
   templateUrl: '../kubernetes-element-list.component.html',

@@ -10,7 +10,7 @@ import { ComponentCommunicationService } from '../../../../shared/services/compo
 import { DataConverter } from '@kyma-project/y-generic-list';
 import { Subscription } from 'rxjs';
 import LuigiClient from '@kyma-project/luigi-client';
-import { ISecret, Secret } from 'shared/datamodel/k8s/secrets';
+import { ISecret, Secret } from 'shared/datamodel/k8s/secret';
 
 @Component({
   selector: 'app-secrets',

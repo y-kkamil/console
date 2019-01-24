@@ -9,7 +9,7 @@ import { AbstractKubernetesElementListComponent } from '../abstract-kubernetes-e
 import { ComponentCommunicationService } from 'shared/services/component-communication.service';
 import { DataConverter } from '@kyma-project/y-generic-list';
 import { Subscription } from 'rxjs';
-import { IReplicaSets, ReplicaSets } from 'shared/datamodel/k8s/replica-sets';
+import { IReplicaSets, ReplicaSet } from 'shared/datamodel/k8s/replica-set';
 
 @Component({
   selector: 'app-replica-sets',
@@ -34,9 +34,9 @@ export class ReplicaSetsComponent extends AbstractKubernetesElementListComponent
     changeDetector: ChangeDetectorRef
   ) {
     super(currentEnvironmentService, changeDetector, http, commService);
-    const converter: DataConverter<IReplicaSets, ReplicaSets> = {
+    const converter: DataConverter<IReplicaSets, ReplicaSet> = {
       convert(entry: IReplicaSets) {
-        return new ReplicaSets(entry);
+        return new ReplicaSet(entry);
       }
     };
 

@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { Pod } from '../../../../../shared/datamodel/k8s/pods';
+import { Pod } from '../../../../../shared/datamodel/k8s/pod';
 import { AbstractKubernetesEntryRendererComponent } from '../../abstract-kubernetes-entry-renderer.component';
 import { Subscription } from 'rxjs';
 import { ComponentCommunicationService } from '../../../../../shared/services/component-communication.service';
@@ -46,7 +46,7 @@ export class PodsEntryRendererComponent
 
   getRestartCount(containerStatuses) {
     return containerStatuses.reduce(
-      (prev, current) => prev + current.restartCount,
+      (prev, curr) => prev + curr.restartCount,
       0
     );
   }

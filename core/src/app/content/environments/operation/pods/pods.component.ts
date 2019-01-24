@@ -9,7 +9,7 @@ import { PodsEntryRendererComponent } from './pods-entry-renderer/pods-entry-ren
 import { ComponentCommunicationService } from 'shared/services/component-communication.service';
 import { DataConverter } from '@kyma-project/y-generic-list';
 import { Observable, Subscription } from 'rxjs';
-import { IPod, Pod } from 'shared/datamodel/k8s/pods';
+import { IPod, Pod } from 'shared/datamodel/k8s/pod';
 
 @Component({
   templateUrl: '../kubernetes-element-list.component.html',
