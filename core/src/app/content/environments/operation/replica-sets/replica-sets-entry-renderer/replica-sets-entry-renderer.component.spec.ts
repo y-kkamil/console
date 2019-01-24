@@ -9,7 +9,7 @@ describe('ReplicaSetsEntryRendererComponent', () => {
   let component: ReplicaSetsEntryRendererComponent;
   let fixture: ComponentFixture<ReplicaSetsEntryRendererComponent>;
   let componentCommunicationService: ComponentCommunicationService;
-  //spec.template.spec.containers
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [AppModule],
