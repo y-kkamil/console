@@ -36,7 +36,6 @@ export class PlainTableComponent extends PlainListComponent {
         this.headerRenderer,
       );
       const hostTag = document.createElement('div');
-      // sf-list__head class not properly applied on dynamically injected element
       hostTag.setAttribute('style', 'text-align:left');
       const component = componentFactory.create(injector, [], hostTag);
       this.headerViewContainer.clear();
@@ -52,7 +51,6 @@ export class PlainTableComponent extends PlainListComponent {
         this.footerRenderer,
       );
       const hostTag = document.createElement('div');
-      hostTag.setAttribute('class', 'sf-list__foot');
       const component = componentFactory.create(injector, [], hostTag);
       this.footerViewContainer.clear();
       this.footerViewContainer.insert(component.hostView);
