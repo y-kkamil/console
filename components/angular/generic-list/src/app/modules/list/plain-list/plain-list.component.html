@@ -1,4 +1,7 @@
-<div [hidden]="loading || errorMessage || !data || data.length === 0" class="row">
+<div
+  class="fd-panel-grid"
+  [hidden]="loading || errorMessage || !data || data.length === 0"
+>
   <ng-template #entries></ng-template>
 </div>
 
@@ -7,4 +10,6 @@
 <p *ngIf="!loading && !errorMessage && (!data || data.length === 0)">
   <ng-content select="[empty-list-placeholder]"></ng-content>
 </p>
-<p *ngIf="!loading && errorMessage" style="color:red">{{ errorMessage }}</p>
+<p *ngIf="!loading && errorMessage" class="fd-has-color-status-3">
+  {{ errorMessage }}
+</p>

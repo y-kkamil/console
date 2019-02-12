@@ -20,7 +20,11 @@ export class AppComponent {
 
   dummyDataProvider = new ArrayDataProvider([
     { id: '1', name: 'one' },
-    { id: '2', name: 'two' },
+    {
+      id: '2',
+      name: 'two (with an error)',
+      error: `'Some days are like this error. Stupid and useless in context of your lifeline' ~ dr Masuko Opatoluchi`,
+    },
     { id: '3', name: 'threeee' },
     { id: '4', name: 'four' },
     { id: '5', name: 'five' },

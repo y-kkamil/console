@@ -1,12 +1,12 @@
-<div [hidden]="loading || errorMessage || !data || data.length === 0">
+<table class="fd-table" [hidden]="loading || errorMessage || !data || data.length === 0">
   <ng-template #header></ng-template>
-  <ng-template class="container" #entries></ng-template>
+  <ng-template #entries></ng-template>
   <ng-template #footer></ng-template>
-</div>
+</table>
 
 <fd-loading-spinner [loading]="loading"></fd-loading-spinner>
 
 <p *ngIf="!loading && !errorMessage && (!data || data.length === 0)">
   <ng-content select="[empty-list-placeholder]"></ng-content>
 </p>
-<p *ngIf="!loading && errorMessage" style="color:red">{{ errorMessage }}</p>
+<p *ngIf="!loading && errorMessage" class="fd-has-color-status-3">{{ errorMessage }}</p>
