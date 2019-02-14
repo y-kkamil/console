@@ -123,43 +123,6 @@ button {
   }
 }
 
-input[type='date'],
-input[type='email'],
-input[type='number'],
-input[type='password'],
-input[type='search'],
-input[type='tel'],
-input[type='text'],
-input[type='url'],
-textarea {
-  height: 36px;
-  border-radius: $sf-border-radius;
-  padding-left: 8px;
-  padding-right: 8px;
-  border-color: $sf-base-color-grey;
-
-  &:focus {
-    border-color: $sf-base-color-blue;
-  }
-}
-
-input[type='checkbox'],
-input[type='radio'] {
-  &:checked {
-    border-color: $sf-base-color-blue;
-    background-color: $sf-base-color-blue;
-  }
-}
-
-.tn-form__label,
-.tn-form__legend {
-  margin-bottom: 6px;
-}
-
-input[type='checkbox'] {
-  border-radius: $sf-border-radius;
-}
-
 .actions-icon {
   padding: 0;
   text-align: center;

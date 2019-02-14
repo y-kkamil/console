@@ -1,9 +1,10 @@
 import { RemoteEnvironmentBindingService } from './../remote-environment-binding-service';
 import { ComponentCommunicationService } from './../../../../../shared/services/component-communication.service';
 import { EnvironmentsService } from '../../../../environments/services/environments.service';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RemoteEnvironmentsService } from './../../services/remote-environments.service';
+import { ModalService, ModalComponent } from 'fundamental-ngx';
 
 import * as _ from 'lodash';
 import { forkJoin } from 'rxjs';
@@ -14,6 +15,8 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./edit-binding-modal.component.scss']
 })
 export class EditBindingsModalComponent {
+  @ViewChild('editBindingModal') editBindingModal: ModalComponent;
+
   public environments = [];
   private environmentsService: EnvironmentsService;
   public remoteEnv: any;
@@ -29,7 +32,8 @@ export class EditBindingsModalComponent {
     private remoteEnvironmentService: RemoteEnvironmentsService,
     private route: ActivatedRoute,
     private remoteEnvironmentBindingService: RemoteEnvironmentBindingService,
-    private communication: ComponentCommunicationService
+    private communication: ComponentCommunicationService,
+    private modalService: ModalService
   ) {
     this.environmentsService = environmentsService;
     this.remoteEnvironmentBindingService = remoteEnvironmentBindingService;
@@ -64,6 +68,12 @@ export class EditBindingsModalComponent {
         }
       );
       this.isActive = true;
+      this.modalService.open(this.editBindingModal).result.finally(() => {
+        this.isActive = false;
+        this.environmentName = null;
+        this.filteredEnvs = [];
+        this.filteredEnvsNames = [];
+      });
     });
   }
 
@@ -117,10 +127,7 @@ export class EditBindingsModalComponent {
   }
 
   public close() {
-    this.isActive = false;
-    this.environmentName = null;
-    this.filteredEnvs = [];
-    this.filteredEnvsNames = [];
+    this.modalService.close(this.editBindingModal);
   }
 
   filterEnvsNames() {

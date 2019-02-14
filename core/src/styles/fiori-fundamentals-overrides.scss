@@ -1,0 +1,96 @@
+//Overwrite bg color for modals overlay
+fd-modal {
+  .fd-modal-background {
+    background-color: rgba(74,80,92,.3) !important;
+    opacity: 1 !important;
+  }
+}
+
+
+
+//Common styles for modals
+.fd-modal__footer {
+  .fd-button {
+    margin-left: 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.fd-modal--large {
+  .fd-modal {
+    max-width: 650px;
+  }
+}
+
+
+//Tables
+.fd-table {
+  &__th--min,
+  &__td--min {
+    width: 8.33333%;
+  }
+}
+
+
+//Breadcrumbs
+.fd-breadcrumb {
+  a {
+    cursor: pointer;
+  }
+}
+
+
+//Panel
+.fd-panel {
+  display: block;
+
+  &__body {
+    &--bleed {
+      
+      .fd-table {
+        td:last-child,
+        th:last-child {
+          padding-right: 24px;
+        }
+      
+        td:first-child,
+        th:first-child {
+          padding-left: 24px;
+        }
+      }
+    }
+  }
+}
+
+
+//for link-button in tables
+span {
+  &.fd-link {
+    cursor: pointer;
+  }
+}
+
+
+//Token
+.y-fd-token {
+  margin-bottom: fd-space('tiny');
+  margin-right: fd-space('tiny');
+  &.y-fd-token--no-button {
+    cursor: default;
+    &:after {
+      all: unset;
+    }
+  }
+}
+
+
+//helpers
+.y-word-wrap {
+  word-wrap: break-word;
+}
+.word-break {
+  word-break: break-all;
+}

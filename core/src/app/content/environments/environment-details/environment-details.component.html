@@ -71,7 +71,7 @@
         <th>Name</th>
         <th>Actions</th>
       </fd-table-header>
-      <fd-table-body c>
+      <fd-table-body>
         <tr *ngFor="let env of remoteEnvironments">
           <td>
             <a class="fd-has-font-weight-semi" (click)="navigateToRemoteEnvs(env.name)">{{ env.name }}</a>

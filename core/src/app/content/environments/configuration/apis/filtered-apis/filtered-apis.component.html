@@ -1,6 +1,4 @@
-<div class="sf-panel">
-  
-  <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
+<y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
   <y-plain-table
     [source]="data"
     [headerRenderer]="headerRenderer"
@@ -13,8 +11,6 @@
     </div>
   </y-plain-table>
   <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
-
-</div>
 
 <app-confirmation-modal #confirmationModal></app-confirmation-modal>
 <app-information-modal #infoModal></app-information-modal>

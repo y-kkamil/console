@@ -8,6 +8,7 @@ import { EnvironmentsService } from '../../../../environments/services/environme
 import { ComponentCommunicationService } from '../../../../../shared/services/component-communication.service';
 import { RemoteEnvironmentBindingService } from './../remote-environment-binding-service';
 import { FormsModule } from '@angular/forms';
+import { ModalService } from 'fundamental-ngx';
 
 const ActivatedRouteMock = {
   params: of({ id: 'id' })
@@ -37,6 +38,17 @@ describe('EditBindingsModalComponent', () => {
   let RemoteEnvironmentsServiceMockStub: RemoteEnvironmentsService;
   let EnvironmentsServiceMockStub: EnvironmentsService;
   let RemoteEnvironmentBindingServiceMockStub: RemoteEnvironmentBindingService;
+  let ComponentCommunicationServiceMockStub: ComponentCommunicationService;
+  let mockModalService: ModalService;
+  let modalService = {
+    open: () => ({
+      result: { finally: () => {} }
+    }),
+    close: () => {}
+  };
+  let ComponentCommunicationServiceMock = {
+    sendEvent: () => {}
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -52,13 +64,22 @@ describe('EditBindingsModalComponent', () => {
           provide: RemoteEnvironmentBindingService,
           useValue: RemoteEnvironmentBindingServiceMock
         },
-        ComponentCommunicationService
+        {
+          provide: ModalService,
+          useValue: modalService
+        },
+        {
+          provide: ComponentCommunicationService,
+          useValue: ComponentCommunicationServiceMock
+        }
       ],
       declarations: [
         EditBindingsModalComponent,
         LuigiClientCommunicationDirective
       ]
-    }).compileComponents();
+    })
+      .overrideTemplate(EditBindingsModalComponent, '')
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -73,6 +94,10 @@ describe('EditBindingsModalComponent', () => {
     RemoteEnvironmentBindingServiceMockStub = fixture.debugElement.injector.get(
       RemoteEnvironmentBindingService
     );
+    ComponentCommunicationServiceMockStub = fixture.debugElement.injector.get(
+      ComponentCommunicationService
+    );
+    mockModalService = TestBed.get(ModalService);
     fixture.detectChanges();
   });
 
@@ -192,39 +217,17 @@ describe('EditBindingsModalComponent', () => {
 
   it('should react on Save event', async done => {
     // given
-    component.isActive = true;
     component.remoteEnv = {
       name: 'test'
     };
-    const remoteEnvs = of({
-      remoteEnvironment: {
-        name: 'test',
-        enabledInNamespaces: ['env1', 'env2']
-      }
-    });
-    const envs = of([
-      {
-        label: 'env3'
-      },
-      {
-        label: 'env4'
-      }
-    ]);
     component.checkIfEnvironmentExists();
 
-    const spyGetRemoteEnvironment = spyOn(
-      RemoteEnvironmentsServiceMockStub,
-      'getRemoteEnvironment'
-    ).and.returnValue(remoteEnvs);
-    const spyGetEnvironments = spyOn(
-      EnvironmentsServiceMockStub,
-      'getEnvironments'
-    ).and.returnValue(envs);
-    const spyConsoleLog = spyOn(console, 'log');
     const spyBind = spyOn(
       RemoteEnvironmentBindingServiceMockStub,
       'bind'
     ).and.returnValue(of({ data: 'created' }));
+
+    spyOn(ComponentCommunicationServiceMockStub, 'sendEvent');
 
     // when
     component.selectedEnv({ label: 'env3' });
@@ -234,12 +237,17 @@ describe('EditBindingsModalComponent', () => {
     fixture.whenStable().then(() => {
       // then
       expect(component).toBeTruthy();
-      expect(component.isActive).toBeFalsy();
-      expect(spyBind.calls.any()).toBeTruthy();
+      expect(spyBind.calls.any()).toBeTruthy('spyBind.calls.any');
       expect(
         RemoteEnvironmentBindingServiceMockStub.bind
       ).toHaveBeenCalledTimes(1);
 
+      expect(
+        ComponentCommunicationServiceMockStub.sendEvent
+      ).toHaveBeenCalledWith({
+        type: 'updateResource',
+        data: { data: 'created' }
+      });
       done();
     });
   });
