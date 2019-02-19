@@ -33,10 +33,11 @@ export class EditRemoteEnvironmentModalComponent {
     this.resetForm();
     this.isActive = true;
 
-    this.modalService.open(this.editRemoteEnvironmentModal).result
-        .finally(() => {
-          this.isActive = false;     
-        })
+    this.modalService
+      .open(this.editRemoteEnvironmentModal)
+      .result.finally(() => {
+        this.isActive = false;
+      });
   }
 
   public close(): void {

@@ -30,9 +30,9 @@ describe('ResourceUploaderModalComponent', () => {
       ],
       imports: [RouterTestingModule.withRoutes(routes)]
     })
-    .overrideTemplate(InformationModalComponent, '')
-    .overrideTemplate(UploaderComponent, '')
-    .compileComponents();
+      .overrideTemplate(InformationModalComponent, '')
+      .overrideTemplate(UploaderComponent, '')
+      .compileComponents();
   }));
 
   beforeEach(() => {

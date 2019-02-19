@@ -55,11 +55,11 @@ export class ReplicaSetsEntryRendererComponent
   getClass(entry) {
     // TODO adjust when ui-api-layer for replica sets is ready
     if (this.hasWarnings(entry)) {
-      return 'sf-indicator--warning';
+      return 'fd-status-label--warning';
     } else if (this.isPending(entry)) {
       return '';
     } else {
-      return 'sf-indicator--success';
+      return 'fd-status-label--success';
     }
   }
 

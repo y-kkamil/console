@@ -1,3 +1,12 @@
+.y-fd-panel__description {
+  padding: 0 16px;
+}
+
+.y-fd-table__tr--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 //Overwrite bg color for modals overlay
 fd-modal {
   .fd-modal-background {
@@ -5,8 +14,6 @@ fd-modal {
     opacity: 1 !important;
   }
 }
-
-
 
 //Common styles for modals
 .fd-modal__footer {
@@ -86,6 +93,9 @@ span {
   }
 }
 
+.fd-action-bar__actions {
+  flex-shrink: 0;
+}
 
 //helpers
 .y-word-wrap {

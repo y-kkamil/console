@@ -1,7 +1,6 @@
 import { LuigiClientCommunicationDirective } from './../../directives/luigi-client-communication/luigi-client-communication.directive';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-
 import { ModalService } from 'fundamental-ngx';
 
 import { ClipboardModule } from 'ngx-clipboard';
@@ -26,8 +25,8 @@ describe('Copy2ClipboardModalComponent', () => {
       ],
       imports: [ClipboardModule]
     })
-    .overrideTemplate(Copy2ClipboardModalComponent, '')
-    .compileComponents();
+      .overrideTemplate(Copy2ClipboardModalComponent, '')
+      .compileComponents();
   }));
 
   beforeEach(() => {

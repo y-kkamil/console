@@ -89,8 +89,8 @@ describe('ExposeApiComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .overrideTemplate(ExposeApiComponent, '')
-    .compileComponents();
+      .overrideTemplate(ExposeApiComponent, '')
+      .compileComponents();
   }));
 
   beforeEach(() => {

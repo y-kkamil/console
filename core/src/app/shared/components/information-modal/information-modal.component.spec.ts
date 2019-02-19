@@ -20,9 +20,9 @@ describe('InformationModalComponent', () => {
         LuigiClientCommunicationDirective
       ],
       providers: [
-        { 
-          provide: APP_BASE_HREF, 
-          useValue: '/my/app' 
+        {
+          provide: APP_BASE_HREF,
+          useValue: '/my/app'
         },
         {
           provide: ModalService,
@@ -30,8 +30,8 @@ describe('InformationModalComponent', () => {
         }
       ]
     })
-    .overrideTemplate(InformationModalComponent, '')
-    .compileComponents();
+      .overrideTemplate(InformationModalComponent, '')
+      .compileComponents();
   }));
 
   beforeEach(() => {
