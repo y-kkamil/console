@@ -120,7 +120,7 @@ async function getEnvironmentNamesFromEnvironmentsPage(page) {
 }
 
 async function getRemoteEnvironmentNames(page) {
-  return await getNamesOnCurrentPage(page, '.remoteenv-name');
+  return await getNamesOnCurrentPage(page, '[data-e2e-id=remoteenv-name]');
 }
 
 async function getNamesOnCurrentPage(page, nameSelector) {
@@ -170,11 +170,11 @@ async function createRemoteEnvironment(page, name) {
   const frame = await getFrame(page);
   // consts
   const createEnvBtn = '.open-create-env-modal';
-  const createEnvModal = '.sf-modal.sf-modal--min';
+  const createEnvModal = '.fd-modal';
   const nameInput = 'input[name=remoteEnvName]';
   const descriptionInput = 'input[name=remoteEnvDescription]';
   const labelsInput = 'input[name=labelsInput]';
-  const createButton = '.tn-modal__button-primary';
+  const createButton = '[data-e2e-id=create-button]';
 
   await frame.click(createEnvBtn);
   await frame.waitFor(createEnvModal);
@@ -187,14 +187,14 @@ async function createRemoteEnvironment(page, name) {
   await frame.click(createButton);
   await frame.waitForSelector(createEnvModal, { hidden: true });
   return frame.waitForXPath(
-    `//div[contains(@class, 'remoteenv-name') and contains(string(), "${name}")]`
+    `//a[contains(@data-e2e-id, 'remoteenv-name') and contains(string(), "${name}")]`
   );
 }
 
 async function deleteRemoteEnvironment(page, name) {
   const frame = await getFrame(page);
-  const remoteEnvironmentsSelector = '.row.sf-list__body';
-  const modalSelector = '.sf-modal';
+  const remoteEnvironmentsSelector = 'tr';
+  const modalSelector = '.fd-modal';
 
   await frame.waitForSelector(remoteEnvironmentsSelector);
   await frame.$$eval(

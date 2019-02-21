@@ -1,9 +1,10 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { RbacService } from '../../services/rbac.service';
 import * as _ from 'lodash';
 import { CurrentEnvironmentService } from '../../../content/environments/services/current-environment.service';
 import { Subscription } from 'rxjs';
 import { ComponentCommunicationService } from '../../services/component-communication.service';
+import { ModalComponent, ModalService } from 'fundamental-ngx';
 
 @Component({
   selector: 'app-role-binding-modal',
@@ -11,6 +12,7 @@ import { ComponentCommunicationService } from '../../services/component-communic
   styleUrls: ['./role-binding-modal.component.scss']
 })
 export class RoleBindingModalComponent implements OnDestroy {
+  @ViewChild('createBindingModal') createBindingModal: ModalComponent;
   public isActive = false;
   public roles = [];
   public userGroup = '';
@@ -31,7 +33,8 @@ export class RoleBindingModalComponent implements OnDestroy {
   constructor(
     private rbacService: RbacService,
     private currentEnvironmentService: CurrentEnvironmentService,
-    private communicationService: ComponentCommunicationService
+    private communicationService: ComponentCommunicationService,
+    private modalService: ModalService
   ) {
     this.currentEnvironmentSubscription = this.currentEnvironmentService
       .getCurrentEnvironmentId()
@@ -92,10 +95,14 @@ export class RoleBindingModalComponent implements OnDestroy {
     if (this.isGlobalPermissionsView) {
       this.selectKind('ClusterRole');
     }
+    this.modalService.open(this.createBindingModal).result.finally(() => {
+      this.isActive = false;
+    });
   }
 
   public close() {
     this.isActive = false;
+    this.modalService.close(this.createBindingModal);
     this.userGroup = '';
     this.selectedRole = '';
     this.selectedKind = '';
