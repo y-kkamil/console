@@ -27,9 +27,7 @@ import { EnvironmentCreateComponent } from '../../environments/environment-creat
 
 @Component({
   selector: 'app-workspace-overview',
-  templateUrl: './workspace-overview.component.html',
-  styleUrls: ['./workspace-overview.component.scss'],
-  host: { class: 'sf-content' }
+  templateUrl: './workspace-overview.component.html'
 })
 export class WorkspaceOverviewComponent extends GenericListComponent
   implements OnInit, OnDestroy {
@@ -127,6 +125,7 @@ export class WorkspaceOverviewComponent extends GenericListComponent
                     );
                   },
                   () => {
+                    this.confirmationModal.cancel();
                     this.refreshContextSwitcher();
                   }
                 );
