@@ -195,7 +195,6 @@ async function deleteRemoteEnvironment(page, name) {
   const remoteEnvironmentsSelector = 'tr';
   const modalSelector = '[data-e2e-id=confirmation-modal]';
 
-
   await frame.waitForSelector(remoteEnvironmentsSelector);
   await frame.$$eval(
     remoteEnvironmentsSelector,

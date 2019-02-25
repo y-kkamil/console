@@ -1,7 +1,7 @@
 <div *ngIf="errorMessage">
   <fd-alert type="error">{{ errorMessage }}</fd-alert>
 </div>
-<div class="fd-section" *ngIf="environment.getLabel()">
+<section class="fd-section" *ngIf="environment.getLabel()">
   <fd-action-bar>
     <fd-action-bar-header>
       <fd-action-bar-title>{{ environment.getLabel() }}</fd-action-bar-title>
@@ -57,32 +57,31 @@
       </fd-panel-body>
     </fd-panel>
   </fd-panel-grid>
-</div>
+</section>
 
-<fd-panel *ngIf="remoteEnvironments && remoteEnvironments.length > 0">
-  <fd-panel-header>
-    <fd-panel-head>
-      <fd-panel-title>Connected Applications</fd-panel-title>
-    </fd-panel-head>
-  </fd-panel-header>
-  <fd-panel-body>
-    <fd-table>
-      <fd-table-header>
-        <th>Name</th>
-        <th>Actions</th>
-      </fd-table-header>
-      <fd-table-body>
-        <tr *ngFor="let env of remoteEnvironments">
-          <td>
-            <a class="fd-has-font-weight-semi" (click)="navigateToRemoteEnvs(env.name)">{{ env.name }}</a>
-          </td>
-          <td class="sf-table__td--min fd-has-text-align-center">
-            <y-list-actions [entry]="env" [entryEventHandler]="entryEventHandler" [actions]="actions"></y-list-actions>
-          </td>
-        </tr>
-      </fd-table-body>
-    </fd-table>
-  </fd-panel-body>
-</fd-panel>
+<section class='fd-section' *ngIf="remoteEnvironments && remoteEnvironments.length > 0">
+  <fd-action-bar>
+    <fd-action-bar-header>
+      <fd-action-bar-title>Connected Applications</fd-action-bar-title>
+    </fd-action-bar-header>
+  </fd-action-bar>
+  <fd-table>
+    <fd-table-header>
+      <th>Name</th>
+      <th>Actions</th>
+    </fd-table-header>
+    <fd-table-body>
+      <tr *ngFor="let env of remoteEnvironments">
+        <td>
+          <a class="fd-has-font-weight-semi" (click)="navigateToRemoteEnvs(env.name)">{{ env.name }}</a>
+        </td>
+        <td class="sf-table__td--min fd-has-text-align-center">
+          <y-list-actions [entry]="env" [entryEventHandler]="entryEventHandler" [actions]="actions"></y-list-actions>
+        </td>
+      </tr>
+    </fd-table-body>
+  </fd-table>
+
+</section>
 
 <app-resource-uploader-modal #uploaderModal></app-resource-uploader-modal>

@@ -4,7 +4,7 @@
       {{ entry.name }}
     </a>
   </td>
-  <td class="word-break"> {{ entry.hostname }} </td>
+  <td > {{ entry.hostname }} </td>
   <td>{{ entry.service.port }}</td>
   <ng-container *ngIf="isSecured(entry)">
     <td>

@@ -6,7 +6,7 @@ import { ModalComponent, ModalService } from 'fundamental-ngx';
 
 @Component({
   selector: 'app-resource-uploader-modal',
-  templateUrl: './resource-uploader-modal.component.html' 
+  templateUrl: './resource-uploader-modal.component.html'
 })
 export class ResourceUploaderModalComponent {
   public isActive = false;

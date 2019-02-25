@@ -18,10 +18,10 @@ describe('ConfirmationModalComponent', () => {
           provide: ModalService,
           useValue: { updateModalService: () => {} }
         }
-      ],
+      ]
     })
-    .overrideTemplate(ConfirmationModalComponent, '')
-    .compileComponents();
+      .overrideTemplate(ConfirmationModalComponent, '')
+      .compileComponents();
   }));
 
   beforeEach(() => {

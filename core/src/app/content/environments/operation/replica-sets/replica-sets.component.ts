@@ -14,8 +14,7 @@ import { IReplicaSet, ReplicaSet } from 'shared/datamodel/k8s/replica-set';
 
 @Component({
   selector: 'app-replica-sets',
-  templateUrl: '../kubernetes-element-list.component.html',
-  host: { class: 'sf-content' }
+  templateUrl: '../kubernetes-element-list.component.html'
 })
 export class ReplicaSetsComponent extends AbstractKubernetesElementListComponent
   implements OnDestroy {

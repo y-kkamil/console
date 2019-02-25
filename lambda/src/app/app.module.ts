@@ -34,6 +34,8 @@ import { SubscriptionsService } from './subscriptions/subscriptions.service';
 import { EventTriggerChooserComponent } from './lambdas/lambda-details/event-trigger-chooser/event-trigger-chooser.component';
 import { HttpTriggerComponent } from './lambdas/lambda-details/http-trigger/http-trigger.component';
 
+import { FundamentalNgxModule } from 'fundamental-ngx';
+
 const routes: Routes = [
   { path: '', redirectTo: 'lambdas', pathMatch: 'full' },
   { path: 'lambdas', component: LambdasComponent },
@@ -68,6 +70,7 @@ const routes: Routes = [
     AceEditorModule,
     FormsModule,
     ClickOutsideModule,
+    FundamentalNgxModule,
   ],
   providers: [
     HttpClient,
