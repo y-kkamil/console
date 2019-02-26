@@ -4,6 +4,7 @@ import { cloneDeep } from 'lodash';
 
 import { ComponentCommunicationService } from '../../services/component-communication.service';
 import { JsonEditorComponent } from './json-editor/json-editor.component';
+import { K8sResourceEditorService } from './services/k8s-resource-editor.service';
 
 @Component({
   selector: 'app-json-editor-modal',
@@ -21,7 +22,8 @@ export class JsonEditorModalComponent {
 
   constructor(
     private communicationService: ComponentCommunicationService,
-    private modalService: ModalService
+    protected modalService: ModalService,
+    private k8sResourceEditorService: K8sResourceEditorService
   ) {}
 
   show() {
@@ -42,7 +44,7 @@ export class JsonEditorModalComponent {
   }
 
   update(event: Event) {
-    this.jsonEditor.updateYaml().subscribe(
+    this.sendUpdateRequest().subscribe(
       data => {
         event.stopPropagation();
         this.isActive = false;
@@ -53,6 +55,12 @@ export class JsonEditorModalComponent {
         this.modalService.close(this.jsonEditorModal);
       },
       err => this.displayErrorMessage(err)
+    );
+  }
+
+  sendUpdateRequest() {
+    return this.k8sResourceEditorService.updateResource(
+      this.jsonEditor.getCurrentValue()
     );
   }
 

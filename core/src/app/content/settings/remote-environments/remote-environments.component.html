@@ -14,7 +14,7 @@
                     [filterState]="filterState"
                     (onFilterChanged)="onFilterChanged($event)">
       </y-list-filter>
-      <button class="fd-button fd-button--light open-create-env-modal" (click)="openModal()">
+      <button *ngIf="!isReadOnly" class="fd-button fd-button--light open-create-env-modal" (click)="openModal()">
         + Create Application
       </button>
     </fd-action-bar-actions>
@@ -23,10 +23,10 @@
   <div class="fd-panel">
     <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
 
-    <y-plain-table 
-      [source]="data" 
-      [headerRenderer]="headerRenderer" 
-      [entryRenderer]="entryRenderer" 
+    <y-plain-table
+      [source]="data"
+      [headerRenderer]="headerRenderer"
+      [entryRenderer]="entryRenderer"
       [entryEventHandler]="entryEventHandler"
       [footerRenderer]="footerRenderer">
       <div empty-list-placeholder *ngIf="showEmptyPage" class="fd-section">
