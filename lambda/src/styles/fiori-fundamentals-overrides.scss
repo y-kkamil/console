@@ -1,0 +1,99 @@
+//Overwrite bg color for modals overlay
+fd-modal .fd-modal-background {
+  background-color: rgba(74,80,92,.3) !important;
+  opacity: 1 !important;
+}
+
+
+
+//Common styles for modals
+.fd-modal__footer {
+  .fd-button {
+    margin-left: 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.fd-modal--large {
+  .fd-modal {
+    max-width: 650px;
+  }
+}
+
+//Tables
+.fd-table {
+  &__th--min,
+  &__td--min {
+    width: 8.33333%;
+  }
+}
+
+//Breadcrumbs inside of title
+.fd-action-bar__header {
+  .fd-breadcrumb {
+    font-size: 23px;
+  }
+}
+
+//Panel
+.fd-panel {
+  display: block;
+}
+
+
+//for link-button in tables
+span {
+  &.fd-link {
+    cursor: pointer;
+  }
+}
+
+//helpers
+.y-word-wrap {
+  word-wrap: break-word;
+}
+
+.y-word-break {
+  word-break: break-all;
+}
+
+
+//Token
+.fd-panel__filters {
+  .y-fd-token {
+    margin-top: fd-space('tiny') / 2;
+    margin-bottom: fd-space('tiny') / 2;
+  }  
+}
+
+.y-fd-token {
+  margin-bottom: fd-space('tiny');
+  margin-right: fd-space('tiny');
+  &.y-fd-token--no-button {
+    cursor: default;
+    &:after {
+      all: unset;
+    }
+  }
+}
+
+
+$possible-columns: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12;
+.fd-table {
+  @each $i in $possible-columns {
+    .y-fd-table__th--col-#{$i} {
+      width: calc(100% / 12 * #{$i});
+    }
+  }
+
+  .y-fd-table__tr--no-border-below {
+    border-bottom: 0;
+  }
+
+  .y-fd-table__tr--no-border-below + tr {
+    border-top: 0;
+  }
+}

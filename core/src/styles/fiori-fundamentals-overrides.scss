@@ -132,7 +132,8 @@ span {
 
 //Token
 .y-fd-token {
-  margin-bottom: fd-space('tiny');
+  margin-top: fd-space('tiny') / 2;
+  margin-bottom: fd-space('tiny') / 2;
   margin-right: fd-space('tiny');
   &.y-fd-token--no-button {
     cursor: default;

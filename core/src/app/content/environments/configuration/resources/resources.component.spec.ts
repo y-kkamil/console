@@ -7,14 +7,12 @@ describe('ResourcesComponent', () => {
   let component: ResourcesComponent;
   let fixture: ComponentFixture<ResourcesComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        declarations: [ResourcesComponent],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ResourcesComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ResourcesComponent);
@@ -25,6 +23,4 @@ describe('ResourcesComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-
 });
