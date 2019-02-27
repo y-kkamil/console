@@ -8,8 +8,8 @@ import { ModalService, ModalComponent } from 'fundamental-ngx';
   styleUrls: ['./information-modal.component.scss']
 })
 export class InformationModalComponent {
-  @Input() private message: string;
-  @Input() private title: string;
+  @Input() public message: string;
+  @Input() public title: string;
 
   @ViewChild('informationModal') informationModal: ModalComponent;
 
@@ -47,7 +47,7 @@ export class InformationModalComponent {
     this.isActive = false;
   }
 
-  private redirect() {
+  public redirect() {
     this.isActive = false;
     if (this.redirectUrl) {
       this.router.navigate([this.redirectUrl]);

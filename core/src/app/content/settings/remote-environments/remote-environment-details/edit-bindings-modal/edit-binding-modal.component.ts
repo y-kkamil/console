@@ -20,12 +20,12 @@ export class EditBindingsModalComponent {
   public environments = [];
   private environmentsService: EnvironmentsService;
   public remoteEnv: any;
-  private ariaExpanded = false;
-  private ariaHidden = true;
+  public ariaExpanded = false;
+  public ariaHidden = true;
   public isActive = false;
   private filteredEnvs = [];
-  private environmentName;
-  private filteredEnvsNames = [];
+  public environmentName;
+  public filteredEnvsNames = [];
 
   constructor(
     environmentsService: EnvironmentsService,
@@ -91,13 +91,13 @@ export class EditBindingsModalComponent {
     this.ariaHidden = !this.ariaHidden;
   }
 
-  private openDropDown(event: Event) {
+  public openDropDown(event: Event) {
     event.stopPropagation();
     this.ariaExpanded = true;
     this.ariaHidden = false;
   }
 
-  private closeDropDown() {
+  public closeDropDown() {
     this.ariaExpanded = false;
     this.ariaHidden = true;
   }

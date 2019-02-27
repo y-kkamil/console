@@ -16,17 +16,17 @@ export class RoleBindingModalComponent implements OnDestroy {
   public isActive = false;
   public roles = [];
   public userGroup = '';
-  private selectedRole = '';
-  private selectedKind = '';
+  public selectedRole = '';
+  public selectedKind = '';
   private currentEnvironmentId: string;
   private currentEnvironmentSubscription: Subscription;
-  private ariaExpandedRole = false;
+  public ariaExpandedRole = false;
   private ariaExpandedKind = false;
-  private error = '';
+  public error = '';
   public filteredRoles = [];
-  private filteredKinds = ['Role', 'ClusterRole'];
+  public filteredKinds = ['Role', 'ClusterRole'];
   private kinds = ['Role', 'ClusterRole'];
-  private userGroupError: string;
+  public userGroupError: string;
 
   @Input() isGlobalPermissionsView: boolean;
 
@@ -159,7 +159,7 @@ export class RoleBindingModalComponent implements OnDestroy {
     );
   }
 
-  private toggleDropDown(dropdown) {
+  public toggleDropDown(dropdown) {
     switch (dropdown) {
       case 'Kind':
         this.ariaExpandedRole = false;
@@ -170,7 +170,7 @@ export class RoleBindingModalComponent implements OnDestroy {
     }
   }
 
-  private closeDropDown(dropdown) {
+  public closeDropDown(dropdown) {
     switch (dropdown) {
       case 'Kind':
         return (this.ariaExpandedKind = false);
@@ -182,7 +182,7 @@ export class RoleBindingModalComponent implements OnDestroy {
     }
   }
 
-  private openDropDown(dropdown: any, event: Event) {
+  public openDropDown(dropdown: any, event: Event) {
     event.stopPropagation();
     switch (dropdown) {
       case 'Kind':

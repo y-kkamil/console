@@ -15,8 +15,8 @@ export class EnvironmentCreateComponent {
   public environments = [];
   public environmentName: string;
   public isActive: boolean;
-  private err: string;
-  private wrongName = false;
+  public err: string;
+  public wrongName = false;
 
   constructor(
     private environmentsService: EnvironmentsService,
@@ -56,7 +56,7 @@ export class EnvironmentCreateComponent {
     LuigiClient.linkManager().navigate(`/home/namespaces/${envName}/details`);
   }
 
-  private validateRegex() {
+  public validateRegex() {
     const regex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/;
     this.environmentName
       ? (this.wrongName = !regex.test(this.environmentName))

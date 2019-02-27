@@ -10,14 +10,14 @@ import { ModalService, ModalComponent } from 'fundamental-ngx';
 export class Copy2ClipboardModalComponent {
   @ViewChild('copyToClipboardModal') copyToClipboardModal: ModalComponent;
 
-  private title: string;
+  public title: string;
   public isActive = false;
-  private ngxClipboard: string;
-  private content: string;
-  private isCopied: false;
-  private message: string;
+  public ngxClipboard: string;
+  public content: string;
+  public isCopied = false;
+  public message: string;
 
-  public constructor(private modalService: ModalService) {}
+  public constructor(public modalService: ModalService) {}
 
   public show(title: string, content: string, message?: string) {
     this.title = title;

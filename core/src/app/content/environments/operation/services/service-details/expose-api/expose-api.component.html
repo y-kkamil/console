@@ -51,7 +51,7 @@
               <div class="fd-dropdown y-fd-dropdown fd-has-display-block" (clickOutside)="closeDropDown()" clickOutsideEvents="click,mousedown" excludeBeforeClick="true">
                 <div class="fd-popover fd-has-display-block">
                   <div class="fd-popover__control">
-                    <button class="fd-dropdown__control y-fd-dropdown__control fd-button fd-has-padding-none" 
+                    <button class="fd-dropdown__control y-fd-dropdown__control fd-button fd-has-padding-none"
                       aria-controls="nNJnB279"
                       [attr.aria-expanded]="ariaServiceExpanded"
                       aria-haspopup="true"
@@ -86,10 +86,10 @@
       <div class="fd-container fd-container--fluid">
         <div class="fd-col--8">
           <div fd-form-set>
-            <div fd-form-item>  
+            <div fd-form-item>
               <fd-form-label [forValue]="'input-2'">Host *</fd-form-label>
               <div class="fd-input-group fd-input-group--after">
-                <input fd-form-control [type]="'text'" id="input-2" placeholder="Field placeholder text" [(ngModel)]="hostname" (ngModelChange)="setApiName(); validateDetails()" (blur)="validateDetails()" [state]="errorHostname ? 'invalid' : undefind">
+                <input fd-form-control [type]="'text'" id="input-2" placeholder="Field placeholder text" [(ngModel)]="hostname" (ngModelChange)="setApiName(); validateDetails()" (blur)="validateDetails()" [state]="errorHostname ? 'invalid' : undefined">
                 <span class="fd-input-group__addon fd-input-group__addon--after">{{ domain }}</span>
               </div>
               <fd-form-message [type]="'error'" *ngIf="errorHostname">
@@ -102,7 +102,7 @@
           <div fd-form-set>
             <div fd-form-item>
               <fd-form-label [forValue]="'input-3'">Service Port *</fd-form-label>
-              <input fd-form-control [type]="'text'" id="input-3" [(ngModel)]="servicePort" (ngModelChange)="validateDetails()" (blur)="validateDetails()" [state]="errorPort ? 'invalid' : undefind">
+              <input fd-form-control [type]="'text'" id="input-3" [(ngModel)]="servicePort" (ngModelChange)="validateDetails()" (blur)="validateDetails()" [state]="errorPort ? 'invalid' : undefined">
               <fd-form-message [type]="'error'" *ngIf="errorPort">
                 {{ errorPort }}
               </fd-form-message>
@@ -110,13 +110,13 @@
           </div>
         </div>
       </div>
-      
+
       <div class="fd-container fd-container--fluid">
         <div class="fd-col--8">
           <div fd-form-set>
             <div fd-form-item>
-              <fd-form-label [forValue]="input-1">Name *</fd-form-label>
-              <input fd-form-control [type]="'text'" id="input-1" [disabled]="apiDefinition" [(ngModel)]="apiName" (ngModelChange)="validateDetails()" (blur)="validateDetails()" [state]="errorApiName ? 'invalid' : undefind">
+              <fd-form-label [forValue]="'input-1'">Name *</fd-form-label>
+              <input fd-form-control [type]="'text'" id="input-1" [disabled]="apiDefinition" [(ngModel)]="apiName" (ngModelChange)="validateDetails()" (blur)="validateDetails()" [state]="errorApiName ? 'invalid' : undefined">
               <fd-form-message [type]="'error'" *ngIf="errorApiName">
                 {{ errorApiName }}
               </fd-form-message>
@@ -151,14 +151,14 @@
           </fieldset>
         </div>
       </div>
-      
+
       <div *ngIf="secure" class="fd-container fd-container--fluid">
         <p class="fd-has-type-1">Identity Provider</p>
         <div class="fd-col--6">
           <div fd-form-set>
             <div fd-form-item>
               <fd-form-label [forValue]="'input-4'">Issuer *</fd-form-label>
-              <input fd-form-control [type]="'text'" id="input-4" [(ngModel)]="issuer" (ngModelChange)="validateDetails()" (blur)="validateDetails()" [state]="errorIssuer ? 'invalid' : undefind">
+              <input fd-form-control [type]="'text'" id="input-4" [(ngModel)]="issuer" (ngModelChange)="validateDetails()" (blur)="validateDetails()" [state]="errorIssuer ? 'invalid' : undefined">
               <fd-form-message [type]="'error'" *ngIf="errorIssuer">
                 {{ errorIssuer }}
               </fd-form-message>
@@ -169,7 +169,7 @@
           <div fd-form-set>
             <div fd-form-item>
               <fd-form-label [forValue]="input-5">JWKS URI *</fd-form-label>
-              <input fd-form-control [type]="'text'" id="input-5" [(ngModel)]="jwksUri" (ngModelChange)="validateDetails()" (blur)="validateDetails()" [state]="errorJWKSUri ? 'invalid' : undefind">
+              <input fd-form-control [type]="'text'" id="input-5" [(ngModel)]="jwksUri" (ngModelChange)="validateDetails()" (blur)="validateDetails()" [state]="errorJWKSUri ? 'invalid' : undefined">
               <fd-form-message [type]="'error'" *ngIf="errorJWKSUri">
                 {{ errorJWKSUri }}
               </fd-form-message>
