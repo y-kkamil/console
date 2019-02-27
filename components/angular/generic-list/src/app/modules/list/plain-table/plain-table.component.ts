@@ -5,7 +5,6 @@ import {
   Type,
   ViewChild,
   ViewContainerRef,
-  ViewEncapsulation,
 } from '@angular/core';
 import { PlainListComponent } from '../plain-list/plain-list.component';
 import { Observable } from 'rxjs';
@@ -14,7 +13,6 @@ import { Observable } from 'rxjs';
   selector: 'y-plain-table',
   templateUrl: './plain-table.component.html',
   styleUrls: ['./plain-table.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class PlainTableComponent extends PlainListComponent {
   @Input() headerRenderer: Type<any>;

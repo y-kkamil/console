@@ -39,14 +39,13 @@ describe('EditBindingsModalComponent', () => {
   let EnvironmentsServiceMockStub: EnvironmentsService;
   let RemoteEnvironmentBindingServiceMockStub: RemoteEnvironmentBindingService;
   let ComponentCommunicationServiceMockStub: ComponentCommunicationService;
-  let mockModalService: ModalService;
-  let modalService = {
+  const modalService = {
     open: () => ({
       result: { finally: () => {} }
     }),
     close: () => {}
   };
-  let ComponentCommunicationServiceMock = {
+  const ComponentCommunicationServiceMock = {
     sendEvent: () => {}
   };
 
@@ -97,7 +96,6 @@ describe('EditBindingsModalComponent', () => {
     ComponentCommunicationServiceMockStub = fixture.debugElement.injector.get(
       ComponentCommunicationService
     );
-    mockModalService = TestBed.get(ModalService);
     fixture.detectChanges();
   });
 

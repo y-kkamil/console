@@ -83,10 +83,16 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   ];
 
   theme: string;
+
+  public initialLabels: string[];
+  public updatedLabels: string[];
+
   @ViewChild('fetchTokenModal') fetchTokenModal: FetchTokenModalComponent;
   @ViewChild('eventTriggerChooserModal')
   eventTriggerChooserModal: EventTriggerChooserComponent;
   @ViewChild('httpTriggerModal') httpTriggerModal: HttpTriggerComponent;
+
+  @ViewChild('editLabelsForm') editLabelsForm: NgForm;
 
   code: string;
   dependency: string;
@@ -1022,9 +1028,6 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     this.labels.splice(index, 1);
   }
 
-  @ViewChild('editLabelsForm') editLabelsForm: NgForm;
-  public initialLabels: string[];
-  public updatedLabels: string[];
   public updateLabelsData({
     labels,
     wrongLabels,

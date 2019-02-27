@@ -13,7 +13,7 @@ describe('EditRemoteEnvironmentModalComponent', () => {
   let mockRemoteEnvironmentsService: RemoteEnvironmentsService;
   let mockComponentCommunicationService: ComponentCommunicationService;
   let mockModalService: ModalService;
-  let modalService = {
+  const modalService = {
     open: () => ({
       result: { finally: () => {} }
     }),

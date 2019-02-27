@@ -38,7 +38,7 @@
     <div class="fd-alert fd-alert--error fd-has-margin-bottom-small" *ngIf="error">
       <p>{{ error }}</p>
     </div>
-    
+
     <fd-panel>
       <fd-panel-header>
         <fd-panel-head>
@@ -54,7 +54,7 @@
                 <div class="fd-form__item">
                   <label class="fd-form__label" for="">Function Name * </label>
                   <div class="fd-input-group">
-                    <input type="text" id="input-1" name="function_name" [(ngModel)]="lambda.metadata.name" 
+                    <input type="text" id="input-1" name="function_name" [(ngModel)]="lambda.metadata.name"
                       [attr.disabled]="mode==='create'?null:''" (keyup)="validatesName()">
                   </div>
                   <fd-form-message [type]="'error'" *ngIf="isFunctionNameInvalid" >
@@ -95,14 +95,14 @@
         <label class="fd-label">Size:</label>
         <fd-popover [compact]="true" [alignment]="'right'">
           <fd-popover-control>
-            <button fd-button [options]="'light'" [glyph]="'slim-arrow-down'" [disabled]="lambda.metadata.name.length <=0 || isFunctionNameInvalid">{{selectedFunctionSizeName}}</button>
+            <button fd-button [options]="'light'" [glyph]="'slim-arrow-down'" [disabled]="lambda.metadata.name.length <=0 || isFunctionNameInvalid">{{ selectedFunctionSizeName }}</button>
           </fd-popover-control>
 
           <fd-popover-body *ngIf="functionSizes?.length">
             <fd-menu>
               <fd-menu-list>
                 <li fd-menu-item *ngFor="let option of functionSizes">
-                  <a (click)="selectSize(option)"><strong>{{option.name}}</strong><br>{{option.description}}</a>
+                  <a (click)="selectSize(option)"><strong>{{ option.name }}</strong><br>{ {option.description }}</a>
                 </li>
               </fd-menu-list>
             </fd-menu>
@@ -112,14 +112,14 @@
         <label class="fd-label">Type:</label>
         <fd-popover [compact]="true" [alignment]="'right'">
           <fd-popover-control>
-            <button fd-button [options]="'light'" [glyph]="'slim-arrow-down'" [disabled]="lambda.metadata.name.length <=0 || isFunctionNameInvalid">{{kind}}</button>
+            <button fd-button [options]="'light'" [glyph]="'slim-arrow-down'" [disabled]="lambda.metadata.name.length <=0 || isFunctionNameInvalid">{{ kind }}</button>
           </fd-popover-control>
 
           <fd-popover-body *ngIf="types?.length">
             <fd-menu>
               <fd-menu-list>
                 <li fd-menu-item *ngFor="let option of types">
-                  <a (click)="selectType(option)">{{option.kind}}</a>
+                  <a (click)="selectType(option)">{{ option.kind }}</a>
                 </li>
               </fd-menu-list>
             </fd-menu>
@@ -131,7 +131,7 @@
     <fd-panel-filters>
       <!-- trigger badges -->
       <ng-container *ngIf="selectedTriggers.length > 0">
-        <span class="fd-token y-fd-token triggers" 
+        <span class="fd-token y-fd-token triggers"
             *ngFor="let trigger of selectedTriggers">
           <div class="labels__remove" title="Remove label" (mouseover)="hideHTTPURL();$event.stopPropagation();" (click)="unselectEvent(trigger);$event.stopPropagation();"></div>
           <span *ngIf="trigger.eventType === 'http' && isHTTPTriggerAuthenticated" class="securedHTTPTrigger"></span>
@@ -184,7 +184,7 @@
     <fd-panel-body>
       <ace-editor #editor [(text)]="code" [mode]="aceMode" [theme]="theme" (textChanged)="onCodeChange($event)"></ace-editor>
     </fd-panel-body>
-  
+
   </fd-panel>
 </section>
 

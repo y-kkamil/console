@@ -36,7 +36,7 @@ export class UploaderComponent {
     this.fileContents = [];
   }
 
-  public selectFile(files: Array<File>) {
+  public selectFile(files: File[]) {
     if (files && files[0]) {
       this.fileToUpload = files[0];
       this.fileName = this.fileToUpload.name;
