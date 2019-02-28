@@ -200,7 +200,7 @@ function getNodes(context) {
   });
 }
 
-async function getCurrentNamespace(namespaceName) {
+async function getNamespace(namespaceName) {
   return fetchFromKyma(`${k8sServerUrl}/api/v1/namespaces/${namespaceName}`);
 }
 
@@ -212,7 +212,7 @@ async function getCurrentNamespace(namespaceName) {
  */
 async function getUiEntities(entityname, environment, placements) {
   if (environment) {
-    const currentNamespace = await getCurrentNamespace(environment);
+    const currentNamespace = await getNamespace(environment);
     if (
       !currentNamespace.metadata.labels ||
       currentNamespace.metadata.labels.env !== 'true'
