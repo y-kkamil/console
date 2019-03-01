@@ -1,12 +1,20 @@
 <section class="fd-section">
-  <fd-action-bar>
+  <fd-action-bar class="y-fd-action-bar">
     <fd-action-bar-header>
       <fd-action-bar-title>{{ title }}</fd-action-bar-title>
     </fd-action-bar-header>
     <fd-action-bar-actions>
-      <y-list-search [hidden]="showEmptyPage" [filterState]="filterState" (onFilterChanged)="onFilterChanged($event)">
+      <y-list-search
+        [hidden]="showEmptyPage"
+        [filterState]="filterState"
+        (onFilterChanged)="onFilterChanged($event)"
+      >
       </y-list-search>
-      <y-list-filter [hidden]="showEmptyPage" [filterState]="filterState" (onFilterChanged)="onFilterChanged($event)">
+      <y-list-filter
+        [hidden]="showEmptyPage"
+        [filterState]="filterState"
+        (onFilterChanged)="onFilterChanged($event)"
+      >
       </y-list-filter>
       <button fd-button [options]="'light'" (click)="goToCreate()">
         + Add Lambda
@@ -14,7 +22,7 @@
     </fd-action-bar-actions>
   </fd-action-bar>
 
-  <fd-panel *ngIf="error">
+  <fd-panel class="y-fd-panel" *ngIf="error">
     <fd-panel-body>
       <div class="fd-alert fd-alert--error" role="alert">
         {{ error }}
@@ -22,18 +30,31 @@
     </fd-panel-body>
   </fd-panel>
 
-  <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
-  <y-plain-table [source]="data" [headerRenderer]="lambdasHeaderRenderer" [entryRenderer]="lambdasEntryRenderer"
-    [entryEventHandler]="lambdasEventHandler">
+  <y-list-paging
+    [pagingState]="pagingState"
+    (onPageChanged)="onPageChanged($event)"
+  ></y-list-paging>
+  <y-plain-table
+    [source]="data"
+    [headerRenderer]="lambdasHeaderRenderer"
+    [entryRenderer]="lambdasEntryRenderer"
+    [entryEventHandler]="lambdasEventHandler"
+  >
     <div empty-list-placeholder *ngIf="showEmptyPage">
       <h1>{{ title }}</h1>
       <p>{{ emptyListText }}</p>
-      <button class="tn-button tn-button--small tn-button--text" (click)="goToCreate()">
+      <button
+        class="tn-button tn-button--small tn-button--text"
+        (click)="goToCreate()"
+      >
         + {{ createNewElementText }}
       </button>
     </div>
   </y-plain-table>
-  <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
+  <y-list-paging
+    [pagingState]="pagingState"
+    (onPageChanged)="onPageChanged($event)"
+  ></y-list-paging>
 </section>
 
 <app-confirmation-modal #confirmationModal></app-confirmation-modal>

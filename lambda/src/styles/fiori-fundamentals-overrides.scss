@@ -1,76 +1,133 @@
 //Overwrite bg color for modals overlay
-fd-modal .fd-modal-background {
-  background-color: rgba(74,80,92,.3) !important;
-  opacity: 1 !important;
-}
+.y-fd-modal {
+  .fd-modal-background {
+    background-color: rgba(74, 80, 92, 0.3) !important;
+    opacity: 1 !important;
+  }
 
+  //Common styles for modals
+  .fd-modal__footer {
+    .fd-button {
+      margin-left: 5px;
 
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
 
-//Common styles for modals
-.fd-modal__footer {
-  .fd-button {
-    margin-left: 5px;
-
-    &:first-child {
-      margin-left: 0;
+  .fd-modal--large {
+    .fd-modal {
+      max-width: 650px;
     }
   }
 }
 
-.fd-modal--large {
-  .fd-modal {
-    max-width: 650px;
+.y-fd-action-bar {
+  .fd-action-bar__actions {
+    .fd-popover {
+      top: 0; /*  There is a bug from Fiori Fundamentals.
+                  When action bar includes popover with `fd-button--primary` class,
+                  then it's not aligned with other buttons in row anymore,
+                  because it has `top: - fd-space(1)` by default.
+                  Until it's fixed in Fundamentals, better to keep these styles to overwrite it.
+              */
+    }
   }
 }
 
 //Tables
-.fd-table {
+.y-fd-table {
+  margin-bottom: 0;
+
   &__th--min,
   &__td--min {
     width: 8.33333%;
   }
-}
 
-//Breadcrumbs inside of title
-.fd-action-bar__header {
-  .fd-breadcrumb {
-    font-size: 23px;
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  $possible-columns: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12;
+  @each $i in $possible-columns {
+    &__th--col-#{$i} {
+      width: calc(100% / 12 * #{$i});
+    }
+  }
+
+  &__tr--no-border-below {
+    border-bottom: 0;
+  }
+
+  &__tr--no-border-below + tr {
+    border-top: 0;
+  }
+
+  tr {
+    cursor: default;
+  }
+
+  td {
+    vertical-align: top;
+    a {
+      cursor: pointer;
+    }
+  }
+
+  //for link-button in tables
+  span {
+    &.fd-link {
+      cursor: pointer;
+    }
   }
 }
 
-//Panel
-.fd-panel {
-  display: block;
-}
-
-
-//for link-button in tables
-span {
-  &.fd-link {
+//Breadcrumbs
+.y-fd-breadcrumb {
+  a {
     cursor: pointer;
   }
 }
 
-//helpers
-.y-word-wrap {
-  word-wrap: break-word;
-}
+//Panel
+.y-fd-panel {
+  display: block;
+  &--button {
+    cursor: pointer;
 
-.y-word-break {
-  word-break: break-all;
-}
+    &:hover {
+      box-shadow: 0 0 5px 0 rgba(fd-color('text', 3), 0.4);
+    }
+  }
 
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .fd-panel__body {
+    &--bleed {
+      .fd-table {
+        td:last-child,
+        th:last-child {
+          padding-right: 24px;
+        }
+
+        td:first-child,
+        th:first-child {
+          padding-left: 24px;
+        }
+      }
+    }
+  }
+}
 
 //Token
-.fd-panel__filters {
-  .y-fd-token {
-    margin-top: fd-space('tiny') / 2;
-    margin-bottom: fd-space('tiny') / 2;
-  }  
-}
-
 .y-fd-token {
-  margin-bottom: fd-space('tiny');
+  margin-top: fd-space('tiny') / 2;
+  margin-bottom: fd-space('tiny') / 2;
   margin-right: fd-space('tiny');
   &.y-fd-token--no-button {
     cursor: default;
@@ -80,20 +137,7 @@ span {
   }
 }
 
-
-$possible-columns: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12;
-.fd-table {
-  @each $i in $possible-columns {
-    .y-fd-table__th--col-#{$i} {
-      width: calc(100% / 12 * #{$i});
-    }
-  }
-
-  .y-fd-table__tr--no-border-below {
-    border-bottom: 0;
-  }
-
-  .y-fd-table__tr--no-border-below + tr {
-    border-top: 0;
-  }
+//helpers
+.y-word-wrap {
+  word-wrap: break-word;
 }
