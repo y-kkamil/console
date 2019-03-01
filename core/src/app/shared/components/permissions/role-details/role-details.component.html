@@ -28,7 +28,7 @@
     {{ errorMessage }}
   </div>
 
-  <fd-panel *ngIf="roleDetails">
+  <fd-panel class="y-fd-panel" *ngIf="roleDetails">
     <fd-panel-header>
       <fd-panel-head>
         <fd-panel-title>Details</fd-panel-title>
@@ -36,32 +36,32 @@
     </fd-panel-header>
     <fd-panel-body [bleed]="true">
       <fd-panel-grid [col]="6" [nogap]="true">
-        <fd-panel [columnSpan]="2">
+        <fd-panel class="y-fd-panel" [columnSpan]="2">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Name</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="4">
+        <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
             {{ roleDetails.metadata.name }}
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="2">
+        <fd-panel class="y-fd-panel" [columnSpan]="2">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Namespace</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="4">
+        <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
             {{ roleDetails.metadata.namespace }}
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="2">
+        <fd-panel class="y-fd-panel" [columnSpan]="2">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Creation time</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="4">
+        <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
             {{ roleDetails.metadata.creationTimestamp }}
           </fd-panel-body>
@@ -72,7 +72,7 @@
 </section>
 
 <section class="fd-section" *ngIf="roleDetails">
-  <fd-panel>
+  <fd-panel class="y-fd-panel" >
     <fd-panel-header>
       <fd-panel-head>
         <fd-panel-title>Rules</fd-panel-title>
@@ -80,34 +80,34 @@
     </fd-panel-header>
     <fd-panel-body [bleed]="true">
       <fd-panel-grid [col]="6" [nogap]="true" *ngFor="let rule of roleDetails.rules">
-        <fd-panel [columnSpan]="2">
+        <fd-panel class="y-fd-panel" [columnSpan]="2">
           <fd-panel-body>
             <label class="fd-has-color-text-4">API Groups</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="4">
+        <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
             <div *ngFor="let apiGroup of rule.apiGroups; let last = last">
               <span>{{ apiGroup !== '' ? apiGroup : coreGroup }}{{ last ? '': ',' }}</span>
             </div>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="2">
+        <fd-panel class="y-fd-panel" [columnSpan]="2">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Verbs</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="4">
+        <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
             <span *ngFor="let verb of rule.verbs; let last = last">{{ verb }}{{ last ? '': ', ' }}</span>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="2">
+        <fd-panel class="y-fd-panel" [columnSpan]="2">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Resources</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="4">
+        <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
             <div *ngFor="let resource of rule.resources; let last = last">
               <span>{{ resource }}{{ last ? '': ',' }}</span>

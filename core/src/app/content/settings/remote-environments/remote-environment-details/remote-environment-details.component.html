@@ -25,7 +25,7 @@
     </fd-action-bar-actions>
   </fd-action-bar>
 
-  <fd-panel *ngIf="remoteEnvironment">
+  <fd-panel class="y-fd-panel" *ngIf="remoteEnvironment">
     <fd-panel-header>
       <fd-panel-head>
         <fd-panel-title>General Information</fd-panel-title>
@@ -39,32 +39,32 @@
 
     <fd-panel-body [bleed]="true">
       <fd-panel-grid [col]="6" [nogap]="true">
-        <fd-panel [columnSpan]="1">
+        <fd-panel class="y-fd-panel" [columnSpan]="1">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Name</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="5">
+        <fd-panel class="y-fd-panel" [columnSpan]="5">
           <fd-panel-body>
             {{ remoteEnvironment.name }}
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="1">
+        <fd-panel class="y-fd-panel" [columnSpan]="1">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Status</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="5">
+        <fd-panel class="y-fd-panel" [columnSpan]="5">
           <fd-panel-body>
             <span class="fd-status-label" [ngClass]="determineClass(remoteEnvironment)">{{ prettyStatus }}</span>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="1">
+        <fd-panel class="y-fd-panel" [columnSpan]="1">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Description</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="5">
+        <fd-panel class="y-fd-panel" [columnSpan]="5">
           <fd-panel-body>
             <ng-container *ngIf="remoteEnvironment.description">
               {{ remoteEnvironment.description }}
@@ -74,12 +74,12 @@
             </ng-container>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="1">
+        <fd-panel class="y-fd-panel" [columnSpan]="1">
           <fd-panel-body>
             <label class="fd-has-color-text-4">Labels</label>
           </fd-panel-body>
         </fd-panel>
-        <fd-panel [columnSpan]="5" >
+        <fd-panel class="y-fd-panel" [columnSpan]="5" >
           <fd-panel-body>
             <ng-container *ngIf='transformedLabels.length'>
               <span class="fd-token y-fd-token y-fd-token--no-button" role="button" *ngFor="let label of transformedLabels">
@@ -98,7 +98,7 @@
 
 <ng-container *ngIf="remoteEnvironment">
   <section class="fd-section">
-    <fd-panel>
+    <fd-panel class="y-fd-panel" >
       <fd-panel-header>
         <fd-panel-head>
           <fd-panel-title>Namespace Bindings</fd-panel-title>
@@ -131,7 +131,7 @@
   </section>
 
   <section class="fd-section" *ngIf="remoteEnvironment.services.length > 0">
-    <fd-panel>
+    <fd-panel class="y-fd-panel" >
       <fd-panel-header>
         <fd-panel-head>
           <fd-panel-title>Provided Services & Events</fd-panel-title>
