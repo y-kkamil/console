@@ -4,20 +4,12 @@
       <fd-action-bar-title>{{ title }}</fd-action-bar-title>
     </fd-action-bar-header>
     <fd-action-bar-actions>
-      <y-list-search
-        [hidden]="showEmptyPage"
-        [filterState]="filterState"
-        (onFilterChanged)="onFilterChanged($event)"
-      >
+      <y-list-search [hidden]="showEmptyPage" [filterState]="filterState" (onFilterChanged)="onFilterChanged($event)">
       </y-list-search>
-      <y-list-filter
-        [hidden]="showEmptyPage"
-        [filterState]="filterState"
-        (onFilterChanged)="onFilterChanged($event)"
-      >
+      <y-list-filter [hidden]="showEmptyPage" [filterState]="filterState" (onFilterChanged)="onFilterChanged($event)">
       </y-list-filter>
-      <button fd-button [options]="'light'" (click)="goToCreate()">
-        + Add Lambda
+      <button fd-button [options]="'light'" [glyph]="'add'" (click)="goToCreate()">
+        Add Lambda
       </button>
     </fd-action-bar-actions>
   </fd-action-bar>
@@ -30,31 +22,18 @@
     </fd-panel-body>
   </fd-panel>
 
-  <y-list-paging
-    [pagingState]="pagingState"
-    (onPageChanged)="onPageChanged($event)"
-  ></y-list-paging>
-  <y-plain-table
-    [source]="data"
-    [headerRenderer]="lambdasHeaderRenderer"
-    [entryRenderer]="lambdasEntryRenderer"
-    [entryEventHandler]="lambdasEventHandler"
-  >
+  <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
+  <y-plain-table [source]="data" [headerRenderer]="lambdasHeaderRenderer" [entryRenderer]="lambdasEntryRenderer"
+    [entryEventHandler]="lambdasEventHandler">
     <div empty-list-placeholder *ngIf="showEmptyPage">
       <h1>{{ title }}</h1>
       <p>{{ emptyListText }}</p>
-      <button
-        class="tn-button tn-button--small tn-button--text"
-        (click)="goToCreate()"
-      >
+      <button class="tn-button tn-button--small tn-button--text" (click)="goToCreate()">
         + {{ createNewElementText }}
       </button>
     </div>
   </y-plain-table>
-  <y-list-paging
-    [pagingState]="pagingState"
-    (onPageChanged)="onPageChanged($event)"
-  ></y-list-paging>
+  <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
 </section>
 
 <app-confirmation-modal #confirmationModal></app-confirmation-modal>
