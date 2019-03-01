@@ -2,7 +2,7 @@
   <fd-alert type="error">{{ errorMessage }}</fd-alert>
 </div>
 <section class="fd-section" *ngIf="environment.getLabel()">
-  <fd-action-bar>
+  <fd-action-bar class="y-fd-action-bar">
     <fd-action-bar-header>
       <fd-action-bar-title>{{ environment.getLabel() }}</fd-action-bar-title>
     </fd-action-bar-header>
@@ -60,7 +60,7 @@
 </section>
 
 <section class='fd-section' *ngIf="remoteEnvironments && remoteEnvironments.length > 0">
-  <fd-action-bar>
+  <fd-action-bar class="y-fd-action-bar">
     <fd-action-bar-header>
       <fd-action-bar-title>Connected Applications</fd-action-bar-title>
     </fd-action-bar-header>
