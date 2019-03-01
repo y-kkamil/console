@@ -1,5 +1,5 @@
 <section class="fd-section">
-  <fd-breadcrumb>
+  <fd-breadcrumb class="y-fd-breadcrumb">
     <fd-breadcrumb-item>
       <a fd-breadcrumb-link (click)="navigateToList()">
         Permissions
@@ -24,7 +24,11 @@
     Loading ...
   </p>
 
-  <div class="fd-alert fd-alert--error fd-has-margin-bottom-small" role="alert" *ngIf="!loading && errorMessage">
+  <div
+    class="fd-alert fd-alert--error fd-has-margin-bottom-small"
+    role="alert"
+    *ngIf="!loading && errorMessage"
+  >
     {{ errorMessage }}
   </div>
 
@@ -72,14 +76,18 @@
 </section>
 
 <section class="fd-section" *ngIf="roleDetails">
-  <fd-panel class="y-fd-panel" >
+  <fd-panel class="y-fd-panel">
     <fd-panel-header>
       <fd-panel-head>
         <fd-panel-title>Rules</fd-panel-title>
       </fd-panel-head>
     </fd-panel-header>
     <fd-panel-body [bleed]="true">
-      <fd-panel-grid [col]="6" [nogap]="true" *ngFor="let rule of roleDetails.rules">
+      <fd-panel-grid
+        [col]="6"
+        [nogap]="true"
+        *ngFor="let rule of roleDetails.rules"
+      >
         <fd-panel class="y-fd-panel" [columnSpan]="2">
           <fd-panel-body>
             <label class="fd-has-color-text-4">API Groups</label>
@@ -88,7 +96,10 @@
         <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
             <div *ngFor="let apiGroup of rule.apiGroups; let last = last">
-              <span>{{ apiGroup !== '' ? apiGroup : coreGroup }}{{ last ? '': ',' }}</span>
+              <span
+                >{{ apiGroup !== '' ? apiGroup : coreGroup
+                }}{{ last ? '' : ',' }}</span
+              >
             </div>
           </fd-panel-body>
         </fd-panel>
@@ -99,7 +110,9 @@
         </fd-panel>
         <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
-            <span *ngFor="let verb of rule.verbs; let last = last">{{ verb }}{{ last ? '': ', ' }}</span>
+            <span *ngFor="let verb of rule.verbs; let last = last"
+              >{{ verb }}{{ last ? '' : ', ' }}</span
+            >
           </fd-panel-body>
         </fd-panel>
         <fd-panel class="y-fd-panel" [columnSpan]="2">
@@ -110,7 +123,7 @@
         <fd-panel class="y-fd-panel" [columnSpan]="4">
           <fd-panel-body>
             <div *ngFor="let resource of rule.resources; let last = last">
-              <span>{{ resource }}{{ last ? '': ',' }}</span>
+              <span>{{ resource }}{{ last ? '' : ',' }}</span>
             </div>
           </fd-panel-body>
         </fd-panel>
