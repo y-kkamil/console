@@ -24,6 +24,7 @@
 }
 
 .y-fd-action-bar {
+  flex-shrink: 0;
   .fd-action-bar__actions {
     .fd-popover {
       top: 0; /*  There is a bug from Fiori Fundamentals.

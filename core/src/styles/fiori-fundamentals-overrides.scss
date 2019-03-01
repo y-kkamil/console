@@ -25,6 +25,7 @@
 
 .y-fd-action-bar {
   .fd-action-bar__actions {
+    flex-shrink: 0;
     .fd-popover {
       top: 0; /*  There is a bug from Fiori Fundamentals.
                   When action bar includes popover with `fd-button--primary` class,
