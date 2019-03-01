@@ -21,6 +21,10 @@
       max-width: 650px;
     }
   }
+
+  .fd-modal__close:focus {
+    box-shadow: none;
+  }
 }
 
 .y-fd-action-bar {
