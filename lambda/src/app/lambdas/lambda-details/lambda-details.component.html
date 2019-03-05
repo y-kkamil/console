@@ -180,7 +180,7 @@
           >
             <div
               class="labels__remove"
-              title="Remove label"
+              title="Remove trigger"
               (mouseover)="hideHTTPURL(); $event.stopPropagation()"
               (click)="unselectEvent(trigger); $event.stopPropagation()"
             ></div>
@@ -300,29 +300,10 @@
           </fd-panel-title>
         </fd-panel-head>
         <fd-panel-actions>
-          <button
-            fd-button
-            [options]="'light'"
-            [glyph]="'add'"
-            [compact]="true"
-            *ngIf="(hasDependencies | async) === false"
-            (click)="addDependencies()"
-            [disabled]="!lambda.metadata.name || isFunctionNameInvalid"
-          >
-            Add
-          </button>
-          <button
-            fd-button
-            [options]="'light'"
-            [glyph]="'less'"
-            *ngIf="(hasDependencies | async)"
-            (click)="removeDependencies()"
-          >
-            Remove
-          </button>
+          <fd-toggle [size]="'xs'" (change)="changeDependencies(hasDependencies)" [(ngModel)]="hasDependencies"></fd-toggle>
         </fd-panel-actions>
       </fd-panel-header>
-      <fd-panel-body [hidden]="(hasDependencies | async) === false">
+      <fd-panel-body [hidden]="!hasDependencies">
         <ace-editor
           #dependencyEditor
           [(text)]="dependency"

@@ -13,14 +13,14 @@
           [disabled]="!lambdaName || isLambdaNameInvalid"
           (click)="showBindingCreatorModal()"
         >
-          Add
+          Create Service Binding
         </button>
       </fd-panel-actions>
     </fd-panel-header>
   </fd-panel>
 
   <fd-panel class="y-fd-panel" *ngIf="instanceBindingInfoList.length > 0">
-    <fd-panel-body>
+    <fd-panel-body [bleed]="true">
       <table class="fd-table y-fd-table">
         <thead>
           <tr>
