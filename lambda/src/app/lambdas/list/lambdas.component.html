@@ -28,9 +28,6 @@
     <div empty-list-placeholder *ngIf="showEmptyPage">
       <h1>{{ title }}</h1>
       <p>{{ emptyListText }}</p>
-      <button class="tn-button tn-button--small tn-button--text" (click)="goToCreate()">
-        + {{ createNewElementText }}
-      </button>
     </div>
   </y-plain-table>
   <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
