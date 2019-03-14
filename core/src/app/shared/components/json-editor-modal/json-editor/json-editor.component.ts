@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as JSONEditor from 'jsoneditor';
+import 'brace/theme/tomorrow';
 
 @Component({
   selector: 'app-json-editor',
@@ -19,7 +20,7 @@ export class JsonEditorComponent implements OnInit {
       history: true,
       indentation: 2,
       mode: 'code',
-      // theme: 'tomorrow', <-- doesn't work for now
+      theme: 'ace/theme/tomorrow',
       search: true,
       sortObjectKeys: false,
       modes: ['code', 'tree', 'view', 'form']
