@@ -23,7 +23,7 @@ export class JsonEditorComponent implements OnInit {
       theme: 'ace/theme/tomorrow',
       search: true,
       sortObjectKeys: false,
-      modes: ['code', 'tree', 'view', 'form']
+      mainMenuBar: false
     };
     this.editor = new JSONEditor(container, options, this.resourceData);
   }
