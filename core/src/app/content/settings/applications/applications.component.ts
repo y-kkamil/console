@@ -95,5 +95,6 @@ export class ApplicationsComponent
 
   ngOnDestroy() {
     LuigiClient.removeContextUpdateListener(this.contextListenerId);
+    super.ngOnDestroy();
   }
 }

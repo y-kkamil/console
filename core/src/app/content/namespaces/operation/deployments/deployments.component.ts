@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Filter } from 'app/generic-list';
 import { AppConfig } from '../../../../app.config';
@@ -17,7 +17,7 @@ import { IEmptyListData } from 'shared/datamodel';
   templateUrl: '../kubernetes-element-list.component.html'
 })
 export class DeploymentsComponent extends AbstractKubernetesElementListComponent
-  implements OnDestroy {
+  implements OnInit, OnDestroy {
   public title = 'Deployments';
   public emptyListData: IEmptyListData = this.getBasicEmptyListData(this.title);
   public createNewElementText = 'Add Deployment';
@@ -81,8 +81,14 @@ export class DeploymentsComponent extends AbstractKubernetesElementListComponent
     );
   }
 
+  public ngOnInit() {
+    super.ngOnInit();
+    this.subscribeToRefreshComponent();
+  }
+
   public ngOnDestroy() {
     this.currentNamespaceSubscription.unsubscribe();
+    super.ngOnDestroy();
   }
 
   public getResourceUrl(kind: string, entry: any): string {

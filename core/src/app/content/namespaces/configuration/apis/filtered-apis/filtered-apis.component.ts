@@ -1,6 +1,6 @@
 import { FilteredApisHeaderRendererComponent } from './filtered-apis-header-renderer/filtered-apis-header-renderer.component';
 import { FilteredApisEntryRendererComponent } from './filtered-apis-entry-renderer/filtered-apis-entry-renderer.component';
-import { Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { AbstractKubernetesElementListComponent } from '../../../operation/abstract-kubernetes-element-list.component';
 import { HttpClient } from '@angular/common/http';
 import { CurrentNamespaceService } from '../../../services/current-namespace.service';
@@ -19,7 +19,7 @@ import { IEmptyListData } from 'shared/datamodel';
 })
 export class FilteredApisComponent
   extends AbstractKubernetesElementListComponent
-  implements OnDestroy {
+  implements OnInit, OnDestroy {
   public resourceKind = 'api';
   public emptyListData: IEmptyListData = this.getBasicEmptyListData('APIs', { headerTitle: false, namespaceSuffix: false });
   public createNewElementText = 'Add API';
@@ -90,11 +90,17 @@ export class FilteredApisComponent
       });
   }
 
+  public ngOnInit() {
+    super.ngOnInit();
+    this.subscribeToRefreshComponent();
+  }
+
   public getResourceUrl(kind: string, entry: any): string {
     return `${this.baseUrl}/${entry.name}`;
   }
 
   public ngOnDestroy() {
     this.currentNamespaceSubscription.unsubscribe();
+    super.ngOnDestroy();
   }
 }

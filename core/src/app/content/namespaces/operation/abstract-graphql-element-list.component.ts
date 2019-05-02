@@ -57,6 +57,7 @@ export class AbstractGraphqlElementListComponent
 
   public ngOnDestroy() {
     this.currentNamespaceSubscription.unsubscribe();
+    super.ngOnDestroy();
   }
 
   protected getGraphqlQueryForList() {
