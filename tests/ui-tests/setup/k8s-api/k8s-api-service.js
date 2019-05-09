@@ -1,34 +1,37 @@
 import * as k8s from '@kubernetes/client-node';
 
-import k8sApiResourceNamespaced from "./k8s-api-resource"
+import config from './../../config';
+import { kubeConfig } from './../kubeconfig';
 
-export class k8sApiService extends k8sApiResourceNamespaced {
-  private defaultDefinition = {
-    metadata: {
-      name: resourceName,
-      labels: {
-        example: resourceName
+export class k8sApiService {
+  constructor(definition, namespaceName = config.testNamespace, apiName = k8s.Core_v1Api) {
+    const defaultDefinition = {
+      metadata: {
+        name: resourceName,
+        labels: {
+          example: resourceName
+        },
+        annotations: {
+          "auth.istio.io/8017": "NONE"
+        }
       },
-      annotations: {
-        "auth.istio.io/8017": "NONE"
+      spec: {
+        ports: [
+          { name: "http", port: 5050 }  
+        ],
+        selector: {
+          example: resourceName    
+        }
       }
-    },
-    spec: {
-      ports: [
-        { name: "http", port: 5050 }  
-      ],
-      selector: {
-        example: resourceName    
-      }
-    }
-  };
+    };
 
-  async constructor(definition = this.defaultDefinition, namespaceName, apiName) {
-    super(definition, namespaceName, apiName);
+    this.definition = definition || defaultDefinition;
+    this.api = kubeConfig.makeApiClient(apiName);
+    this.namespaceName = namespaceName;
     await this.api.createNamespacedService(this.namespaceName, this.definition);
   } 
 
-  async delete(resourceName = this.definition.metadata.name, namespaceName = this.namespaceName) {
-    await this.api.deleteNamespacedService(resourceName, namespaceName);
+  async delete() {
+    await this.api.deleteNamespacedService(this.definition.metadata.name, this.namespaceName);
   }
 }

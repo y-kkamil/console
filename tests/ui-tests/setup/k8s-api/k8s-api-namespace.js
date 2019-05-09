@@ -1,12 +1,10 @@
 import * as k8s from '@kubernetes/client-node';
 
 import config from './../../config';
-
 import { kubeConfig } from './../kubeconfig';
 
-
 export class k8sApiNamespace {
-  constructor(definition, apiName=k8s.Core_v1Api) {
+  constructor(definition, apiName = k8s.Core_v1Api) {
     const defaultDefinition = {
       metadata: {
         name: config.testNamespace,
@@ -18,12 +16,12 @@ export class k8sApiNamespace {
     this.create();
   } 
 
-  async create() {
-    // await this.delete();
-    
+  async create() {    
+    testNamespaceExist = (await this.api.listNamespace(undefined, undefined, undefined, "metadata.name="+config.testNamespace)).length > 0;
+    if (testNamespaceExist) {
+      await this.delete();
+    }
     await this.api.createNamespace(this.definition);
-    const p = await this.api.listNamespace(undefined, undefined, undefined, "metadata.name="+config.testNamespace);
-    console.log("P jtest", p.response.body.items);
   }
 
   async delete() {
