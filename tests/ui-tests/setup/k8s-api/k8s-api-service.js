@@ -7,9 +7,9 @@ export class k8sApiService {
   constructor(definition, namespaceName = config.testNamespace, apiName = k8s.Core_v1Api) {
     const defaultDefinition = {
       metadata: {
-        name: resourceName,
+        name: "http-db-service",
         labels: {
-          example: resourceName
+          example: "http-db-service"
         },
         annotations: {
           "auth.istio.io/8017": "NONE"
@@ -20,7 +20,7 @@ export class k8sApiService {
           { name: "http", port: 5050 }  
         ],
         selector: {
-          example: resourceName    
+          example: "http-db-service"    
         }
       }
     };
@@ -28,6 +28,19 @@ export class k8sApiService {
     this.definition = definition || defaultDefinition;
     this.api = kubeConfig.makeApiClient(apiName);
     this.namespaceName = namespaceName;
+  
+    this.create();
+  }
+
+  async create() {
+    const resourceExists = (await this.api.
+      listNamespacedService(this.namespaceName, undefined, undefined, undefined, "metadata.name=" + this.definition.metadata.name))
+      .response.body.items
+      .length > 0;
+    if (resourceExists) {
+      console.info(`Service ${this.definition.metadata.name} already exists, but probably it shouldn't. Skipping creation`);
+      return;
+    }
     await this.api.createNamespacedService(this.namespaceName, this.definition);
   } 
 

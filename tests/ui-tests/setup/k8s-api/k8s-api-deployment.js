@@ -4,39 +4,44 @@ import config from './../../config';
 import { kubeConfig } from './../kubeconfig';
 
 export class k8sApiDeployment {
-  constructor(definition, namespaceName = config.testNamespace, apiName = k8s.Core_v1Api) {
+  constructor(definition, namespaceName = config.testNamespace, apiName = k8s.Apps_v1Api) {    
     const defaultDefinition = {
       metadata: {
-        name: resourceName,
-        spec: {
-          replicas: 1,
-          template: {
-            metadata: {
-              labels: {
-                example: resourceName
-              },
-              annotations: {
-                "sidecar.istio.io/inject": "true"
-              }
+        name: "http-db-service"
+      },
+      spec: {
+        replicas: 1,
+        selector: {
+          matchLabels: {
+            example: "http-db-service"
+          }
+        },
+        template: {
+          metadata: {
+            labels: {
+              example: "http-db-service"
             },
-            spec: {
-              imagePullSecrets: [
-                { name: "kyma-docker-user" }
-              ],
-              containers: [
-                {
-                  image: "vad1mo/hello-world-rest",
-                  imagePullPolicy: "IfNotPresent",
-                  name: resourceName,
-                  ports: [
-                    { name: "http", containerPort: 5050 }
-                  ],
-                  env: [
-                    { name: "dbtype", value: "memory" }
-                  ]
-                }
-              ]
+            annotations: {
+              "sidecar.istio.io/inject": "true"
             }
+          },
+          spec: {
+            imagePullSecrets: [
+              { name: "kyma-docker-user" }
+            ],
+            containers: [
+              {
+                image: "vad1mo/hello-world-rest",
+                imagePullPolicy: "IfNotPresent",
+                name: "http-db-service",
+                ports: [
+                  { name: "http", containerPort: 5050 }
+                ],
+                env: [
+                  { name: "dbtype", value: "memory" }
+                ]
+              }
+            ]
           }
         }
       }
@@ -45,6 +50,19 @@ export class k8sApiDeployment {
     this.definition = definition || defaultDefinition;
     this.api = kubeConfig.makeApiClient(apiName);
     this.namespaceName = namespaceName;
+
+    this.create();
+  }
+
+  async create() {
+    const resourceExists = (await this.api
+      .listNamespacedDeployment(this.namespaceName, undefined, undefined, undefined, "metadata.name=" + this.definition.metadata.name))
+      .response.body.items
+      .length > 0;
+    if (resourceExists) {
+      console.info(`Deployment ${this.definition.metadata.name} already exists, but probably it shouldn't. Skipping creation`);
+      return;
+    }
     await this.api.createNamespacedDeployment(this.namespaceName, this.definition);
   } 
 

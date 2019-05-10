@@ -17,9 +17,13 @@ export class k8sApiNamespace {
   } 
 
   async create() {    
-    testNamespaceExist = (await this.api.listNamespace(undefined, undefined, undefined, "metadata.name="+config.testNamespace)).length > 0;
-    if (testNamespaceExist) {
-      await this.delete();
+    const resourceExists = (await this.api
+      .listNamespace(undefined, undefined, undefined, "metadata.name=" + this.definition.metadata.name))
+      .response.body.items
+      .length > 0;
+    if (resourceExists) {
+      console.info(`Namespace ${this.definition.metadata.name} already exists, but probably it shouldn't. Skipping creation`);
+      return;
     }
     await this.api.createNamespace(this.definition);
   }
