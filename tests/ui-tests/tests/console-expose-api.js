@@ -5,7 +5,7 @@ import common from '../commands/common';
 import { describeIf } from '../utils/skip';
 import dex from '../utils/dex';
 import address from '../utils/address';
-import { retry } from '../utils/retry';
+import { retry, retryInterval } from '../utils/retry';
 import { k8sApiNamespace, k8sApiDeployment, k8sApiService } from "./../setup/k8s-api"
 
 let page, browser;
@@ -33,14 +33,11 @@ describeIf(dex.isStaticUser(), 'Console expose api tests', () => {
   });
 
   test('Expose API for Service', async () => {
-    const TIMEOUT_FOR_RESOURCES_CHANGE = 5000;
     const serviceUrl = address.console.getService(config.testNamespace, service.definition.metadata.name);
     const apiName = "ui-test-exposed-api";
-    let statusCode, frame, exposedApiCellTexts;
+    let frame, exposedApiCellTexts;
     
-    function callExposedAPI() {
-      // Reset status code
-      statusCode = 0;
+    function callExposedAPI({expectedStatusCode}) {
       const req = {
         url: `https://${apiName}.${config.domain}`,
         method: 'GET',
@@ -50,13 +47,18 @@ describeIf(dex.isStaticUser(), 'Console expose api tests', () => {
 
       return new Promise((resolve, reject) => {
         request(req, (error, response) => {
-          if (error) { reject(error) }          
-          resolve(response.statusCode);
+          if (error) { reject(error) }
+          if (!response) { resolve("request returned no response") }
+          if (response.statusCode !== expectedStatusCode) {
+            resolve(`expected status code ${expectedStatusCode}, received ${response.statusCode}`)
+          }
+          resolve(true);
         });
       });
     }
 
     async function getCellsText() {
+      await frame.waitForSelector('[data-e2e-id=exposed-api-name]');
       return {
         name: (await kymaConsole.getNamesOnCurrentPage(page, "[data-e2e-id=exposed-api-name]"))[0],
         secured: (await kymaConsole.getNamesOnCurrentPage(page, "[data-e2e-id=exposed-api-secured]"))[0],
@@ -73,8 +75,7 @@ describeIf(dex.isStaticUser(), 'Console expose api tests', () => {
 
     // Before exposing API
     console.log("Exposed API should retrieve 404 (does not exist)");
-    statusCode = await callExposedAPI();
-    expect(statusCode).toEqual(404);
+    await callExposedAPI(404);
 
     // Expose API (not secured)
     frame = await kymaConsole.getFrame(page);
@@ -83,16 +84,13 @@ describeIf(dex.isStaticUser(), 'Console expose api tests', () => {
     await frame.type('#host-input', apiName);
     await frame.click("[data-e2e-id=save-expose-api]");    
     
-    await frame.waitFor(TIMEOUT_FOR_RESOURCES_CHANGE * 3);
-
     exposedApiCellTexts = await getCellsText();
     expect(exposedApiCellTexts.name).toEqual(` http-db-service-${apiName} `);
     expect(exposedApiCellTexts.secured).toEqual(`No`);
     expect(exposedApiCellTexts.idp).toEqual('-');
 
     console.log("Exposed API should retrieve 200 (not secured)");
-    statusCode = await callExposedAPI();
-    expect(statusCode).toEqual(200);
+    await retryInterval(callExposedAPI, {expectedStatusCode: 200});
 
     // Expose API (secured)
     await kymaConsole.openLinkOnFrame(page, "[data-e2e-id=exposed-api-name]", `http-db-service-${apiName}`);
@@ -100,15 +98,12 @@ describeIf(dex.isStaticUser(), 'Console expose api tests', () => {
     await frame.click("[data-e2e-id=secure-api-checkbox]");
     await frame.click("[data-e2e-id=save-expose-api]");    
 
-    await frame.waitFor(TIMEOUT_FOR_RESOURCES_CHANGE * 3);
-
     exposedApiCellTexts = await getCellsText();
     expect(exposedApiCellTexts.name).toEqual(` http-db-service-${apiName} `);
     expect(exposedApiCellTexts.secured).toEqual(`Yes`);
     expect(exposedApiCellTexts.idp).toEqual('DEX');
 
     console.log("Exposed API should retrieve 401 (secured)");
-    statusCode = await callExposedAPI();
-    expect(statusCode).toEqual(401);
+    await retryInterval(callExposedAPI, {expectedStatusCode: 401});
   });
 });
