@@ -36,9 +36,10 @@ import ReactMarkdown from './ReactMarkdown';
 import Search from './Search';
 import Separator from './Separator';
 import Spinner from './Spinner';
+import Status from './Status';
+import StatusWrapper from './Status/StatusWrapper';
 import Tabs from './Tabs';
 import Tab from './Tabs/Tab';
-import TabElementsIndicator from './TabElementsIndicator';
 import Table from './Table';
 import Text from './Text';
 import ThemeWrapper from './ThemeWrapper';
@@ -94,9 +95,10 @@ module.exports = {
   Search,
   Separator,
   Spinner,
+  Status,
+  StatusWrapper,
   Tabs,
   Tab,
-  TabElementsIndicator,
   Table,
   Text,
   ThemeWrapper,

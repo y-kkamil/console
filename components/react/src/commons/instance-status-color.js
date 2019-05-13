@@ -1,4 +1,4 @@
-export const statusColor = statusType => {
+export const instanceStatusColor = statusType => {
   switch (statusType) {
     case 'PROVISIONING':
     case 'DEPROVISIONING':

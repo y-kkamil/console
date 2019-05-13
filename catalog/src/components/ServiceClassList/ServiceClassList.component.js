@@ -7,12 +7,14 @@ import {
   NotificationMessage,
   Search,
   Spinner,
+  Status,
+  StatusWrapper,
   Tab,
   Tabs,
   Toolbar,
   Tooltip,
   Panel,
-  PanelBody,
+  PanelBody
 } from '@kyma-project/react-components';
 
 import { serviceClassConstants } from '../../variables';
@@ -25,9 +27,7 @@ import {
   ServiceClassListWrapper,
   CardsWrapper,
   EmptyServiceListMessageWrapper,
-  ServiceClassDescription,
-  StatusWrapper,
-  Status,
+  ServiceClassDescription
 } from './styled';
 
 class ServiceClassList extends React.Component {

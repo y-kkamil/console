@@ -7,20 +7,17 @@ import {
   Markdown,
   ReactMarkdown,
   InstanceStatus,
+  Status,
+  StatusWrapper,
   Table,
   Tabs,
   Tab,
-  TabElementsIndicator
 } from '@kyma-project/react-components';
 import LuigiClient from '@kyma-project/luigi-client';
 
 import ApiReference from '../SwaggerApi/SwaggerApiReference.component';
 
-import {
-  Link,
-  LinkButton,
-  ServiceClassTabsContentWrapper
-} from './styled';
+import { Link, LinkButton, ServiceClassTabsContentWrapper } from './styled';
 
 import {
   sortDocumentsByType,
@@ -214,10 +211,10 @@ class ServiceClassTabs extends Component {
   }
 
   getTabElementsIndicator(instancesCount) {
-    return instancesCount ? (
-      <TabElementsIndicator count={this.props.serviceClass.instances.length}/>
-    ) : (
-      ''
+    return (
+      <StatusWrapper key="instances-no">
+        <Status>{instancesCount}</Status>
+      </StatusWrapper>
     );
   }
 
@@ -232,7 +229,7 @@ class ServiceClassTabs extends Component {
             {instance.name}
           </Link>
         </LinkButton>,
-        <InstanceStatus status={instance.status.type}/>
+        <InstanceStatus status={instance.status.type} />,
       ],
     }));
   }
