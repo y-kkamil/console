@@ -8,21 +8,28 @@ export class k8sApiNamespace {
     const defaultDefinition = {
       metadata: {
         name: config.testNamespace,
-        labels: { env: 'true' }
-      }
+        labels: { env: 'true' },
+      },
     };
-    this.definition = definition || defaultDefinition;
+    this.definition = definition || defaultDefinition;
     this.api = kubeConfig.makeApiClient(apiName);
     this.create();
-  } 
+  }
 
-  async create() {    
-    const resourceExists = (await this.api
-      .listNamespace(undefined, undefined, undefined, "metadata.name=" + this.definition.metadata.name))
-      .response.body.items
-      .length > 0;
+  async create() {
+    const resourceExists =
+      (await this.api.listNamespace(
+        undefined,
+        undefined,
+        undefined,
+        'metadata.name=' + this.definition.metadata.name,
+      )).response.body.items.length > 0;
     if (resourceExists) {
-      console.info(`Namespace ${this.definition.metadata.name} already exists, but probably it shouldn't. Skipping creation`);
+      console.info(
+        `Namespace ${
+          this.definition.metadata.name
+        } already exists, but probably it shouldn't. Skipping creation`,
+      );
       return;
     }
     await this.api.createNamespace(this.definition);

@@ -11,7 +11,6 @@ export const retry = async fn => {
   }
 };
 
-
 /*
 Inputs: 
   fn - function to be executed in every interval. Should return true when the condition has been fulfilled
@@ -19,17 +18,27 @@ Inputs:
   intervalMs - requests repetition interval (in ms). Default is 1000ms
   maxReps - max amount of requests to do
 */
-export const retryInterval = async (fn, args, intervalMs = 1000, maxReps = 30) => {
+export const retryInterval = async (
+  fn,
+  args,
+  intervalMs = 1000,
+  maxReps = 30,
+) => {
   let repsCounter = 0;
   return new Promise((resolve, reject) => {
     var interval = setInterval(async () => {
       repsCounter++;
       const result = await fn(args);
-      if (result === true || repsCounter === maxReps) {
+      if (result === true || repsCounter === maxReps) {
         clearInterval(interval);
-        if (result === true) { resolve(result) }
-        else { reject(`Max. amount of retry repetitions reached without expected result. Error: ${result}`) }
-      };
+        if (result === true) {
+          resolve(result);
+        } else {
+          reject(
+            `Max. amount of retry repetitions reached without expected result. Error: ${result}`,
+          );
+        }
+      }
     }, intervalMs);
   });
 };

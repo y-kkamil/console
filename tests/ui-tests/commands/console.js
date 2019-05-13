@@ -230,5 +230,5 @@ module.exports = {
   deleteNamespace,
   getApplicationNames,
   getTextContentOnFrameBySelector,
-  getNamesOnCurrentPage
+  getNamesOnCurrentPage,
 };
