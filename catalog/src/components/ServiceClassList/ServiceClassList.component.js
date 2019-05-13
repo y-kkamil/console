@@ -14,7 +14,7 @@ import {
   Toolbar,
   Tooltip,
   Panel,
-  PanelBody
+  PanelBody,
 } from '@kyma-project/react-components';
 
 import { serviceClassConstants } from '../../variables';
@@ -27,7 +27,7 @@ import {
   ServiceClassListWrapper,
   CardsWrapper,
   EmptyServiceListMessageWrapper,
-  ServiceClassDescription
+  ServiceClassDescription,
 } from './styled';
 
 class ServiceClassList extends React.Component {

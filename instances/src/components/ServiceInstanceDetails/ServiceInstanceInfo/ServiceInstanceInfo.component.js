@@ -194,7 +194,9 @@ const ServiceInstanceInfo = ({ serviceInstance }) => {
           <PanelActions>
             <Icon
               glyph={statusIcon(serviceInstance.status.type)}
-              style={{ color: instanceStatusColor(serviceInstance.status.type) }}
+              style={{
+                color: instanceStatusColor(serviceInstance.status.type),
+              }}
             />
           </PanelActions>
         </ContentHeader>

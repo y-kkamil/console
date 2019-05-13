@@ -37,4 +37,3 @@ export const ServiceClassDescription = styled.div`
   text-align: left;
   padding: 30px 30px 0;
 `;
-

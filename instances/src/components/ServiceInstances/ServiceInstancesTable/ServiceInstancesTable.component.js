@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import LuigiClient from '@kyma-project/luigi-client';
 
-import { Button, InstanceStatus, Modal, Table, Tooltip } from '@kyma-project/react-components';
+import {
+  Button,
+  InstanceStatus,
+  Modal,
+  Table,
+  Tooltip,
+} from '@kyma-project/react-components';
 
 import {
   LinkButton,
@@ -176,7 +182,7 @@ export class ServiceInstancesTable extends Component {
                   content={instance.status.message}
                   minWidth="250px"
                 >
-                  <InstanceStatus status={instance.status.type}/>
+                  <InstanceStatus status={instance.status.type} />
                 </Tooltip>
               );
             })(),

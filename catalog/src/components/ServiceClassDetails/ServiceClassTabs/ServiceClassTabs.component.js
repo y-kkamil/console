@@ -279,26 +279,25 @@ class ServiceClassTabs extends Component {
 
       const deprecatedDocs =
         documentsTypes &&
-        documentsTypes.map(
-          type =>
-            documentsByType &&
-            documentsByType[type] &&
-            !validatDocumentsByType(documentsByType[type]) ? null : (
-              <Tab key={type} title={type}>
-                <Markdown>
-                  {documentsByType[type].map((item, i) => {
-                    return !(item.source || item.Source) ? null : (
-                      <div
-                        key={i}
-                        dangerouslySetInnerHTML={{
-                          __html: item.source || item.Source,
-                        }}
-                      />
-                    );
-                  })}
-                </Markdown>
-              </Tab>
-            ),
+        documentsTypes.map(type =>
+          documentsByType &&
+          documentsByType[type] &&
+          !validatDocumentsByType(documentsByType[type]) ? null : (
+            <Tab key={type} title={type}>
+              <Markdown>
+                {documentsByType[type].map((item, i) => {
+                  return !(item.source || item.Source) ? null : (
+                    <div
+                      key={i}
+                      dangerouslySetInnerHTML={{
+                        __html: item.source || item.Source,
+                      }}
+                    />
+                  );
+                })}
+              </Markdown>
+            </Tab>
+          ),
         );
 
       const newDocs = docsData
