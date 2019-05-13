@@ -16,6 +16,7 @@ import H3 from './Header/H3';
 import H4 from './Header/H4';
 import Label from './Label';
 import Image from './Image';
+import InstanceStatus from './InstanceStatus';
 import Icon from './Icon';
 import Markdown from './Markdown';
 import Notification from './Notification';
@@ -37,6 +38,7 @@ import Separator from './Separator';
 import Spinner from './Spinner';
 import Tabs from './Tabs';
 import Tab from './Tabs/Tab';
+import TabElementsIndicator from './TabElementsIndicator';
 import Table from './Table';
 import Text from './Text';
 import ThemeWrapper from './ThemeWrapper';
@@ -74,6 +76,7 @@ module.exports = {
   H4,
   Label,
   Image,
+  InstanceStatus,
   Icon,
   Markdown,
   Notification,
@@ -93,6 +96,7 @@ module.exports = {
   Spinner,
   Tabs,
   Tab,
+  TabElementsIndicator,
   Table,
   Text,
   ThemeWrapper,

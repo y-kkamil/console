@@ -6,13 +6,21 @@ import ODataReact from '@kyma-project/odata-react';
 import {
   Markdown,
   ReactMarkdown,
+  InstanceStatus,
+  Table,
   Tabs,
   Tab,
+  TabElementsIndicator
 } from '@kyma-project/react-components';
+import LuigiClient from '@kyma-project/luigi-client';
 
 import ApiReference from '../SwaggerApi/SwaggerApiReference.component';
 
-import { ServiceClassTabsContentWrapper } from './styled';
+import {
+  Link,
+  LinkButton,
+  ServiceClassTabsContentWrapper
+} from './styled';
 
 import {
   sortDocumentsByType,
@@ -199,6 +207,36 @@ class ServiceClassTabs extends Component {
     return data;
   }
 
+  goToServiceInstanceDetails(instanceName) {
+    LuigiClient.linkManager()
+      .fromContext('namespaces')
+      .navigate(`cmf-instances/details/${instanceName}`);
+  }
+
+  getTabElementsIndicator(instancesCount) {
+    return instancesCount ? (
+      <TabElementsIndicator count={this.props.serviceClass.instances.length}/>
+    ) : (
+      ''
+    );
+  }
+
+  prepareRowData(serviceClassInstances) {
+    return serviceClassInstances.map(instance => ({
+      rowData: [
+        <LinkButton>
+          <Link
+            onClick={() => this.goToServiceInstanceDetails(instance.name)}
+            title={instance.name}
+          >
+            {instance.name}
+          </Link>
+        </LinkButton>,
+        <InstanceStatus status={instance.status.type}/>
+      ],
+    }));
+  }
+
   render() {
     const { serviceClass, serviceClassLoading } = this.props;
     //data from new api
@@ -244,25 +282,26 @@ class ServiceClassTabs extends Component {
 
       const deprecatedDocs =
         documentsTypes &&
-        documentsTypes.map(type =>
-          documentsByType &&
-          documentsByType[type] &&
-          !validatDocumentsByType(documentsByType[type]) ? null : (
-            <Tab key={type} title={type}>
-              <Markdown>
-                {documentsByType[type].map((item, i) => {
-                  return !(item.source || item.Source) ? null : (
-                    <div
-                      key={i}
-                      dangerouslySetInnerHTML={{
-                        __html: item.source || item.Source,
-                      }}
-                    />
-                  );
-                })}
-              </Markdown>
-            </Tab>
-          ),
+        documentsTypes.map(
+          type =>
+            documentsByType &&
+            documentsByType[type] &&
+            !validatDocumentsByType(documentsByType[type]) ? null : (
+              <Tab key={type} title={type}>
+                <Markdown>
+                  {documentsByType[type].map((item, i) => {
+                    return !(item.source || item.Source) ? null : (
+                      <div
+                        key={i}
+                        dangerouslySetInnerHTML={{
+                          __html: item.source || item.Source,
+                        }}
+                      />
+                    );
+                  })}
+                </Markdown>
+              </Tab>
+            ),
         );
 
       const newDocs = docsData
@@ -319,6 +358,19 @@ class ServiceClassTabs extends Component {
                 <ODataReact schema={odata.source || deprecatedOdataSpec} />
               </Tab>
             ) : null}
+            <Tab
+              aditionalStatus={this.getTabElementsIndicator(
+                this.props.serviceClass.instances.length,
+              )}
+              title={'Instances'}
+            >
+              <Table
+                headers={['INSTANCE', 'STATUS']}
+                tableData={this.prepareRowData(
+                  this.props.serviceClass.instances,
+                )}
+              />
+            </Tab>
           </Tabs>
         </ServiceClassTabsContentWrapper>
       );
