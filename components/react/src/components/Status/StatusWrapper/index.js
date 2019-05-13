@@ -12,4 +12,4 @@ const StatusWrapper = styled.div`
   float: left;
 `;
 
-export default StatusWrapper
+export default StatusWrapper;
