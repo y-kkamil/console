@@ -116,11 +116,17 @@ async function getNamespacesFromContextSwitcher(page) {
 }
 
 async function getNamespaceNamesFromNamespacesPage(page) {
-  return await getTextContentOnPageBySelector(page, '[data-e2e-id=namespace-name]');
+  return await getTextContentOnPageBySelector(
+    page,
+    '[data-e2e-id=namespace-name]',
+  );
 }
 
 async function getApplicationNames(page) {
-  return await getTextContentOnPageBySelector(page, '[data-e2e-id=application-name]');
+  return await getTextContentOnPageBySelector(
+    page,
+    '[data-e2e-id=application-name]',
+  );
 }
 
 async function getTextContentOnPageBySelector(page, nameSelector) {

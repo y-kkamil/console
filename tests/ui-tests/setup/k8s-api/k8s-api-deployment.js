@@ -7,7 +7,7 @@ export class k8sApiDeployment {
   constructor(
     namespaceName = config.testNamespace,
     definition,
-    apiName = k8s.Apps_v1Api
+    apiName = k8s.Apps_v1Api,
   ) {
     const defaultDefinition = {
       metadata: {

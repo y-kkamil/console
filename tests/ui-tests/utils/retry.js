@@ -17,11 +17,7 @@ Inputs:
   intervalMs - requests repetition interval (in ms). Default is 1000ms
   maxReps - max amount of requests to do
 */
-export const retryInterval = async (
-  fn,
-  intervalMs = 1000,
-  maxReps = 30,
-) => {
+export const retryInterval = async (fn, intervalMs = 1000, maxReps = 30) => {
   let repsCounter = 0;
   return new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
