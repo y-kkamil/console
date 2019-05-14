@@ -14,7 +14,6 @@ export const retry = async fn => {
 /*
 Inputs: 
   fn - function to be executed in every interval. Should return true when the condition has been fulfilled
-  args - args for the function `fn` that will be called
   intervalMs - requests repetition interval (in ms). Default is 1000ms
   maxReps - max amount of requests to do
 */
