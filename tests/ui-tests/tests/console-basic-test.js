@@ -131,11 +131,11 @@ describeIf(dex.isStaticUser(), 'Console basic tests', () => {
     }
 
     // Create k8s resources
-    await page.waitFor(10000); // wait for namespace from previous test to be removed
-    namespace = await new k8sApiNamespace();
-    await new k8sApiDeployment();
-    service = await new k8sApiService();
-    await page.waitFor(15000); // wait for new resources to be active
+    const namespaceUnderTest = 'test-expose-api';
+    namespace = await new k8sApiNamespace(namespaceUnderTest);
+    await new k8sApiDeployment(namespaceUnderTest);
+    service = await new k8sApiService(namespaceUnderTest);
+    await page.waitFor(15000); // TODO: provide a deterministic way to wait for new resources to be active
 
     serviceUrl = address.console.getService(
       namespace.definition.metadata.name,

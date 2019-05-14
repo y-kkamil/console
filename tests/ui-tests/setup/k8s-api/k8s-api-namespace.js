@@ -4,10 +4,10 @@ import config from './../../config';
 import { kubeConfig } from './../kubeconfig';
 
 export class k8sApiNamespace {
-  constructor(definition, apiName = k8s.Core_v1Api) {
+  constructor(namespace, definition, apiName = k8s.Core_v1Api) {
     const defaultDefinition = {
       metadata: {
-        name: config.testNamespace,
+        name: namespace || config.testNamespace,
         labels: { env: 'true' },
       },
     };

@@ -5,9 +5,9 @@ import { kubeConfig } from './../kubeconfig';
 
 export class k8sApiDeployment {
   constructor(
-    definition,
     namespaceName = config.testNamespace,
-    apiName = k8s.Apps_v1Api,
+    definition,
+    apiName = k8s.Apps_v1Api
   ) {
     const defaultDefinition = {
       metadata: {

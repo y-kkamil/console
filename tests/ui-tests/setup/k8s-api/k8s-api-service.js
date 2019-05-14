@@ -5,8 +5,8 @@ import { kubeConfig } from './../kubeconfig';
 
 export class k8sApiService {
   constructor(
-    definition,
     namespaceName = config.testNamespace,
+    definition,
     apiName = k8s.Core_v1Api,
   ) {
     const defaultDefinition = {
