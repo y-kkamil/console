@@ -115,15 +115,15 @@ describeIf(dex.isStaticUser(), 'Console basic tests', () => {
     async function getCellsText() {
       await frame.waitForSelector('[data-e2e-id=exposed-api-name]');
       return {
-        name: (await kymaConsole.getNamesOnCurrentPage(
+        name: (await kymaConsole.getTextContentOnPageBySelector(
           page,
           '[data-e2e-id=exposed-api-name]',
         ))[0],
-        secured: (await kymaConsole.getNamesOnCurrentPage(
+        secured: (await kymaConsole.getTextContentOnPageBySelector(
           page,
           '[data-e2e-id=exposed-api-secured]',
         ))[0],
-        idp: (await kymaConsole.getNamesOnCurrentPage(
+        idp: (await kymaConsole.getTextContentOnPageBySelector(
           page,
           '[data-e2e-id=exposed-api-idp]',
         ))[0],

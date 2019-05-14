@@ -31,8 +31,8 @@ class Console {
     return this.getInstancesList(namespace) + '/details/' + instanceName;
   }
 
-  getService(namespace, instanceName) {
-    return this.getNamespace(namespace) + '/services/details/' + instanceName;
+  getService(namespace, serviceName) {
+    return this.getNamespace(namespace) + '/services/details/' + serviceName;
   }
 
   getDocs() {
