@@ -147,6 +147,8 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
 
   public canShowLogs = false;
 
+  public currentTab = 0;
+
   @ViewChild('dependencyEditor') dependencyEditor;
   @ViewChild('editor') editor;
   @ViewChild('labelsInput') labelsInput;
@@ -239,9 +241,8 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
               this.editor.setReadOnly(true);
             }
             if (this.lambda.metadata.name === '') {
-              this.functionName.nativeElement.focus()
+              this.functionName.nativeElement.focus();
             }
-
           }
 
           this.eventActivationsService
@@ -895,13 +896,22 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   }
 
   initCanShowLogs() {
-    luigiClient.linkManager().pathExists('/home/cmf-logs').then(exists => {
-      this.canShowLogs = exists;
-    });
+    luigiClient
+      .linkManager()
+      .pathExists('/home/cmf-logs')
+      .then(exists => {
+        this.canShowLogs = exists;
+      });
   }
 
   showLogs() {
-    luigiClient.linkManager().withParams({function: this.lambda.metadata.name, namespace: this.namespace}).openAsModal('/home/cmf-logs');
+    luigiClient
+      .linkManager()
+      .withParams({
+        function: this.lambda.metadata.name,
+        namespace: this.namespace,
+      })
+      .openAsModal('/home/cmf-logs');
   }
 
   navigateToList() {
@@ -1052,12 +1062,9 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     }
     const regex = /[a-z]([-a-z0-9]*[a-z0-9])?/;
     const found = this.lambda.metadata.name.match(regex);
-    this.isFunctionNameEmpty =
-      this.lambda.metadata.name === ''
-        ? true
-        : false;
+    this.isFunctionNameEmpty = this.lambda.metadata.name === '' ? true : false;
     if (this.isFunctionNameEmpty) {
-      this.isLambdaFormValid = false
+      this.isLambdaFormValid = false;
     }
     this.isFunctionNameInvalid =
       (found && found[0] === this.lambda.metadata.name) ||
@@ -1190,9 +1197,9 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     if (api.spec.authentication !== undefined) {
       httpEndPoint.isAuthEnabled =
         api.spec.authentication.length !== 0 ? true : false;
-        if (httpEndPoint.isAuthEnabled) {
-          httpEndPoint.authentication = api.spec.authentication[0]
-        }
+      if (httpEndPoint.isAuthEnabled) {
+        httpEndPoint.authentication = api.spec.authentication[0];
+      }
     }
 
     return httpEndPoint;
@@ -1292,5 +1299,9 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       });
       return functionSizeChanged;
     }
+  }
+
+  changeTab(index: number) {
+    this.currentTab = index;
   }
 }
