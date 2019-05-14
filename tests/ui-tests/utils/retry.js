@@ -20,7 +20,6 @@ Inputs:
 */
 export const retryInterval = async (
   fn,
-  args,
   intervalMs = 1000,
   maxReps = 30,
 ) => {
