@@ -28,7 +28,7 @@ export const retryInterval = async (
   return new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
       repsCounter++;
-      const result = await fn(args);
+      const result = await fn();
       if (result === true || repsCounter === maxReps) {
         clearInterval(interval);
         if (result === true) {
