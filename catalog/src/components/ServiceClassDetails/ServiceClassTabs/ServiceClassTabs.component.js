@@ -25,7 +25,7 @@ import {
   processDocFilename,
   DocsProcessor,
 } from '../../../commons/helpers';
-
+import { serviceClassConstants } from '../../../variables';
 import { asyncApiConfig, asyncApiTheme } from '../../../commons/asyncapi';
 
 const validatDocumentsByType = type => {
@@ -358,13 +358,14 @@ class ServiceClassTabs extends Component {
               aditionalStatus={this.getTabElementsIndicator(
                 this.props.serviceClass.instances.length,
               )}
-              title={'Instances'}
+              title={serviceClassConstants.instancesTabText}
             >
               <Table
-                headers={['INSTANCE', 'STATUS']}
+                headers={[serviceClassConstants.tableHeaderInstance, serviceClassConstants.tableHeaderStatus]}
                 tableData={this.prepareRowData(
                   this.props.serviceClass.instances,
                 )}
+                notFoundMessage={serviceClassConstants.emptyInstancesListMessage}
               />
             </Tab>
           </Tabs>
