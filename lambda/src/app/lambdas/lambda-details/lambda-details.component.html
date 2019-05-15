@@ -45,8 +45,8 @@
         </a>
       </span>
       <span class="fd-tabs__item">
-        <a class="fd-tabs__link" href="javascript:void(null)" (click)="changeTab(1)"
-          [attr.aria-selected]="currentTab===1" [attr.aria-disabled]="true" role="tab">
+        <a class="fd-tabs__link" href="javascript:void(null)" (click)="isTestingEnabled && changeTab(1)"
+          [attr.aria-selected]="currentTab===1" [attr.aria-disabled]="!isTestingEnabled" role="tab">
           Test
         </a>
       </span>

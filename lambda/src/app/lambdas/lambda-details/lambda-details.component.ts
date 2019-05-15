@@ -148,7 +148,8 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   public canShowLogs = false;
 
   public currentTab = 0;
-
+  public isTestingEnabled = false; //TODO: make it true only if Lambda is deployed & has HTTP trigger attached
+    
   @ViewChild('dependencyEditor') dependencyEditor;
   @ViewChild('editor') editor;
   @ViewChild('labelsInput') labelsInput;
@@ -168,7 +169,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       s.description = `Memory: ${s.memory} CPU: ${s.cpu} minReplicas: ${
         s.minReplicas
       } maxReplicas: ${s.maxReplicas}`;
-      return s;
+        return s;
     });
 
     this.selectedFunctionSize = this.functionSizes[0];
@@ -634,12 +635,12 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           sub.metadata.name = `lambda-${this.lambda.metadata.name}-${
             trigger.eventType
           }-${trigger.version}`.toLowerCase();
-          sub.metadata.namespace = this.namespace;
+            sub.metadata.namespace = this.namespace;
           sub.metadata.labels['Function'] = this.lambda.metadata.name;
           sub.spec.endpoint = `http://${this.lambda.metadata.name}.${
             this.namespace
           }:8080/`;
-          sub.spec.event_type = trigger.eventType;
+            sub.spec.event_type = trigger.eventType;
           sub.spec.event_type_version = trigger.version;
           sub.spec.source_id = trigger.sourceId;
           const req = this.subscriptionsService
@@ -659,7 +660,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           `lambda-${this.lambda.metadata.name}-${et.eventType}-${
             et.version
           }`.toLowerCase(),
-          this.namespace,
+            this.namespace,
           this.token,
         )
         .pipe(
@@ -1069,7 +1070,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     this.isFunctionNameInvalid =
       (found && found[0] === this.lambda.metadata.name) ||
       this.lambda.metadata.name === ''
-        ? false
+          ? false
         : true;
     if (!this.lambda.metadata.name || this.isFunctionNameInvalid) {
       this.editor.setReadOnly(true);
@@ -1228,7 +1229,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         this.httpURL = `${this.lambda.metadata.name}-${this.namespace}.${
           AppConfig.domain
         }`.toLowerCase();
-
+          
         this.isHTTPTriggerAdded = true;
         this.isHTTPTriggerAuthenticated = (trigger as HTTPEndpoint).isAuthEnabled;
         this.warnUnsavedChanges(true);
@@ -1266,7 +1267,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     this.lambda.spec.horizontalPodAutoscaler.metadata.name = `${
       this.lambda.metadata.name
     }`;
-    this.lambda.spec.horizontalPodAutoscaler.metadata.namespace = this.namespace;
+      this.lambda.spec.horizontalPodAutoscaler.metadata.namespace = this.namespace;
     this.lambda.spec.horizontalPodAutoscaler.metadata.labels = {
       function: `${this.lambda.metadata.name}`,
     };
