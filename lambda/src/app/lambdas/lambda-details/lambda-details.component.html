@@ -39,14 +39,14 @@
 
     <nav class="fd-tabs" role="tablist">
       <span class="fd-tabs__item">
-        <a href="javascript:void(null)" (click)="changeTab(0)" class="fd-tabs__link"
-          [attr.aria-selected]="currentTab===0" role="tab">
+        <a href="javascript:void(null)" (click)="changeTab('config')" class="fd-tabs__link"
+          [attr.aria-selected]="currentTab==='config'" role="tab">
           Config
         </a>
       </span>
       <span class="fd-tabs__item">
-        <a class="fd-tabs__link" href="javascript:void(null)" (click)="isTestingEnabled && changeTab(1)"
-          [attr.aria-selected]="currentTab===1" [attr.aria-disabled]="!isTestingEnabled" role="tab">
+        <a class="fd-tabs__link" href="javascript:void(null)" (click)="existingHTTPEndpoint && changeTab('test')"
+          [attr.aria-selected]="currentTab==='test'" [attr.aria-disabled]="!existingHTTPEndpoint" role="tab">
           Test
         </a>
       </span>
@@ -55,7 +55,7 @@
   </section>
 </header>
 
-<div class="fd-tabs__panel" [attr.aria-expanded]="currentTab===0" id="limitRanges" role="tabpanel">
+<div class="fd-tabs__panel" [attr.aria-expanded]="currentTab==='config'" id="limitRanges" role="tabpanel">
   <section class="fd-section">
     <p *ngIf="!loaded">
       Loading ...
@@ -282,6 +282,28 @@
 
 </div>
 
-<div class="fd-tabs__panel" [attr.aria-expanded]="currentTab===1" id="limitRanges" role="tabpanel">
-  Test area
+<div class="fd-tabs__panel" [attr.aria-expanded]="currentTab==='test'" id="limitRanges" role="tabpanel">
+  <section class="fd-section">
+    <fd-panel class="y-fd-panel">
+      <fd-panel-header>
+        <fd-panel-head>
+          <fd-panel-title>Payload</fd-panel-title>
+        </fd-panel-head>
+      </fd-panel-header>
+
+      <fd-panel-body [bleed]="true">
+        <ace-editor class="test-payload-editor" #testPayloadEditor [(text)]="testPayloadText" [theme]="theme"
+          [mode]="'json'">
+        </ace-editor>
+      </fd-panel-body>
+      <fd-panel-footer>
+        <button fd-button [options]="'light'" [glyph]="'add'" id="functionTriggerSelector"
+          (click)="toggleDropdownState('functionTriggerPopover')" [disabled]="
+                        lambda.metadata.name.length <= 0 || isFunctionNameInvalid
+                      ">
+          Select Function Trigger
+        </button>
+      </fd-panel-footer>
+    </fd-panel>
+  </section>
 </div>
