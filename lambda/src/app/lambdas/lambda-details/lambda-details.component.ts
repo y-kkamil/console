@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http';
 import { catchError, finalize } from 'rxjs/operators';
 import { of as observableOf, Observable, forkJoin } from 'rxjs';
 
@@ -167,6 +167,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     private subscriptionsService: SubscriptionsService,
     private cdr: ChangeDetectorRef,
     protected route: ActivatedRoute,
+    private http: HttpClient
   ) {
     this.functionSizes = AppConfig.functionSizes.map(s => s['size']).map(s => {
       s.description = `Memory: ${s.memory} CPU: ${s.cpu} minReplicas: ${
@@ -1322,18 +1323,72 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       return;
     }
     console.log(this.existingHTTPEndpoint)
-    const url = `https://${this.existingHTTPEndpoint.spec.hostname}:${this.existingHTTPEndpoint.spec.service.port}`;
+    const url = `https://${this.existingHTTPEndpoint.spec.hostname}`;
 
-    luigiClient.uxManager().showLoadingIndicator();
+    // luigiClient.uxManager().showLoadingIndicator();
 
-    fetch(url, {
-      method: "POST",
-      body: this.testPayloadText
-    }).finally(
-      () => { luigiClient.uxManager().hideLoadingIndicator(); }
-    ).catch(() => {
-      luigiClient.uxManager().showAlert({ text: `The Lambda endpoint is inaccessible`, type: 'error' });
-    });
+    const hasAuth: boolean = Boolean(this.existingHTTPEndpoint.spec.authentication && this.existingHTTPEndpoint.spec.authentication.length);
 
+
+    //luigiClient.getEventData().idToken
+    //luigiClient.getToken()
+
+
+    // const h = {
+    //   headers: new HttpHeaders({
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${luigiClient.getToken()}`
+    //   })
+    // }
+
+    // fetch(url, {
+    //   method: "POST",
+    //   body: this.testPayloadText,
+    //   headers: new Headers({
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${luigiClient.getEventData().idToken}`
+    //   })
+    // }).finally(
+    //   () => { luigiClient.uxManager().hideLoadingIndicator(); }
+    // ).catch(() => {
+    //   luigiClient.uxManager().showAlert({ text: `The Lambda endpoint is inaccessible`, type: 'error' });
+    // });
+
+
+
+
+    ///*
+    let httpHeaders: any;
+    httpHeaders = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      }),
+    };
+
+
+    const result = this.http
+      .post(url, { "dupa": "fhhdhhd" }, httpHeaders)
+      .map(res => {
+        const response: any = res;
+        const filteredErrors =
+          (response &&
+            response.errors &&
+            response.errors.filter(
+              (e: any) => !e.message.startsWith('MODULE_DISABLED'),
+            )) ||
+          [];
+        if (filteredErrors.length) {
+          throw new Error(filteredErrors[0].message);
+        }
+        if (response && response.data) {
+          return response.data;
+        }
+      }).subscribe(res => {
+        console.warn(res);
+      }, err => {
+        console.log(err)
+      });
+    // */
   }
 }
