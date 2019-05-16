@@ -12,5 +12,5 @@ export const serviceClassConstants = {
   servicesDescription:
     'Enrich your experience with additional services that are installed outside the cluster.',
   servicesTooltipDescription: 'Enrich your experience with additional services',
-  title: 'Service Catalog'
+  title: 'Service Catalog',
 };

@@ -7,9 +7,7 @@ import { serviceClassConstants } from '../../../../variables';
 
 import { Link, LinkButton } from './styled';
 
-
 export class ServiceClassInstancesTable extends Component {
-
   prepareRowData(serviceClassInstances) {
     return serviceClassInstances.map(instance => ({
       rowData: [
@@ -33,12 +31,15 @@ export class ServiceClassInstancesTable extends Component {
   }
 
   render() {
-    return (<Table
-      headers={[serviceClassConstants.tableHeaderInstance, serviceClassConstants.tableHeaderStatus]}
-      tableData={this.prepareRowData(
-        this.props.tableData,
-      )}
-      notFoundMessage={serviceClassConstants.emptyInstancesListMessage}
-    />)
+    return (
+      <Table
+        headers={[
+          serviceClassConstants.tableHeaderInstance,
+          serviceClassConstants.tableHeaderStatus,
+        ]}
+        tableData={this.prepareRowData(this.props.tableData)}
+        notFoundMessage={serviceClassConstants.emptyInstancesListMessage}
+      />
+    );
   }
 }
