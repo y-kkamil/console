@@ -5,6 +5,7 @@ import AsyncApi from '@kyma-project/asyncapi-react';
 import ODataReact from '@kyma-project/odata-react';
 import {
   Markdown,
+  NotificationMessage,
   ReactMarkdown,
   Status,
   StatusWrapper,
@@ -15,7 +16,10 @@ import {
 import ApiReference from '../SwaggerApi/SwaggerApiReference.component';
 import { ServiceClassInstancesTable } from './ServiceClassInstancesTable/ServiceClassInstancesTable.component';
 
-import { ServiceClassTabsContentWrapper } from './styled';
+import {
+  ServiceClassTabsContentWrapper,
+  TabErrorMessageWrapper,
+} from './styled';
 
 import {
   sortDocumentsByType,
@@ -40,7 +44,7 @@ class ServiceClassTabs extends Component {
     openApiSpec: null,
     asyncapi: null,
     odata: null,
-    error: null,
+    fetchError: null,
   };
 
   async componentDidMount() {
@@ -150,7 +154,7 @@ class ServiceClassTabs extends Component {
         })
         .catch(err => {
           this.setState({
-            error: err,
+            fetchError: err,
           });
         });
     return data;
@@ -170,7 +174,7 @@ class ServiceClassTabs extends Component {
         })
         .catch(err => {
           this.setState({
-            error: err,
+            fetchError: err,
           });
         });
     return data;
@@ -196,7 +200,7 @@ class ServiceClassTabs extends Component {
       ),
     ).catch(err => {
       this.setState({
-        error: err,
+        fetchError: err,
       });
     });
     return data;
@@ -213,12 +217,7 @@ class ServiceClassTabs extends Component {
   render() {
     const { serviceClass, serviceClassLoading } = this.props;
     //data from new api
-    const { docsData, openApiSpec, asyncapi, odata, error } = this.state;
-
-    if (error) {
-      console.error(error);
-      return <div>{`${error.name}: ${error.message}`}</div>;
-    }
+    const { docsData, openApiSpec, asyncapi, odata, fetchError } = this.state;
 
     //data from deprecated api
     const deprecatedContent = serviceClass.content && serviceClass.content;
@@ -298,50 +297,68 @@ class ServiceClassTabs extends Component {
           ));
 
       return (
-        <ServiceClassTabsContentWrapper>
-          <Tabs>
-            {docsData && docsData.length ? docsFromNewApi : deprecatedDocs}
-            {(openApiSpec && openApiSpec.source) ||
-            (deprecatedOpenApiSpec &&
-              Object.keys(deprecatedOpenApiSpec).length) ? (
-              <Tab title={'Console'}>
-                <ApiReference
-                  url="http://petstore.swagger.io/v1/swagger.json"
-                  schema={openApiSpec.source || deprecatedOpenApiSpec}
-                />
-              </Tab>
-            ) : null}
-            {(asyncapi && asyncapi.source) ||
-            (deprecatedAsyncApiSpec &&
-              Object.keys(deprecatedAsyncApiSpec).length) ? (
-              <Tab title={'Events'} margin="0" background="inherit">
-                <AsyncApi
-                  schema={
-                    (asyncapi && asyncapi.source) || deprecatedAsyncApiSpec
-                  }
-                  theme={asyncApiTheme}
-                  config={asyncApiConfig}
-                />
-              </Tab>
-            ) : null}
-            {(odata && odata.source) ||
-            (deprecatedOdataSpec && Object.keys(deprecatedOdataSpec).length) ? (
-              <Tab title={'OData'} margin="0" background="inherit">
-                <ODataReact schema={odata.source || deprecatedOdataSpec} />
-              </Tab>
-            ) : null}
-            <Tab
-              aditionalStatus={this.getTabElementsIndicator(
-                this.props.serviceClass.instances.length,
-              )}
-              title={serviceClassConstants.instancesTabText}
-            >
-              <ServiceClassInstancesTable
-                tableData={this.props.serviceClass.instances}
+        <>
+          {fetchError && (
+            <TabErrorMessageWrapper>
+              <NotificationMessage
+                type="error"
+                title={fetchError.name}
+                message={fetchError.message}
               />
-            </Tab>
-          </Tabs>
-        </ServiceClassTabsContentWrapper>
+            </TabErrorMessageWrapper>
+          )}
+
+          <ServiceClassTabsContentWrapper>
+            <Tabs>
+              {!fetchError && docsData && docsData.length
+                ? docsFromNewApi
+                : deprecatedDocs}
+              {!fetchError &&
+              ((openApiSpec && openApiSpec.source) ||
+                (deprecatedOpenApiSpec &&
+                  Object.keys(deprecatedOpenApiSpec).length)) ? (
+                <Tab title={'Console'}>
+                  <ApiReference
+                    url="http://petstore.swagger.io/v1/swagger.json"
+                    schema={openApiSpec.source || deprecatedOpenApiSpec}
+                  />
+                </Tab>
+              ) : null}
+              {!fetchError &&
+              ((asyncapi && asyncapi.source) ||
+                (deprecatedAsyncApiSpec &&
+                  Object.keys(deprecatedAsyncApiSpec).length)) ? (
+                <Tab title={'Events'} margin="0" background="inherit">
+                  <AsyncApi
+                    schema={
+                      (asyncapi && asyncapi.source) || deprecatedAsyncApiSpec
+                    }
+                    theme={asyncApiTheme}
+                    config={asyncApiConfig}
+                  />
+                </Tab>
+              ) : null}
+              {!fetchError &&
+              ((odata && odata.source) ||
+                (deprecatedOdataSpec &&
+                  Object.keys(deprecatedOdataSpec).length)) ? (
+                <Tab title={'OData'} margin="0" background="inherit">
+                  <ODataReact schema={odata.source || deprecatedOdataSpec} />
+                </Tab>
+              ) : null}
+              <Tab
+                aditionalStatus={this.getTabElementsIndicator(
+                  this.props.serviceClass.instances.length,
+                )}
+                title={serviceClaskyma.localsConstants.instancesTabText}
+              >
+                <ServiceClassInstancesTable
+                  tableData={this.props.serviceClass.instances}
+                />
+              </Tab>
+            </Tabs>
+          </ServiceClassTabsContentWrapper>
+        </>
       );
     }
     return null;
