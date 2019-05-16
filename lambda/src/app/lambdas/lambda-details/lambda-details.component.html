@@ -291,17 +291,15 @@
         </fd-panel-head>
       </fd-panel-header>
 
-      <fd-panel-body [bleed]="true">
+      <fd-panel-body>
         <ace-editor class="test-payload-editor" #testPayloadEditor [(text)]="testPayloadText" [theme]="theme"
           [mode]="'json'">
         </ace-editor>
+
       </fd-panel-body>
       <fd-panel-footer>
-        <button fd-button [options]="'light'" [glyph]="'add'" id="functionTriggerSelector"
-          (click)="toggleDropdownState('functionTriggerPopover')" [disabled]="
-                        lambda.metadata.name.length <= 0 || isFunctionNameInvalid
-                      ">
-          Select Function Trigger
+        <button fd-button [options]="'emphasized'" [glyph]="'journey-depart'" (click)="handleTestButtonClick()">
+          Make a test call
         </button>
       </fd-panel-footer>
     </fd-panel>

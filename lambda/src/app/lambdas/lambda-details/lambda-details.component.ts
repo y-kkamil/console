@@ -1308,4 +1308,32 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   changeTab(name: string) {
     this.currentTab = name;
   }
+
+  handleTestButtonClick() {
+    if (!this.existingHTTPEndpoint) {
+      throw new Error('It looks like the Lambda is not deployed yet');
+    }
+
+    try {
+      this.testPayload = JSON.parse(this.testPayloadText);
+    } catch (ex) {
+      luigiClient.uxManager().showAlert({ text: `Couldn't parse payload JSON`, type: 'error', closeAfter: 3000 });
+      //TODO alert
+      return;
+    }
+    console.log(this.existingHTTPEndpoint)
+    const url = `https://${this.existingHTTPEndpoint.spec.hostname}:${this.existingHTTPEndpoint.spec.service.port}`;
+
+    luigiClient.uxManager().showLoadingIndicator();
+
+    fetch(url, {
+      method: "POST",
+      body: this.testPayloadText
+    }).finally(
+      () => { luigiClient.uxManager().hideLoadingIndicator(); }
+    ).catch(() => {
+      luigiClient.uxManager().showAlert({ text: `The Lambda endpoint is inaccessible`, type: 'error' });
+    });
+
+  }
 }
