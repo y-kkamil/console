@@ -350,7 +350,7 @@ class ServiceClassTabs extends Component {
                 aditionalStatus={this.getTabElementsIndicator(
                   this.props.serviceClass.instances.length,
                 )}
-                title={serviceClaskyma.localsConstants.instancesTabText}
+                title={serviceClassConstants.instancesTabText}
               >
                 <ServiceClassInstancesTable
                   tableData={this.props.serviceClass.instances}
