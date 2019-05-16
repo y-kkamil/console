@@ -6,18 +6,16 @@ import ODataReact from '@kyma-project/odata-react';
 import {
   Markdown,
   ReactMarkdown,
-  InstanceStatus,
   Status,
   StatusWrapper,
-  Table,
   Tabs,
   Tab,
 } from '@kyma-project/react-components';
-import LuigiClient from '@kyma-project/luigi-client';
 
 import ApiReference from '../SwaggerApi/SwaggerApiReference.component';
+import { ServiceClassInstancesTable } from './ServiceClassInstancesTable/ServiceClassInstancesTable.component';
 
-import { Link, LinkButton, ServiceClassTabsContentWrapper } from './styled';
+import { ServiceClassTabsContentWrapper } from './styled';
 
 import {
   sortDocumentsByType,
@@ -204,34 +202,12 @@ class ServiceClassTabs extends Component {
     return data;
   }
 
-  goToServiceInstanceDetails(instanceName) {
-    LuigiClient.linkManager()
-      .fromContext('namespaces')
-      .navigate(`cmf-instances/details/${instanceName}`);
-  }
-
   getTabElementsIndicator(instancesCount) {
     return (
       <StatusWrapper key="instances-no">
         <Status>{instancesCount}</Status>
       </StatusWrapper>
     );
-  }
-
-  prepareRowData(serviceClassInstances) {
-    return serviceClassInstances.map(instance => ({
-      rowData: [
-        <LinkButton>
-          <Link
-            onClick={() => this.goToServiceInstanceDetails(instance.name)}
-            title={instance.name}
-          >
-            {instance.name}
-          </Link>
-        </LinkButton>,
-        <InstanceStatus status={instance.status.type} />,
-      ],
-    }));
   }
 
   render() {
@@ -360,12 +336,8 @@ class ServiceClassTabs extends Component {
               )}
               title={serviceClassConstants.instancesTabText}
             >
-              <Table
-                headers={[serviceClassConstants.tableHeaderInstance, serviceClassConstants.tableHeaderStatus]}
-                tableData={this.prepareRowData(
-                  this.props.serviceClass.instances,
-                )}
-                notFoundMessage={serviceClassConstants.emptyInstancesListMessage}
+              <ServiceClassInstancesTable
+                tableData={this.props.serviceClass.instances}
               />
             </Tab>
           </Tabs>
