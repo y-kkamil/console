@@ -259,44 +259,44 @@ class ServiceClassTabs extends Component {
             </TabErrorMessageWrapper>
           )}
 
-        <ServiceClassTabsContentWrapper>
-          <Tabs>
-            {!fetchError && docsData && docsData.length && docsFromNewApi}
-            {!fetchError && openApiSpec && openApiSpec.source ? (
-              <Tab title={'Console'}>
-                <ApiReference
-                  url="http://petstore.swagger.io/v1/swagger.json"
-                  schema={openApiSpec.source}
+          <ServiceClassTabsContentWrapper>
+            <Tabs>
+              {!fetchError && docsData && docsData.length && docsFromNewApi}
+              {!fetchError && openApiSpec && openApiSpec.source ? (
+                <Tab title={'Console'}>
+                  <ApiReference
+                    url="http://petstore.swagger.io/v1/swagger.json"
+                    schema={openApiSpec.source}
+                  />
+                </Tab>
+              ) : null}
+              {!fetchError && asyncapi && asyncapi.source ? (
+                <Tab title={'Events'} margin="0" background="inherit">
+                  <AsyncApi
+                    schema={asyncapi && asyncapi.source}
+                    theme={asyncApiTheme}
+                    config={asyncApiConfig}
+                  />
+                </Tab>
+              ) : null}
+              {!fetchError && odata && odata.source ? (
+                <Tab title={'OData'} margin="0" background="inherit">
+                  <ODataReact schema={odata.source} />
+                </Tab>
+              ) : null}
+              <Tab
+                aditionalStatus={this.getTabElementsIndicator(
+                  this.props.serviceClass.instances.length,
+                )}
+                title={serviceClassConstants.instancesTabText}
+              >
+                <ServiceClassInstancesTable
+                  tableData={this.props.serviceClass.instances}
                 />
               </Tab>
-            ) : null}
-            {!fetchError && asyncapi && asyncapi.source ? (
-              <Tab title={'Events'} margin="0" background="inherit">
-                <AsyncApi
-                  schema={asyncapi && asyncapi.source}
-                  theme={asyncApiTheme}
-                  config={asyncApiConfig}
-                />
-              </Tab>
-            ) : null}
-            {!fetchError && odata && odata.source ? (
-              <Tab title={'OData'} margin="0" background="inherit">
-                <ODataReact schema={odata.source} />
-              </Tab>
-            ) : null}
-            <Tab
-              aditionalStatus={this.getTabElementsIndicator(
-                this.props.serviceClass.instances.length,
-              )}
-              title={serviceClassConstants.instancesTabText}
-            >
-              <ServiceClassInstancesTable
-                tableData={this.props.serviceClass.instances}
-              />
-            </Tab>
-          </Tabs>
-        </ServiceClassTabsContentWrapper>
-      </>
+            </Tabs>
+          </ServiceClassTabsContentWrapper>
+        </>
       );
     }
     return null;
