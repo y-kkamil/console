@@ -1319,76 +1319,28 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       this.testPayload = JSON.parse(this.testPayloadText);
     } catch (ex) {
       luigiClient.uxManager().showAlert({ text: `Couldn't parse payload JSON`, type: 'error', closeAfter: 3000 });
-      //TODO alert
       return;
     }
-    console.log(this.existingHTTPEndpoint)
+
     const url = `https://${this.existingHTTPEndpoint.spec.hostname}`;
-
-    // luigiClient.uxManager().showLoadingIndicator();
-
     const hasAuth: boolean = Boolean(this.existingHTTPEndpoint.spec.authentication && this.existingHTTPEndpoint.spec.authentication.length);
 
+    luigiClient.uxManager().showLoadingIndicator();
 
-    //luigiClient.getEventData().idToken
-    //luigiClient.getToken()
-
-
-    // const h = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type': 'application/json',
-    //     Authorization: `Bearer ${luigiClient.getToken()}`
-    //   })
-    // }
-
-    // fetch(url, {
-    //   method: "POST",
-    //   body: this.testPayloadText,
-    //   headers: new Headers({
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${luigiClient.getEventData().idToken}`
-    //   })
-    // }).finally(
-    //   () => { luigiClient.uxManager().hideLoadingIndicator(); }
-    // ).catch(() => {
-    //   luigiClient.uxManager().showAlert({ text: `The Lambda endpoint is inaccessible`, type: 'error' });
-    // });
-
-
-
-
-    ///*
-    let httpHeaders: any;
-    httpHeaders = {
-      headers: new HttpHeaders({
+    fetch(url, {
+      method: "POST",
+      body: this.testPayloadText,
+      headers: hasAuth ? new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
-      }),
-    };
+        'Authorization': `Bearer ${this.token}`
+      }) : {}
+    }).finally(
+      () => { luigiClient.uxManager().hideLoadingIndicator(); }
+    ).then(() => {
+      luigiClient.uxManager().showAlert({ text: `The Lambda received your payload. You can now browse the logs to see the reaction`, type: 'info', closeAfter: 3500 });
+    }).catch(() => {
+      luigiClient.uxManager().showAlert({ text: `The Lambda endpoint is inaccessible`, type: 'error' });
+    });
 
-
-    const result = this.http
-      .post(url, { "dupa": "fhhdhhd" }, httpHeaders)
-      .map(res => {
-        const response: any = res;
-        const filteredErrors =
-          (response &&
-            response.errors &&
-            response.errors.filter(
-              (e: any) => !e.message.startsWith('MODULE_DISABLED'),
-            )) ||
-          [];
-        if (filteredErrors.length) {
-          throw new Error(filteredErrors[0].message);
-        }
-        if (response && response.data) {
-          return response.data;
-        }
-      }).subscribe(res => {
-        console.warn(res);
-      }, err => {
-        console.log(err)
-      });
-    // */
   }
 }
