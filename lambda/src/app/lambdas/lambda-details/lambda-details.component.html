@@ -235,8 +235,13 @@
               </nav>
             </div>
           </div>
+
         </fd-panel-filters>
         <fd-panel-body>
+          <div *ngIf="!existingHTTPEndpoint" class="fd-alert fd-alert--information fd-has-margin-bottom-small"
+            role="alert">
+            You'll be able to <strong>test</strong> your lambda once it's deployed and has an HTTPS endpoint.
+          </div>
           <ace-editor #editor [(text)]="code" [mode]="aceMode" [theme]="theme" (textChanged)="onCodeChange($event)">
           </ace-editor>
         </fd-panel-body>
