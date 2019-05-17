@@ -140,7 +140,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   listenerId: number;
   functionSizes = [];
   dropDownStates = {};
-  testPayload = { a: 123 };
+  testPayload = {};
 
   public issuer: string;
   public jwksUri: string;
