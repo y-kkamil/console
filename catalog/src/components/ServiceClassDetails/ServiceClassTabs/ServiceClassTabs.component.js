@@ -14,7 +14,7 @@ import {
 } from '@kyma-project/react-components';
 
 import ApiReference from '../SwaggerApi/SwaggerApiReference.component';
-import { ServiceClassInstancesTable } from './ServiceClassInstancesTable/ServiceClassInstancesTable.component';
+import { ServiceClassInstancesTable } from '../ServiceClassInstancesTable/ServiceClassInstancesTable.component';
 
 import {
   ServiceClassTabsContentWrapper,
@@ -301,6 +301,7 @@ class ServiceClassTabs extends Component {
           {fetchError && (
             <TabErrorMessageWrapper>
               <NotificationMessage
+                customMargin={'0'}
                 type="error"
                 title={fetchError.name}
                 message={fetchError.message}
