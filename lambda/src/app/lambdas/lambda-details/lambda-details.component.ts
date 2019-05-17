@@ -1328,7 +1328,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     luigiClient.uxManager().showLoadingIndicator();
 
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       body: this.testPayloadText,
       headers: hasAuth ? new Headers({
         'Content-Type': 'application/json',
