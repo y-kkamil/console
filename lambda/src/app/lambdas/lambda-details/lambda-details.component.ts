@@ -1336,7 +1336,8 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       }) : {}
     }).finally(
       () => { luigiClient.uxManager().hideLoadingIndicator(); }
-    ).then(() => {
+    ).then(res => {
+      if (!res.ok) throw new Error();
       luigiClient.uxManager().showAlert({ text: `The Lambda received your payload. You can now browse the logs to see the reaction`, type: 'info', closeAfter: 3500 });
     }).catch(() => {
       luigiClient.uxManager().showAlert({ text: `The Lambda endpoint is inaccessible`, type: 'error' });
