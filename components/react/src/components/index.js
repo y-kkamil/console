@@ -18,7 +18,6 @@ import Label from './Label';
 import Image from './Image';
 import InstanceStatus from './InstanceStatus';
 import Icon from './Icon';
-import Markdown from './Markdown';
 import Notification from './Notification';
 import NotificationMessage from './NotificationMessage';
 import {
@@ -79,7 +78,6 @@ module.exports = {
   Image,
   InstanceStatus,
   Icon,
-  Markdown,
   Notification,
   NotificationMessage,
   Panel,
