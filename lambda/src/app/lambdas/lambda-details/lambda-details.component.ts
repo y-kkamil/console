@@ -1322,15 +1322,14 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const url = `https://${this.existingHTTPEndpoint.spec.hostname}`;
-    const hasAuth: boolean = Boolean(this.existingHTTPEndpoint.spec.authentication && this.existingHTTPEndpoint.spec.authentication.length);
+    const lambdaEndpoint: HTTPEndpoint = this.getHTTPEndPointFromApi(this.existingHTTPEndpoint);
 
     luigiClient.uxManager().showLoadingIndicator();
 
-    fetch(url, {
+    fetch(lambdaEndpoint.url, {
       method: 'POST',
       body: this.testPayloadText,
-      headers: hasAuth ? new Headers({
+      headers: lambdaEndpoint.isAuthEnabled ? new Headers({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.token}`
       }) : {}
