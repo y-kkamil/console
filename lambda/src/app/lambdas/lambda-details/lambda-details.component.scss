@@ -123,12 +123,11 @@ input[type='text']:focus {
 
 .fd-page__header .fd-tabs {
   margin-bottom: -16px;
+  &__link {
+    display: inline-block;
+  }
 }
 
-.test-payload-editor{
-  height:20em;
-}
-
-.fd-tabs__link{
-  display: inline-block;
+.test-payload-editor {
+  height: 20em;
 }
