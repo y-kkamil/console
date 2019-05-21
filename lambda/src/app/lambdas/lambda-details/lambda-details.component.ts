@@ -147,11 +147,8 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   public authType: string;
 
   public canShowLogs = false;
-
   public currentTab = 'config';
-
   public testPayloadText = JSON.stringify(this.testPayload, null, 2);
-
 
   @ViewChild('dependencyEditor') dependencyEditor;
   @ViewChild('editor') editor;
