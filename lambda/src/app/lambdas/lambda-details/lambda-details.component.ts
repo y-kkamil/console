@@ -150,8 +150,8 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   public currentTab = 'config';
   public testPayloadText = JSON.stringify(this.testPayload, null, 2);
   public payloadAlert = {
-    type: "",
-    message: ""
+    type: '',
+    message: ''
   }
 
   @ViewChild('dependencyEditor') dependencyEditor;
