@@ -49,8 +49,12 @@
           [attr.aria-selected]="currentTab==='test'" [attr.aria-disabled]="!existingHTTPEndpoint" role="tab">
           Testing
         </a>
+        <span *ngIf="!existingHTTPEndpoint" class="fd-inline-help fd-has-margin-left-tiny">
+          <span class="fd-inline-help__content fd-inline-help__content--right">
+            You'll be able to test your lambda once it's deployed and has an HTTPS endpoint.
+          </span>
+        </span>
       </span>
-
     </nav>
   </section>
 </header>
@@ -238,10 +242,6 @@
 
         </fd-panel-filters>
         <fd-panel-body>
-          <div *ngIf="!existingHTTPEndpoint" class="fd-alert fd-alert--information fd-has-margin-bottom-small"
-            role="alert">
-            You'll be able to <strong>test</strong> your lambda once it's deployed and has an HTTPS endpoint.
-          </div>
           <ace-editor #editor [(text)]="code" [mode]="aceMode" [theme]="theme" (textChanged)="onCodeChange($event)">
           </ace-editor>
         </fd-panel-body>
@@ -294,10 +294,15 @@
       </fd-panel-header>
 
       <fd-panel-body>
+        <div *ngIf="payloadAlert.type && payloadAlert.message"
+          [ngClass]='["fd-alert", "fd-alert--" + payloadAlert.type, "fd-has-margin-bottom-small"]' role="alert"
+          id="JwPcf464">
+          {{ payloadAlert.message }}
+        </div>
+
         <ace-editor class="test-payload-editor" #testPayloadEditor [(text)]="testPayloadText" [theme]="theme"
           [mode]="'json'">
         </ace-editor>
-
       </fd-panel-body>
       <fd-panel-footer>
         <button fd-button [options]="'emphasized'" [glyph]="'journey-depart'" (click)="handleTestButtonClick()">

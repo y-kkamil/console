@@ -149,6 +149,10 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   public canShowLogs = false;
   public currentTab = 'config';
   public testPayloadText = JSON.stringify(this.testPayload, null, 2);
+  public payloadAlert = {
+    type: "",
+    message: ""
+  }
 
   @ViewChild('dependencyEditor') dependencyEditor;
   @ViewChild('editor') editor;
@@ -1315,7 +1319,10 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     try {
       this.testPayload = JSON.parse(this.testPayloadText);
     } catch (ex) {
-      luigiClient.uxManager().showAlert({ text: `Couldn't parse payload JSON`, type: 'error', closeAfter: 3000 });
+      this.payloadAlert = {
+        type: `error`,
+        message: `Couldn't parse the payload JSON`
+      }
       return;
     }
 
@@ -1334,9 +1341,15 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       () => { luigiClient.uxManager().hideLoadingIndicator(); }
     ).then(res => {
       if (!res.ok) { throw new Error(); }
-      luigiClient.uxManager().showAlert({ text: `The Lambda received your payload. You can now browse the logs to see the reaction`, type: 'info', closeAfter: 3500 });
+      this.payloadAlert = {
+        type: `success`,
+        message: `The Lambda received your payload. You can now browse its logs.`
+      }
     }).catch(() => {
-      luigiClient.uxManager().showAlert({ text: `The Lambda endpoint is inaccessible`, type: 'error' });
+      this.payloadAlert = {
+        type: `error`,
+        message: `The Lambda endpoint is inaccessible`
+      }
     });
 
   }
