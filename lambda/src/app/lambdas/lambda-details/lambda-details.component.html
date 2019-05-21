@@ -49,11 +49,10 @@
           [attr.aria-selected]="currentTab==='test'" [attr.aria-disabled]="!existingHTTPEndpoint" role="tab">
           Testing
         </a>
-        <span *ngIf="!existingHTTPEndpoint" class="fd-inline-help fd-has-margin-left-tiny">
-          <span class="fd-inline-help__content fd-inline-help__content--right">
-            You'll be able to test your lambda once it's deployed and has an HTTPS endpoint.
-          </span>
-        </span>
+
+        <fd-inline-help [position]="'right'" class="fd-has-margin-left-tiny" *ngIf="!existingHTTPEndpoint">
+          You'll be able to test your lambda once it's deployed and has an HTTPS endpoint.
+        </fd-inline-help>
       </span>
     </nav>
   </section>

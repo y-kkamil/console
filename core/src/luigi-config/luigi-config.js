@@ -34,7 +34,7 @@ var consoleViewGroupName = '_console_';
 
 let navigation = {
   viewGroupSettings: {
-    _console_ : {
+    _console_: {
       preloadUrl: '/consoleapp.html#/home/preload'
     }
   },
@@ -244,17 +244,17 @@ function getNodes(context) {
     });
     return nodeTree;
   })
-  .catch((err) => {
-    const errParsed = JSON.parse(err);
-    console.error('Error', errParsed);
-    const settings = {
-      text: `Namespace ${errParsed.details.name} not found.`,
-      type: 'error'
-     };
-     LuigiClient
-      .uxManager()
-      .showAlert(settings)
-  });
+    .catch((err) => {
+      const errParsed = JSON.parse(err);
+      console.error('Error', errParsed);
+      const settings = {
+        text: `Namespace ${errParsed.details.name} not found.`,
+        type: 'error'
+      };
+      LuigiClient
+        .uxManager()
+        .showAlert(settings)
+    });
 }
 
 /**
@@ -477,7 +477,7 @@ function getConsoleInitData() {
     backendModules{
       name
     }
-    clusterMicroFrontends{
+    clusterMicrofrontends{
       name
       category
       viewBaseUrl
@@ -489,12 +489,7 @@ function getConsoleInitData() {
         showInNavigation
         order
         settings
-        externalLink
-        requiredPermissions{
-          verbs
-          resource
-          apiGroup
-        }
+        
       }
     }
   }`;
@@ -541,17 +536,17 @@ let selfSubjectRulesReview = [];
 let clusterMicrofrontendNodes = [];
 var initPromises = [getFreshKeys()];
 
-if(token){
+if (token) {
   initPromises.push(getConsoleInitData())
 }
 
 Promise.all(initPromises)
   .then(
     res => {
-      if(token){
+      if (token) {
         const modules = res[1].backendModules;
         const subjectRules = res[1].selfSubjectRules;
-        const cmfs = res[1].clusterMicroFrontends;
+        const cmfs = res[1].clusterMicrofrontends;
         if (
           modules &&
           modules.length > 0
@@ -650,10 +645,10 @@ Promise.all(initPromises)
                   ]
                 }
               ],
-              requiredPermissions : [{
-                apiGroup : "rbac.authorization.k8s.io",
-                resource : "clusterrolebindings",
-                verbs : ["create"]
+              requiredPermissions: [{
+                apiGroup: "rbac.authorization.k8s.io",
+                resource: "clusterrolebindings",
+                verbs: ["create"]
               }]
             },
             {
@@ -681,54 +676,54 @@ Promise.all(initPromises)
         icon: 'sys-help'
       }
     ],
-    Luigi.setConfig({
-      auth: {
-        use: 'openIdConnect',
-        openIdConnect: {
-          authority: 'https://dex.' + k8sDomain,
-          client_id: 'console',
-          scope:
-            'audience:server:client_id:kyma-client audience:server:client_id:console openid profile email groups',
-          automaticSilentRenew: true,
-          loadUserInfo: false
-        },
+      Luigi.setConfig({
+        auth: {
+          use: 'openIdConnect',
+          openIdConnect: {
+            authority: 'https://dex.' + k8sDomain,
+            client_id: 'console',
+            scope:
+              'audience:server:client_id:kyma-client audience:server:client_id:console openid profile email groups',
+            automaticSilentRenew: true,
+            loadUserInfo: false
+          },
 
-        events: {
-          onLogout: () => {
-            console.log('onLogout');
-          },
-          onAuthSuccessful: data => { },
-          onAuthExpired: () => {
-            console.log('onAuthExpired');
-          },
-          // TODO: define luigi-client api for getting errors
-          onAuthError: err => {
-            console.log('authErrorHandler 1', err);
+          events: {
+            onLogout: () => {
+              console.log('onLogout');
+            },
+            onAuthSuccessful: data => { },
+            onAuthExpired: () => {
+              console.log('onAuthExpired');
+            },
+            // TODO: define luigi-client api for getting errors
+            onAuthError: err => {
+              console.log('authErrorHandler 1', err);
+            }
+          }
+        },
+        navigation,
+        routing: {
+          nodeParamPrefix: '~',
+          skipRoutingForUrlPatterns: [/access_token=/, /id_token=/]
+        },
+        settings: {
+          responsiveNavigation: 'simpleMobileOnly',
+          header: () => {
+            const logo =
+              clusterConfig && clusterConfig.headerLogoUrl
+                ? clusterConfig.headerLogoUrl
+                : '/assets/logo.svg';
+            const title = clusterConfig ? clusterConfig.headerTitle : undefined;
+            const favicon = clusterConfig ? clusterConfig.faviconUrl : undefined;
+            return {
+              logo,
+              title,
+              favicon
+            };
           }
         }
-      },
-      navigation,
-      routing: {
-        nodeParamPrefix: '~',
-        skipRoutingForUrlPatterns: [/access_token=/, /id_token=/]
-      },
-      settings: {
-        responsiveNavigation: 'simpleMobileOnly',
-        header: () => {
-          const logo =
-            clusterConfig && clusterConfig.headerLogoUrl
-              ? clusterConfig.headerLogoUrl
-              : '/assets/logo.svg';
-          const title = clusterConfig ? clusterConfig.headerTitle : undefined;
-          const favicon = clusterConfig ? clusterConfig.faviconUrl : undefined;
-          return {
-            logo,
-            title,
-            favicon
-          };
-        }
-      }
-    });
+      });
   })
   .catch((err) => {
     console.error('Config Init Error', err);
