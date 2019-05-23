@@ -1332,6 +1332,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       method: 'POST',
       body: this.testPayloadText,
       headers: lambdaEndpoint.isAuthEnabled ? new Headers({
+        'Content-Type':'application/json',
         'Authorization': `Bearer ${this.token}`
       }) : {}
     }).then(res => {
