@@ -1343,10 +1343,10 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     
       res.text().then(returnedBody => {
         try{
-          //the result can be parsed to JSON; pretty print it
+          // the result can be parsed to JSON; pretty print it
           this.testingResult = JSON.stringify(JSON.parse(returnedBody),null,2);
         }catch{
-          //just display it as it is
+          // just display it as it is
           this.testingResult = returnedBody;
         }
       }).catch(()=>{
