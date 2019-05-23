@@ -53,7 +53,6 @@ import { Subscription } from '../../shared/datamodel/k8s/subscription';
 import { SubscriptionsService } from '../../subscriptions/subscriptions.service';
 import { EventTriggerChooserComponent } from './event-trigger-chooser/event-trigger-chooser.component';
 import { HttpTriggerComponent } from './http-trigger/http-trigger.component';
-import { Authentication } from '../../shared/datamodel/authentication';
 
 const DEFAULT_CODE = `module.exports = { main: function (event, context) {
 
@@ -149,10 +148,11 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   public canShowLogs = false;
   public currentTab = 'config';
   public testPayloadText = JSON.stringify(this.testPayload, null, 2);
-  public payloadAlert = {
-    type: '',
-    message: ''
+  public testingAlert = {
+      type: '',
+      message: ''
   }
+  public testingResult = '';
 
   @ViewChild('dependencyEditor') dependencyEditor;
   @ViewChild('editor') editor;
@@ -1317,7 +1317,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     try {
       this.testPayload = JSON.parse(this.testPayloadText);
     } catch (ex) {
-      this.payloadAlert = {
+      this.testingAlert= {
         type: `error`,
         message: `Couldn't parse the payload JSON`
       }
@@ -1332,19 +1332,30 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       method: 'POST',
       body: this.testPayloadText,
       headers: lambdaEndpoint.isAuthEnabled ? new Headers({
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.token}`
       }) : {}
-    }).finally(
-      () => { luigiClient.uxManager().hideLoadingIndicator(); }
-    ).then(res => {
+    }).then(res => {
       if (!res.ok) { throw new Error(); }
-      this.payloadAlert = {
+      this.testingAlert= {
         type: `success`,
         message: `The Lambda received your payload. You can now browse its logs.`
       }
-    }).catch(() => {
-      this.payloadAlert = {
+    
+      res.text().then(returnedBody => {
+        try{
+          //the result can be parsed to JSON; pretty print it
+          this.testingResult = JSON.stringify(JSON.parse(returnedBody),null,2);
+        }catch{
+          //just display it as it is
+          this.testingResult = returnedBody;
+        }
+      }).catch(()=>{
+        this.testingResult='';
+      }); 
+    }).finally(
+      () => { luigiClient.uxManager().hideLoadingIndicator(); }
+    ).catch(() => {
+      this.testingAlert = {
         type: `error`,
         message: `The Lambda endpoint is inaccessible`
       }

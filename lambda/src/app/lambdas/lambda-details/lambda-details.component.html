@@ -293,21 +293,35 @@
       </fd-panel-header>
 
       <fd-panel-body>
-        <div *ngIf="payloadAlert.type && payloadAlert.message"
-          [ngClass]='["fd-alert", "fd-alert--" + payloadAlert.type, "fd-has-margin-bottom-small"]' role="alert"
+        <div *ngIf="testingAlert.type && testingAlert.message"
+          [ngClass]='["fd-alert", "fd-alert--" + testingAlert.type, "fd-has-margin-bottom-small"]' role="alert"
           id="JwPcf464">
-          {{ payloadAlert.message }}
+          {{ testingAlert.message }}
         </div>
 
-        <ace-editor class="test-payload-editor" #testPayloadEditor [(text)]="testPayloadText" [theme]="theme"
+        <ace-editor id="test-payload-editor" #testPayloadEditor [(text)]="testPayloadText" [theme]="theme"
           [mode]="'json'">
         </ace-editor>
       </fd-panel-body>
       <fd-panel-footer>
         <button fd-button [options]="'emphasized'" [glyph]="'journey-depart'" (click)="handleTestButtonClick()">
           Make a test call
-        </button>
+        </button>       
       </fd-panel-footer>
     </fd-panel>
+
+    <fd-panel *ngIf='testingResult' class="y-fd-panel fd-has-margin-top-small">
+        <fd-panel-header>
+          <fd-panel-head>
+            <fd-panel-title>Response</fd-panel-title>
+          </fd-panel-head>
+        </fd-panel-header>
+  
+        <fd-panel-body>      
+          <ace-editor aria-readonly="" id="test-result" [(text)]="testingResult" [theme]="theme"
+            [mode]="'json'">
+          </ace-editor>
+        </fd-panel-body>    
+      </fd-panel>
   </section>
 </div>

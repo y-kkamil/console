@@ -128,6 +128,16 @@ input[type='text']:focus {
   }
 }
 
-.test-payload-editor {
+#test-payload-editor {
   height: 20em;
+}
+
+#test-result {
+  height: 8em;
+}
+
+.fd-panel__footer{
+  .fd-button{
+    display: block;
+  }
 }
