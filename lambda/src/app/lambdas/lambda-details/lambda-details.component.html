@@ -318,7 +318,7 @@
         </fd-panel-header>
   
         <fd-panel-body>      
-          <ace-editor aria-readonly="" id="test-result" [(text)]="testingResult" [theme]="theme"
+          <ace-editor [readOnly]="true" id="test-result" [(text)]="testingResult" [theme]="theme"
             [mode]="'json'">
           </ace-editor>
         </fd-panel-body>    
