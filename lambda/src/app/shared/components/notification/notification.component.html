@@ -1,0 +1,9 @@
+<div [ngClass]="['notification', 'notification--' + type]">
+  <header class="notification__header">
+    {{ header }}
+    <fd-icon [glyph]="'accept'" [size]="'m'"></fd-icon>
+  </header>
+  <div *ngIf="description" class="notification__description">
+    {{ description }}
+  </div>
+</div>
