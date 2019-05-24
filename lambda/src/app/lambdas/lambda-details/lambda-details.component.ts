@@ -1335,32 +1335,31 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         'Content-Type':'application/json',
         'Authorization': `Bearer ${this.token}`
       }) : {}
-    }).then(res => {
-      if (!res.ok) { throw new Error(); }
-      this.testingAlert= {
+    }).then(async res => {
+      const responseText = await res.text();
+      if (!res.ok) { 
+       throw new Error(responseText);
+      }
+
+      this.testingAlert = {
         type: `success`,
         message: `The Lambda received your payload. You can now browse its logs.`
       }
     
-      res.text().then(returnedBody => {
-        try{
-          // the result can be parsed to JSON; pretty print it
-          this.testingResult = JSON.stringify(JSON.parse(returnedBody),null,2);
-        }catch{
-          // just display it as it is
-          this.testingResult = returnedBody;
-        }
-      }).catch(()=>{
-        this.testingResult='';
-      }); 
+      try{
+        // the result can be parsed to JSON => pretty print it
+        this.testingResult = JSON.stringify(JSON.parse(responseText),null,2);
+      }catch{
+        // just display it as it is
+        this.testingResult = responseText;
+      }
     }).finally(
       () => { luigiClient.uxManager().hideLoadingIndicator(); }
-    ).catch(() => {
+    ).catch(error => {
       this.testingAlert = {
         type: `error`,
-        message: `The Lambda endpoint is inaccessible`
+        message: error.message
       }
     });
-
   }
 }
