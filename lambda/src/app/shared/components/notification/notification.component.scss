@@ -1,5 +1,8 @@
-@mixin hasLeftBorder($color) {
+@mixin hasThemeColor($color) {
   border-left: 6px solid $color;
+  fd-icon{
+      color: $color;
+  }
 }
 
 .notification {
@@ -19,11 +22,11 @@
   min-width: 20em;
 
   &.notification--success {
-    @include hasLeftBorder(var(--fd-color-status-1));
+    @include hasThemeColor(var(--fd-color-status-1));
   }
 
   &.notification--error {
-    @include hasLeftBorder(var(--fd-color-status-3));
+    @include hasThemeColor(var(--fd-color-status-3));
   }
 
   &__header {
@@ -51,5 +54,6 @@
     box-sizing: border-box;
     border-top: 1px solid var(--fd-color-neutral-3);
   }
+  
 
 }

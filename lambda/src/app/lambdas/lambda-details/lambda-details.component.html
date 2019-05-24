@@ -293,19 +293,18 @@
       </fd-panel-header>
 
       <fd-panel-body>
-       
-
         <ace-editor id="test-payload-editor" #testPayloadEditor [(text)]="testPayloadText" [theme]="theme"
           [mode]="'json'">
         </ace-editor>
-
       </fd-panel-body>
       <fd-panel-footer>
         <button fd-button [options]="'emphasized'" [glyph]="'journey-depart'" (click)="handleTestButtonClick()">
           Make a test call
         </button> 
+        
         <app-notification id="M4SK0P4T0L" *ngIf="testingAlert.type && testingAlert.message" 
-        [header]="testingAlert.message" [type]="testingAlert.type">
+        [header]="testingAlert.message" [type]="testingAlert.type"
+        [description]="testingAlert.description">
         </app-notification>      
       </fd-panel-footer>
     </fd-panel>
