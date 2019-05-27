@@ -65,7 +65,7 @@ const DEFAULT_CODE = `module.exports = { main: function (event, context) {
 
 const FUNCTION = 'function';
 
-interface ITestingAlert {
+interface INotificationData {
   type: 'info' | 'success' | 'error';
   message: string;
   description?: string;
@@ -160,11 +160,11 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   public canShowLogs = false;
   public currentTab = 'config';
   public testPayloadText = JSON.stringify(this.testPayload, null, 2);
-  public testingAlert: ITestingAlert = {
+  public currentNotification: INotificationData = {
     type: 'info',
     message: '',
   };
-  public testingResult = '';
+  public testingResponse = '';
 
   @ViewChild('dependencyEditor') dependencyEditor;
   @ViewChild('editor') editor;
@@ -1324,15 +1324,15 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     this.currentTab = name;
   }
 
-  showNotification(notificationData: ITestingAlert, timeout?: number) {
-    this.testingAlert = { message: '', type: 'info' }; // "pretend" there's no error to force notification re-render
+  showNotification(notificationData: INotificationData, timeout?: number) {
+    this.currentNotification = { message: '', type: 'info' }; // "pretend" there's no error to force notification re-render
     setTimeout(() => {
-      this.testingAlert = notificationData;
+      this.currentNotification = notificationData;
     });
 
     if (timeout) {
       setTimeout(() => {
-        this.testingAlert = { message: '', type: 'info' };
+        this.currentNotification = { message: '', type: 'info' };
       }, timeout);
     }
   }
@@ -1345,7 +1345,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     try {
       this.testPayload = JSON.parse(this.testPayloadText);
     } catch (ex) {
-      this.testingAlert = {
+      this.currentNotification = {
         type: `error`,
         message: `Couldn't parse the payload JSON`,
         description: null,
@@ -1381,12 +1381,12 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
             message: `The Lambda received your payload.`,
             description: `You can now browse its logs.`,
           },
-          3000,
+          4000,
         );
 
         try {
           // the result can be parsed to JSON => pretty print it
-          this.testingResult = JSON.stringify(
+          this.testingResponse = JSON.stringify(
             JSON.parse(responseText),
             null,
             2,
@@ -1394,7 +1394,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           this.responseEditorMode = 'json';
         } catch {
           // just display it as it is
-          this.testingResult = responseText;
+          this.testingResponse = responseText;
           this.responseEditorMode = 'text';
         }
       })
@@ -1408,9 +1408,9 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
             message: error.message,
             description: null,
           },
-          3000,
+          4000,
         );
-        this.testingResult = '';
+        this.testingResponse = '';
       });
   }
 }
