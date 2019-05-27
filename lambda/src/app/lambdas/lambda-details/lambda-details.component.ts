@@ -1381,7 +1381,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
             message: `The Lambda received your payload.`,
             description: `You can now browse its logs.`,
           },
-          4000,
+          5000,
         );
 
         try {
@@ -1408,7 +1408,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
             message: error.message,
             description: null,
           },
-          4000,
+          5000,
         );
         this.testingResponse = '';
       });
