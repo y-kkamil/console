@@ -151,6 +151,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   functionSizes = [];
   dropDownStates = {};
   testPayload = {};
+  responseEditorMode: 'json' | 'text' = 'json';
 
   public issuer: string;
   public jwksUri: string;
@@ -1323,11 +1324,17 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     this.currentTab = name;
   }
 
-  showNotification(notificationData: ITestingAlert) {
+  showNotification(notificationData: ITestingAlert, timeout?: number) {
     this.testingAlert = { message: '', type: 'info' }; // "pretend" there's no error to force notification re-render
     setTimeout(() => {
       this.testingAlert = notificationData;
     });
+
+    if (timeout) {
+      setTimeout(() => {
+        this.testingAlert = { message: '', type: 'info' };
+      }, timeout);
+    }
   }
 
   handleTestButtonClick() {
@@ -1368,11 +1375,14 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           throw new Error(responseText);
         }
 
-        this.showNotification({
-          type: `success`,
-          message: `The Lambda received your payload.`,
-          description: `You can now browse its logs.`,
-        });
+        this.showNotification(
+          {
+            type: `success`,
+            message: `The Lambda received your payload.`,
+            description: `You can now browse its logs.`,
+          },
+          3000,
+        );
 
         try {
           // the result can be parsed to JSON => pretty print it
@@ -1381,20 +1391,26 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
             null,
             2,
           );
+          this.responseEditorMode = 'json';
         } catch {
           // just display it as it is
           this.testingResult = responseText;
+          this.responseEditorMode = 'text';
         }
       })
       .finally(() => {
         luigiClient.uxManager().hideLoadingIndicator();
       })
       .catch(async error => {
-        this.showNotification({
-          type: `error`,
-          message: error.message,
-          description: null,
-        });
+        this.showNotification(
+          {
+            type: `error`,
+            message: error.message,
+            description: null,
+          },
+          3000,
+        );
+        this.testingResult = '';
       });
   }
 }
