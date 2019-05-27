@@ -1,7 +1,7 @@
 @mixin hasThemeColor($color) {
   border-left: 6px solid $color;
-  fd-icon{
-      color: $color;
+  fd-icon {
+    color: $color;
   }
 }
 
@@ -16,7 +16,6 @@
   right: 1.2em;
   transition: all ease-in-out 0.4s;
   z-index: 1000;
-  cursor: pointer;
   border-radius: 3px;
   color: var(--fd-color-text-1);
   min-width: 20em;
@@ -54,6 +53,4 @@
     box-sizing: border-box;
     border-top: 1px solid var(--fd-color-neutral-3);
   }
-  
-
 }

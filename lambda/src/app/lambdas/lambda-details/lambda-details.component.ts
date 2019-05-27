@@ -1357,6 +1357,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     })
       .then(async res => {
         const responseText = await res.text();
+        console.log(responseText);
         if (!res.ok) {
           throw new Error(responseText);
         }
