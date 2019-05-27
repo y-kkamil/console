@@ -152,6 +152,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   dropDownStates = {};
   testPayload = {};
   responseEditorMode: 'json' | 'text' = 'json';
+  notificationTimeout: NodeJS.Timeout;
 
   public issuer: string;
   public jwksUri: string;
@@ -1326,18 +1327,24 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
 
   showNotification(notificationData: INotificationData, timeout?: number) {
     this.currentNotification = { message: '', type: 'info' }; // "pretend" there's no error to force notification re-render
+
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
+    }
+
     setTimeout(() => {
       this.currentNotification = notificationData;
     });
 
     if (timeout) {
-      setTimeout(() => {
+      this.notificationTimeout = setTimeout(() => {
         this.currentNotification = { message: '', type: 'info' };
       }, timeout);
     }
   }
 
   handleTestButtonClick() {
+    this.testingResponse = '';
     if (!this.existingHTTPEndpoint) {
       throw new Error('It looks like the Lambda is not deployed yet');
     }
@@ -1410,7 +1417,6 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           },
           5000,
         );
-        this.testingResponse = '';
       });
   }
 }
