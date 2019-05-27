@@ -20,6 +20,8 @@
   color: var(--fd-color-text-1);
   min-width: 20em;
 
+  animation: slideIn 0.4s ease-out;
+
   &.notification--success {
     @include hasThemeColor(var(--fd-color-status-1));
   }
@@ -52,5 +54,14 @@
     padding: 12px 12px;
     box-sizing: border-box;
     border-top: 1px solid var(--fd-color-neutral-3);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    right: calc(-450px - 1.2em);
+  }
+  100% {
+    right: 1.2em;
   }
 }

@@ -1323,6 +1323,13 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     this.currentTab = name;
   }
 
+  showNotification(notificationData: ITestingAlert) {
+    this.testingAlert = { message: '', type: 'info' }; // "pretend" there's no error to force notification re-render
+    setTimeout(() => {
+      this.testingAlert = notificationData;
+    });
+  }
+
   handleTestButtonClick() {
     if (!this.existingHTTPEndpoint) {
       throw new Error('It looks like the Lambda is not deployed yet');
@@ -1357,16 +1364,15 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     })
       .then(async res => {
         const responseText = await res.text();
-        console.log(responseText);
         if (!res.ok) {
           throw new Error(responseText);
         }
 
-        this.testingAlert = {
+        this.showNotification({
           type: `success`,
           message: `The Lambda received your payload.`,
           description: `You can now browse its logs.`,
-        };
+        });
 
         try {
           // the result can be parsed to JSON => pretty print it
@@ -1383,12 +1389,12 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       .finally(() => {
         luigiClient.uxManager().hideLoadingIndicator();
       })
-      .catch(error => {
-        this.testingAlert = {
+      .catch(async error => {
+        this.showNotification({
           type: `error`,
           message: error.message,
           description: null,
-        };
+        });
       });
   }
 }
