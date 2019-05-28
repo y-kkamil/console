@@ -438,7 +438,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       if (this.isEventTriggerPresent()) {
         this.manageEventTriggers();
       } else {
-        this.navigateToList();
+        this.showSuccessfulSaveNotification();
       }
     } else {
       // Changes in binding state
@@ -480,7 +480,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         if (this.isEventTriggerPresent) {
           this.manageEventTriggers();
         } else {
-          this.navigateToList();
+          this.showSuccessfulSaveNotification();
         }
       }
     }
@@ -588,7 +588,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
               if (this.isEventTriggerSelected) {
                 this.manageEventTriggers();
               } else {
-                this.navigateToList();
+                this.showSuccessfulSaveNotification();
               }
             }
           });
@@ -715,7 +715,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           this.executeDeleteSubscriptionRequests(deleteSubReqs);
         } else {
           if (errMessage === undefined) {
-            this.navigateToList();
+            this.showSuccessfulSaveNotification();
           } else {
             this.showError(errMessage);
           }
@@ -725,7 +725,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       if (deleteSubReqs.length > 0) {
         this.executeDeleteSubscriptionRequests(deleteSubReqs);
       } else {
-        this.navigateToList();
+        this.showSuccessfulSaveNotification();
       }
     }
   }
@@ -744,7 +744,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         }
       });
       if (errMessage === undefined) {
-        this.navigateToList();
+        this.showSuccessfulSaveNotification();
       } else {
         this.showError(errMessage);
       }
@@ -773,7 +773,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         if (this.isEventTriggerSelected) {
           this.manageEventTriggers();
         } else {
-          this.navigateToList();
+          this.showSuccessfulSaveNotification();
         }
       } else {
         this.showError(errMessage);
@@ -1418,5 +1418,16 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           5000,
         );
       });
+  }
+
+  showSuccessfulSaveNotification() {
+    console.trace();
+    this.showNotification(
+      {
+        type: 'success',
+        message: 'Lambda saved successfully'
+      },
+      4000,
+    );
   }
 }
