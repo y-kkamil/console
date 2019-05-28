@@ -849,12 +849,15 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
 
           this.setLoaded(true);
           this.initializeEditor();
-          this.functionSizes.forEach(s => {
+          if(lambda.metadata && lambda.metadata.annotations)
+          {
+            this.functionSizes.forEach(s => {
             if (`${s.name}` === lambda.metadata.annotations['function-size']) {
               this.selectedFunctionSize = s;
               this.selectedFunctionSizeName = this.selectedFunctionSize['name'];
             }
-          });
+            });
+          }
         },
         err => {
           this.navigateToList();
@@ -1297,4 +1300,13 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       return functionSizeChanged;
     }
   }
+
+  getEnvs(){
+    const depl = this.lambda.spec.deployment;
+    const cont = depl && depl.spec && depl.spec.template && depl.spec.template.spec && depl.spec.template.spec.containers
+     ? depl.spec.template.spec.containers 
+     : null;
+    return cont && cont.length && cont[0] ? cont[0].env : null; 
+  }
+
 }
