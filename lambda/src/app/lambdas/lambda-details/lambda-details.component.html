@@ -297,7 +297,11 @@
           [mode]="'json'">
         </ace-editor>
       </fd-panel-body>
-      <fd-panel-footer>
+      <fd-panel-footer class="flex-right">
+        <button fd-button class="fd-has-margin-right-tiny" [options]="'light'" (click)="showLogs()" *ngIf="mode !== 'create' && canShowLogs">
+          Show Logs
+        </button>
+        
         <button fd-button [options]="'emphasized'" [glyph]="'journey-depart'" (click)="handleTestButtonClick()">
           Make a test call
         </button> 
