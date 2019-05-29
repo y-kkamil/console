@@ -8,7 +8,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   HttpErrorResponse,
   HttpHeaders,
@@ -182,6 +182,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     protected route: ActivatedRoute,
     private http: HttpClient,
+    private router: Router
   ) {
     this.functionSizes = AppConfig.functionSizes.map(s => s['size']).map(s => {
       s.description = `Memory: ${s.memory} CPU: ${s.cpu} minReplicas: ${
@@ -211,6 +212,12 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           this.namespace = eventData.namespaceId;
           this.token = eventData.idToken;
           if (params['name']) {
+
+            if (sessionStorage.displayLambdaSavedNotification) {
+              this.showSuccessNotification();
+              delete sessionStorage.displayLambdaSavedNotification;
+            }
+
             this.mode = 'update';
             const lambdaName = params['name'];
             this.title = `${lambdaName} Details`;
@@ -438,7 +445,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       if (this.isEventTriggerPresent()) {
         this.manageEventTriggers();
       } else {
-        this.showSuccessfulSaveNotification();
+        this.saveLambda();
       }
     } else {
       // Changes in binding state
@@ -480,7 +487,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         if (this.isEventTriggerPresent) {
           this.manageEventTriggers();
         } else {
-          this.showSuccessfulSaveNotification();
+          this.saveLambda();
         }
       }
     }
@@ -588,7 +595,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
               if (this.isEventTriggerSelected) {
                 this.manageEventTriggers();
               } else {
-                this.showSuccessfulSaveNotification();
+                this.saveLambda();
               }
             }
           });
@@ -715,7 +722,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           this.executeDeleteSubscriptionRequests(deleteSubReqs);
         } else {
           if (errMessage === undefined) {
-            this.showSuccessfulSaveNotification();
+            this.saveLambda();
           } else {
             this.showError(errMessage);
           }
@@ -725,7 +732,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       if (deleteSubReqs.length > 0) {
         this.executeDeleteSubscriptionRequests(deleteSubReqs);
       } else {
-        this.showSuccessfulSaveNotification();
+        this.saveLambda();
       }
     }
   }
@@ -744,7 +751,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         }
       });
       if (errMessage === undefined) {
-        this.showSuccessfulSaveNotification();
+        this.saveLambda();
       } else {
         this.showError(errMessage);
       }
@@ -773,7 +780,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         if (this.isEventTriggerSelected) {
           this.manageEventTriggers();
         } else {
-          this.showSuccessfulSaveNotification();
+          this.saveLambda();
         }
       } else {
         this.showError(errMessage);
@@ -1352,11 +1359,14 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     try {
       this.testPayload = JSON.parse(this.testPayloadText);
     } catch (ex) {
-      this.currentNotification = {
-        type: `error`,
-        message: `Couldn't parse the payload JSON`,
-        description: null,
-      };
+      this.showNotification(
+        {
+          type: `error`,
+          message: `Couldn't parse the payload JSON`,
+          description: null,
+        },
+        5000,
+      );
       return;
     }
 
@@ -1371,10 +1381,12 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       body: this.testPayloadText,
       headers: lambdaEndpoint.isAuthEnabled
         ? new Headers({
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
-          })
-        : {},
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token}`,
+        })
+        : new Headers({
+          'Content-Type': 'application/json',
+        }),
     })
       .then(async res => {
         const responseText = await res.text();
@@ -1420,14 +1432,23 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  showSuccessfulSaveNotification() {
-    console.trace();
+  saveLambda() {
+    if (this.mode === 'create') {
+      sessionStorage.displayLambdaSavedNotification = true;
+      luigiClient.linkManager().fromClosestContext().navigate(`/details/${this.lambda.metadata.name}`);
+    }
+    else {
+      this.showSuccessNotification();
+    }
+  }
+
+  private showSuccessNotification() {
     this.showNotification(
       {
         type: 'success',
         message: 'Lambda saved successfully'
       },
-      4000,
+      4000
     );
   }
 }
