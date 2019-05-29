@@ -181,8 +181,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     private subscriptionsService: SubscriptionsService,
     private cdr: ChangeDetectorRef,
     protected route: ActivatedRoute,
-    private http: HttpClient,
-    private router: Router
+    private http: HttpClient
   ) {
     this.functionSizes = AppConfig.functionSizes.map(s => s['size']).map(s => {
       s.description = `Memory: ${s.memory} CPU: ${s.cpu} minReplicas: ${
