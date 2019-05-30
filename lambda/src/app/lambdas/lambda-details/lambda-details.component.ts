@@ -869,8 +869,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
 
           this.setLoaded(true);
           this.initializeEditor();
-          if(lambda.metadata && lambda.metadata.annotations)
-          {
+          if(lambda.metadata && lambda.metadata.annotations){
             this.functionSizes.forEach(s => {
             if (`${s.name}` === lambda.metadata.annotations['function-size']) {
               this.selectedFunctionSize = s;
