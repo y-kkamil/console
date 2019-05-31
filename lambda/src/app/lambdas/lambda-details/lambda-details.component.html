@@ -270,7 +270,7 @@
     <app-lambda-instance-bindings [lambdaName]="lambda.metadata.name" [isLambdaNameInvalid]="isFunctionNameInvalid"
       (bindingStateEmitter)="handleBindingStateEmitter($event)"></app-lambda-instance-bindings>
 
-      <section *ngIf="getEnvs()" class="fd-section">
+      <section class="fd-section">
         <app-lambda-env-table [envs]="getEnvs()"
           [lambdaName]="lambda.metadata.name" [isLambdaNameInvalid]="isFunctionNameInvalid"
           (envEmitter)="handleEnvEmitter($event)"></app-lambda-env-table>

@@ -58,9 +58,11 @@ export class LambdaEnvComponent {
     if (this.envs === undefined) {
       this.envs = [];
     }
-    const duplicate = this.envs.find(env => {
-      return env.name === this.envVar.name;
-    });
+    const duplicate = this.envs
+      ? this.envs.find(env => {
+          return env.name === this.envVar.name;
+        })
+      : null;
 
     this.isEnvVariableDuplicate = false;
     this.isEnvVariableNameInvalid = false;

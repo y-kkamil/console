@@ -1233,7 +1233,22 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleEnvEmitter($event): void {
-    this.lambda.spec.deployment.spec.template.spec.containers[0].env = $event;
+    this.lambda.spec.deployment = {
+      ... this.lambda.spec.deployment,
+      spec:{
+        template:{
+          spec:{
+            containers:[{
+              env: $event,
+              name: this.lambda.metadata.name,
+              image: '',
+              resources:{}
+            }]
+          }
+        }
+      }
+    }   
+    
     this.warnUnsavedChanges(true);
   }
 
