@@ -90,7 +90,7 @@
                     <label class="fd-form__label" for="">Function Name * </label>
                     <div class="fd-input-group">
                       <input type="text" id="input-1" #functionName name="function_name"
-                        [(ngModel)]="lambda.metadata.name"
+                        [(ngModel)]="lambda.metadata.name" (ngModelChange)="addAppLabel()"
                         [ngClass]="{'is-invalid': isFunctionNameInvalid, 'is-warning': isFunctionNameEmpty}"
                         [attr.disabled]="mode === 'create' ? null : ''" (keyup)="validatesName()"
                         (focusout)="validatesName()" />
