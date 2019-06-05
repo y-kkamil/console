@@ -1500,6 +1500,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       },
       4000,
     );
+  }
 
   filterTriggerEvents() {
     this.filteredTriggers = [];
