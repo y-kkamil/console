@@ -202,6 +202,8 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.initializeTriggers();
+
     this.route.params.subscribe(
       params => {
         this.listenerId = luigiClient.addInitListener(() => {
@@ -210,7 +212,6 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           this.namespace = eventData.namespaceId;
           this.token = eventData.idToken;
           if (params['name']) {
-
             if (sessionStorage.displayLambdaSavedNotification) {
               this.showSuccessNotification();
               delete sessionStorage.displayLambdaSavedNotification;
@@ -445,7 +446,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       if (this.isEventTriggerPresent()) {
         this.manageEventTriggers();
       } else {
-        this.saveLambda();
+        this.reloadLambdaSpec();
       }
     } else {
       // Changes in binding state
@@ -487,7 +488,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         if (this.isEventTriggerPresent) {
           this.manageEventTriggers();
         } else {
-          this.saveLambda();
+          this.reloadLambdaSpec();
         }
       }
     }
@@ -595,7 +596,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
               if (this.isEventTriggerSelected) {
                 this.manageEventTriggers();
               } else {
-                this.saveLambda();
+                this.reloadLambdaSpec();
               }
             }
           });
@@ -722,7 +723,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           this.executeDeleteSubscriptionRequests(deleteSubReqs);
         } else {
           if (errMessage === undefined) {
-            this.saveLambda();
+            this.reloadLambdaSpec();
           } else {
             this.showError(errMessage);
           }
@@ -732,7 +733,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       if (deleteSubReqs.length > 0) {
         this.executeDeleteSubscriptionRequests(deleteSubReqs);
       } else {
-        this.saveLambda();
+        this.reloadLambdaSpec();
       }
     }
   }
@@ -751,7 +752,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         }
       });
       if (errMessage === undefined) {
-        this.saveLambda();
+        this.reloadLambdaSpec();
       } else {
         this.showError(errMessage);
       }
@@ -780,7 +781,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
         if (this.isEventTriggerSelected) {
           this.manageEventTriggers();
         } else {
-          this.saveLambda();
+          this.reloadLambdaSpec();
         }
       } else {
         this.showError(errMessage);
@@ -1170,24 +1171,34 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   }
 
   updateApi(): void {
-    const api: Api = this.apisService.initializeApi(
-      this.lambda,
+    this.apisService.getApi(
+      this.lambda.metadata.name,
       this.namespace,
-      this.existingHTTPEndpoint,
-      this.isHTTPTriggerAuthenticated,
-      this.httpURL,
-      this.authType,
-      this.jwksUri,
-      this.issuer,
-    );
-    this.apisService.updateApi(api, this.namespace, this.token).subscribe(
-      () => {
-        this.manageServiceBindings();
-      },
-      err => {
-        this.showError(err.message);
-      },
-    );
+      this.token,
+    ).subscribe(updatedApi => {
+      if (updatedApi.metadata.resourceVersion !== this.existingHTTPEndpoint.metadata.resourceVersion) {
+        this.existingHTTPEndpoint.metadata.resourceVersion = updatedApi.metadata.resourceVersion;
+      }
+
+      const api: Api = this.apisService.initializeApi(
+        this.lambda,
+        this.namespace,
+        this.existingHTTPEndpoint,
+        this.isHTTPTriggerAuthenticated,
+        this.httpURL,
+        this.authType,
+        this.jwksUri,
+        this.issuer,
+      );
+      this.apisService.updateApi(api, this.namespace, this.token).subscribe(
+        () => {
+          this.manageServiceBindings();
+        },
+        err => {
+          this.showError(err.message);
+        },
+      );
+    })
   }
 
   isEventTriggerSelected(
@@ -1352,7 +1363,9 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
 
   addAppLabel() {
     this.updatedLabels = this.updatedLabels.map(label => {
-      return label.startsWith('app=') ? `app=${this.lambda.metadata.name}` : label;
+      return label.startsWith('app=')
+        ? `app=${this.lambda.metadata.name}`
+        : label;
     });
   }
 
@@ -1387,12 +1400,12 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       body: this.testPayloadText,
       headers: lambdaEndpoint.isAuthEnabled
         ? new Headers({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`,
-        })
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`,
+          })
         : new Headers({
-          'Content-Type': 'application/json',
-        }),
+            'Content-Type': 'application/json',
+          }),
     })
       .then(async res => {
         const responseText = await res.text();
@@ -1438,13 +1451,27 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  saveLambda() {
+  initializeTriggers() {
+    this.existingHTTPEndpoint = null;
+    this.httpURL = '';
+    const httpEndPoint: HTTPEndpoint = null;
+    this.selectedTriggers = [];
+    this.isHTTPTriggerAdded = false;
+    this.isHTTPTriggerAuthenticated = false;
+    this.jwksUri = '';
+    this.authType = '';
+  }
+
+  reloadLambdaSpec() {
     if (this.mode === 'create') {
       sessionStorage.displayLambdaSavedNotification = true;
-      luigiClient.linkManager().fromClosestContext().navigate(`/details/${this.lambda.metadata.name}`);
-    }
-    else {
+      luigiClient
+        .linkManager()
+        .fromClosestContext()
+        .navigate(`/details/${this.lambda.metadata.name}`);
+    } else {
       this.showSuccessNotification();
+      this.ngOnInit();
     }
   }
 
@@ -1452,9 +1479,9 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     this.showNotification(
       {
         type: 'success',
-        message: 'Lambda saved successfully'
+        message: 'Lambda saved successfully',
       },
-      4000
+      4000,
     );
   }
 }
