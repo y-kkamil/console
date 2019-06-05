@@ -1454,7 +1454,6 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   initializeTriggers() {
     this.existingHTTPEndpoint = null;
     this.httpURL = '';
-    const httpEndPoint: HTTPEndpoint = null;
     this.selectedTriggers = [];
     this.isHTTPTriggerAdded = false;
     this.isHTTPTriggerAuthenticated = false;
