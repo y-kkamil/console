@@ -65,6 +65,7 @@ const DEFAULT_CODE = `module.exports = { main: function (event, context) {
 } }`;
 
 const FUNCTION = 'function';
+
 interface INotificationData {
   type: 'info' | 'success' | 'error';
   message: string;
@@ -184,7 +185,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     private subscriptionsService: SubscriptionsService,
     private cdr: ChangeDetectorRef,
     protected route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.functionSizes = AppConfig.functionSizes.map(s => s['size']).map(s => {
       s.description = `Memory: ${s.memory} CPU: ${s.cpu} minReplicas: ${
@@ -203,7 +204,6 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     this.aceMode = 'javascript';
     this.aceDependencyMode = 'json';
     this.kind = 'nodejs8';
-
   }
 
   ngOnInit() {
@@ -287,24 +287,23 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
                     eventType: ev.eventType,
                     sourceId: ea.sourceId,
                     description: ev.description,
-                    version: ev.version
+                    version: ev.version,
                   };
                   const eventTriggerWithSchema: EventTriggerWithSchema = {
                     eventType: ev.eventType,
                     sourceId: ea.sourceId,
                     description: ev.description,
                     version: ev.version,
-                    schema: ev.schema
+                    schema: ev.schema,
                   };
                   this.availableEventTriggers.push(eventTrigger);
                   this.allEventTriggers.push(eventTriggerWithSchema);
                 });
               });
-              if(this.allEventTriggers.length>0){
+              if (this.allEventTriggers.length > 0) {
                 this.filteredTriggers = this.allEventTriggers;
               }
             });
-
         });
       },
       err => {
@@ -1189,34 +1188,36 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   }
 
   updateApi(): void {
-    this.apisService.getApi(
-      this.lambda.metadata.name,
-      this.namespace,
-      this.token,
-    ).subscribe(updatedApi => {
-      if (updatedApi.metadata.resourceVersion !== this.existingHTTPEndpoint.metadata.resourceVersion) {
-        this.existingHTTPEndpoint.metadata.resourceVersion = updatedApi.metadata.resourceVersion;
-      }
+    this.apisService
+      .getApi(this.lambda.metadata.name, this.namespace, this.token)
+      .subscribe(updatedApi => {
+        if (
+          updatedApi.metadata.resourceVersion !==
+          this.existingHTTPEndpoint.metadata.resourceVersion
+        ) {
+          this.existingHTTPEndpoint.metadata.resourceVersion =
+            updatedApi.metadata.resourceVersion;
+        }
 
-      const api: Api = this.apisService.initializeApi(
-        this.lambda,
-        this.namespace,
-        this.existingHTTPEndpoint,
-        this.isHTTPTriggerAuthenticated,
-        this.httpURL,
-        this.authType,
-        this.jwksUri,
-        this.issuer,
-      );
-      this.apisService.updateApi(api, this.namespace, this.token).subscribe(
-        () => {
-          this.manageServiceBindings();
-        },
-        err => {
-          this.showError(err.message);
-        },
-      );
-    })
+        const api: Api = this.apisService.initializeApi(
+          this.lambda,
+          this.namespace,
+          this.existingHTTPEndpoint,
+          this.isHTTPTriggerAuthenticated,
+          this.httpURL,
+          this.authType,
+          this.jwksUri,
+          this.issuer,
+        );
+        this.apisService.updateApi(api, this.namespace, this.token).subscribe(
+          () => {
+            this.manageServiceBindings();
+          },
+          err => {
+            this.showError(err.message);
+          },
+        );
+      });
   }
 
   isEventTriggerSelected(
@@ -1470,6 +1471,8 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   }
 
   initializeTriggers() {
+    this.existingEventTriggers = [];
+
     this.existingHTTPEndpoint = null;
     this.httpURL = '';
     this.selectedTriggers = [];
@@ -1480,16 +1483,23 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   }
 
   reloadLambdaSpec() {
-    if (this.mode === 'create') {
-      sessionStorage.displayLambdaSavedNotification = true;
-      luigiClient
-        .linkManager()
-        .fromClosestContext()
-        .navigate(`/details/${this.lambda.metadata.name}`);
-    } else {
-      this.showSuccessNotification();
-      this.ngOnInit();
-    }
+    luigiClient.uxManager().showLoadingIndicator();
+    this.eventTriggerChooserModal.initializeView();
+
+    // temporary workaround for 'reappearing' triggers
+    setTimeout(() => {
+      if (this.mode === 'create') {
+        sessionStorage.displayLambdaSavedNotification = true;
+        luigiClient
+          .linkManager()
+          .fromClosestContext()
+          .navigate(`/details/${this.lambda.metadata.name}`);
+      } else {
+        this.showSuccessNotification();
+        this.ngOnInit();
+        luigiClient.uxManager().hideLoadingIndicator();
+      }
+    }, 3000);
   }
 
   private showSuccessNotification() {
@@ -1505,21 +1515,24 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   filterTriggerEvents() {
     this.filteredTriggers = [];
     this.allEventTriggers.forEach(element => {
-      if (element.eventType.toLowerCase().indexOf(this.trigger.toLowerCase())!==-1) {
+      if (
+        element.eventType.toLowerCase().indexOf(this.trigger.toLowerCase()) !==
+        -1
+      ) {
         this.filteredTriggers.push(element);
       }
     });
   }
 
-
-  public toggleDropDown(forceState?:boolean) {
-    this.isTriggerDropdownExpanded = forceState===undefined ? !this.isTriggerDropdownExpanded : forceState;
+  public toggleDropDown(forceState?: boolean) {
+    this.isTriggerDropdownExpanded =
+      forceState === undefined ? !this.isTriggerDropdownExpanded : forceState;
   }
 
   private generateExample(schema: JSON) {
     try {
-      return require('openapi-sampler').sample(schema)
-    } catch(e) {
+      return require('openapi-sampler').sample(schema);
+    } catch (e) {
       return;
     }
   }
@@ -1527,6 +1540,10 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   public selectTrigger(trigger) {
     this.trigger = trigger.eventType;
     this.testPayload = trigger.schema;
-    this.testPayloadText = JSON.stringify(this.generateExample(trigger.schema), null, 2);
+    this.testPayloadText = JSON.stringify(
+      this.generateExample(trigger.schema),
+      null,
+      2,
+    );
   }
 }
