@@ -25,6 +25,7 @@ import { ResourcesComponent } from '../content/namespaces/configuration/resource
 
 import { ConfigMapsComponent } from '../content/namespaces/operation/configmaps/configmaps.component';
 import { StatusLabelComponent } from 'shared/components/status-label/status-label.component';
+import { AboutKymaComponent } from 'shared/components/about-kyma/about-kyma.component';
 
 const appRoutes: Routes = [
   {
@@ -119,6 +120,10 @@ const appRoutes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'namespaces/workspace' },
       { path: '**', pathMatch: 'full', redirectTo: 'namespaces/workspace' }
     ]
+  },
+  {
+    path: 'about',
+    component: AboutKymaComponent
   }
 ];
 

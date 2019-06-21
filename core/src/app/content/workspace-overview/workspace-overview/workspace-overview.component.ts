@@ -69,6 +69,10 @@ export class WorkspaceOverviewComponent extends GenericListComponent
     });
   }
 
+  public c() {
+    LuigiClient.linkManager().openAsModal('/home/about', {size: 's'});
+  }
+
   ngOnInit() {
     super.ngOnInit();
     this.queryParamsSubscription = this.route.queryParams.subscribe(params =>

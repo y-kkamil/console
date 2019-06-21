@@ -52,6 +52,16 @@ let navigation = {
         link: '/home/workspace?~showModal=true'
       }
     ]
+  },
+  profile: {
+    items: [
+      {
+        link: '/about',
+        icon: 'hint',
+        label: 'About Kyma',
+        viewUrl: '/consoleapp.html#/about'
+      }
+    ]
   }
 };
 
@@ -607,6 +617,12 @@ Promise.all(initPromises)
               label: 'General Settings',
               category: { label: 'Settings', icon: 'settings' },
               viewUrl: '/consoleapp.html#/home/settings/organisation'
+            },
+            {
+              pathSegment: 'about',
+              icon: 'hint',
+              label: 'About Kyma',
+              viewUrl: '/consoleapp.html#/about'
             },
             {
               pathSegment: 'global-permissions',

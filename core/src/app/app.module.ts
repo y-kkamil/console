@@ -105,6 +105,7 @@ import { ConfigMapsEntryRendererComponent } from './content/namespaces/operation
 import { ConfigMapsHeaderRendererComponent } from './content/namespaces/operation/configmaps/configmaps-header-renderer/configmaps-header-renderer.component';
 import { StatusLabelComponent } from './shared/components/status-label/status-label.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
+import { AboutKymaComponent } from 'shared/components/about-kyma/about-kyma.component';
 import { LuigiClientCommunicationDirective } from './shared/directives/luigi-client-communication/luigi-client-communication.directive';
 
 import { FundamentalNgxModule } from 'fundamental-ngx';
@@ -201,7 +202,8 @@ import { GenericHelpersService } from './shared/services/generic-helpers.service
     LabelsInputComponent,
     StatusLabelComponent,
     TooltipComponent,
-    LuigiClientCommunicationDirective
+    LuigiClientCommunicationDirective,
+    AboutKymaComponent
   ],
   imports: [
     BrowserModule,
