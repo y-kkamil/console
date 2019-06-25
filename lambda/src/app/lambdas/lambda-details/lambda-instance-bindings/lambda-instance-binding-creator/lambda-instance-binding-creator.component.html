@@ -6,10 +6,7 @@
     <div fd-form-set>
       <div fd-form-item>
         <fd-form-label class="control-label">Service Instance Prefix</fd-form-label>
-        <input fd-form-control [type]="'text'" id="input-svc-instance-prefix" (keyup)="validatesPrefix()"  [(ngModel)]="selectedInstanceBindingPrefix" [state]="isSelectedInstanceBindingPrefixInvalid ? 'invalid' : undefined">
-        <fd-form-message [type]="'error'" *ngIf="isSelectedInstanceBindingPrefixInvalid">
-          Invalid prefix: must consist of lower case alphanumeric characters, '-', '_' or '.', no spaces and must start and end with an alphanumeric character. It should not be more than 61 characters long.
-        </fd-form-message>
+        <input fd-form-control [type]="'text'" id="input-svc-instance-prefix" [(ngModel)]="selectedInstanceBindingPrefix">
       </div>
       <div fd-form-item>
         <fd-form-label class="control-label">Service Instance</fd-form-label>
