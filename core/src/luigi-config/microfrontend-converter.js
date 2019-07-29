@@ -29,11 +29,11 @@ function buildNode(node, spec, config) {
     };
   }
 
-  processNodeForLocalDevelopment(n, config);
+  processNodeForLocalDevelopment(n, spec, config);
   return n;
 }
 
-function processNodeForLocalDevelopment(node, config) {
+function processNodeForLocalDevelopment(node, spec, config) {
   const {domain, localDomain} = config;
   const localDevDomainBindings = [
     {startsWith: "lambdas-ui", replaceWith: config.lambdasModuleUrl},
@@ -59,10 +59,23 @@ function processNodeForLocalDevelopment(node, config) {
     );
   }
 
+  if (spec.preloadUrl) {
+    spec.preloadUrl = spec.preloadUrl.replace(
+      `https://console.${domain}`,
+      `http://${localDomain}:4200`
+    )
+  }
+
   //cluster microfrontends
   localDevDomainBindings.forEach(binding=>{
     if (node.viewUrl.startsWith(`https://${binding.startsWith}.${domain}`)) {
       node.viewUrl = node.viewUrl.replace(
+        `https://${binding.startsWith}.${domain}`,
+        binding.replaceWith
+      );
+    }
+    if (spec.preloadUrl) {
+      spec.preloadUrl = spec.preloadUrl.replace(
         `https://${binding.startsWith}.${domain}`,
         binding.replaceWith
       );
