@@ -1,4 +1,4 @@
-
+import processNodeForLocalDevelopment from './local-development-node-converter';
 
 function buildNode(node, spec, config) {
   var n = {
@@ -29,7 +29,13 @@ function buildNode(node, spec, config) {
     };
   }
 
-  processNodeForLocalDevelopment(n, spec, config);
+  const isLocalDev = window.location.href.startsWith(
+    `http://${localDomain}:4200`
+  );
+
+  if (isLocalDev && node.viewUrl) {
+    n = processNodeForLocalDevelopment(n, spec, config);
+  }
   return n;
 }
 
