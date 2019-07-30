@@ -13,26 +13,27 @@ export default function processNodeForLocalDevelopment(node, spec, config) {
     { startsWith: 'log-ui', replaceWith: config.logsModuleUrl },
   ];
 
-  if (node.viewUrl.startsWith(`https://console.${domain}`)) {
-    node.viewUrl = adjustMicroFrontendUrlForLocalDevelopment(node.viewUrl);
+  const isNodeMicroFrontend = node.viewUrl.startsWith(`https://console.${domain}`);
+  const hasNodePreloadUrl = spec.preloadUrl;
 
-    if (spec.preloadUrl) {
-      spec.preloadUrl = adjustMicroFrontendUrlForLocalDevelopment(spec.preloadUrl);
-    }
+  const clusterMicroFrontendDomainBinding = localDevDomainBindings.find(domainBinding => {
+    return node.viewUrl.startsWith(`https://${domainBinding.startsWith}.${domain}`);
+  });
+  const isNodeClusterMicroFrontend = node.viewUrl.startsWith(`https://${clusterMicroFrontendDomainBinding.startsWith}.${domain}`);
+
+  if (isNodeMicroFrontend) {
+    node.viewUrl = adjustMicroFrontendUrlForLocalDevelopment(node.viewUrl);
+  }
+  if (isNodeMicroFrontend && hasNodePreloadUrl) {
+    spec.preloadUrl = adjustMicroFrontendUrlForLocalDevelopment(spec.preloadUrl);
   }
 
-  //cluster microfrontends
-  localDevDomainBindings.forEach(binding => {
-    if (node.viewUrl.startsWith(`https://${binding.startsWith}.${domain}`)) {
-      node.viewUrl = node.viewUrl.replace(
-        `https://${binding.startsWith}.${domain}`,
-        binding.replaceWith,
-      );
-    }
-    if (spec.preloadUrl) {
-      spec.preloadUrl = adjustClusterMicroFrontendUrlForLocalDevelopment();
-    }
-  });
+  if (isNodeClusterMicroFrontend) {
+    node.viewUrl = adjustClusterMicroFrontendUrlForLocalDevelopment(node.viewUrl, clusterMicroFrontendDomainBinding)
+  }
+  if (isNodeClusterMicroFrontend && hasNodePreloadUrl) {
+    spec.preloadUrl = adjustClusterMicroFrontendUrlForLocalDevelopment();
+  }
 
   return node;
 }
@@ -44,9 +45,9 @@ function adjustMicroFrontendUrlForLocalDevelopment(url) {
   );
 }
 
-function adjustClusterMicroFrontendUrlForLocalDevelopment(url) {
+function adjustClusterMicroFrontendUrlForLocalDevelopment(url, domainBinding) {
   return url.replace(
-    `https://${binding.startsWith}.${domain}`,
+    `https://${domainBinding.startsWith}.${domain}`,
     binding.replaceWith,
   );
 }
