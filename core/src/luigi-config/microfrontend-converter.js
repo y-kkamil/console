@@ -30,7 +30,7 @@ function buildNode(node, spec, config) {
   }
 
   const isLocalDev = window.location.href.startsWith(
-    `http://${localDomain}:4200`
+    `http://${config.localDomain}:4200`
   );
 
   if (isLocalDev && n.viewUrl) {
