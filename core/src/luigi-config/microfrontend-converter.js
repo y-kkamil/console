@@ -33,7 +33,7 @@ function buildNode(node, spec, config) {
     `http://${localDomain}:4200`
   );
 
-  if (isLocalDev && node.viewUrl) {
+  if (isLocalDev && n.viewUrl) {
     n = processNodeForLocalDevelopment(n, spec, config);
   }
   return n;
