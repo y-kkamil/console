@@ -95,7 +95,7 @@ export default function convertToNavigationTree(name, spec, config, navigation, 
           node.viewGroup = node.navigationContext;
           if (spec.preloadUrl) {
             navigation.viewGroupSettings[node.viewGroup] = {
-              preloadUrl: spec.preloadUrl
+              preloadUrl: node.localPreloadUrl || spec.preloadUrl
             };
           }
         }

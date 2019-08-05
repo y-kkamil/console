@@ -34,7 +34,7 @@ export default function processNodeForLocalDevelopment(node, spec, config) {
     node.viewUrl = adjustMicroFrontendUrlForLocalDevelopment(node.viewUrl);
   }
   if (isNodeMicroFrontend && hasNodePreloadUrl) {
-    spec.preloadUrl = adjustMicroFrontendUrlForLocalDevelopment(
+    node.localPreloadUrl = adjustMicroFrontendUrlForLocalDevelopment(
       spec.preloadUrl
     );
   }
@@ -46,7 +46,7 @@ export default function processNodeForLocalDevelopment(node, spec, config) {
     );
   }
   if (isNodeClusterMicroFrontend && hasNodePreloadUrl) {
-    spec.preloadUrl = adjustClusterMicroFrontendUrlForLocalDevelopment(
+    node.localPreloadUrl = adjustClusterMicroFrontendUrlForLocalDevelopment(
       spec.preloadUrl,
       clusterMicroFrontendDomainBinding
     );
