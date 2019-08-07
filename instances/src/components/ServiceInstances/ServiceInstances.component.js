@@ -114,21 +114,21 @@ class ServiceInstances extends React.Component {
       defaultActiveTabIndex
         ? this.setTabFilter(false)
         : this.setTabFilter(true);
-      // TODO: uncomment after https://github.com/kyma-project/luigi/issues/491 is done
-      // let tabName = '';
-      // switch (defaultActiveTabIndex) {
-      //   case 0:
-      //     tabName = 'addons';
-      //     break;
-      //   case 1:
-      //     tabName = 'services';
-      //     break;
-      //   default:
-      //     tabName = 'addons';
-      // }
-      // LuigiClient.linkManager()
-      //   .withParams({ selectedTab: tabName })
-      //   .navigate('');
+
+      let tabName = '';
+      switch (defaultActiveTabIndex) {
+        case 0:
+          tabName = 'addons';
+          break;
+        case 1:
+          tabName = 'services';
+          break;
+        default:
+          tabName = 'addons';
+      }
+      LuigiClient.linkManager()
+        .withParams({ selectedTab: tabName })
+        .navigate('');
     };
 
     return (
