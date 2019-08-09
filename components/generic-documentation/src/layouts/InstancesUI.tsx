@@ -12,7 +12,9 @@ export interface InstancesUILayoutProps {
 export const InstancesUILayout: React.FunctionComponent<
   InstancesUILayoutProps
 > = ({ renderers, tabRouteHandler }) => {
-  renderers.group = (props: any) => <GroupRenderer tabRouteHandler={tabRouteHandler} {...props} />;
+  renderers.group = (props: any) => (
+    <GroupRenderer tabRouteHandler={tabRouteHandler} {...props} />
+  );
 
   return (
     <InstancesUIWrapper>
