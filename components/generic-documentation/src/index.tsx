@@ -79,6 +79,7 @@ export interface GenericComponentProps {
     label: string;
     content: React.ReactNode;
   }>;
+  tabRouteHandler?: object;
 }
 
 export const GenericComponent: React.FunctionComponent<

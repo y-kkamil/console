@@ -153,7 +153,7 @@ class ServiceClassList extends React.Component {
       defaultActiveTabIndex
         ? this.setTabFilter(false)
         : this.setTabFilter(true);
-      // TODO: uncomment after https://github.com/kyma-project/luigi/issues/491 is done
+
       let tabName = '';
       switch (defaultActiveTabIndex) {
         case 0:
