@@ -59,7 +59,7 @@ function renderContent(type: LayoutType, props?: any): React.ReactNode {
       return <CatalogUILayout {...props} renderers={RENDERERS} />;
     }
     case LayoutType.INSTANCES_UI: {
-      return <InstancesUILayout renderers={RENDERERS} />;
+      return <InstancesUILayout {...props} renderers={RENDERERS} />;
     }
     default:
       return null;
