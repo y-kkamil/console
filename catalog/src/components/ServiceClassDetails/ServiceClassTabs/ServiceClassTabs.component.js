@@ -23,12 +23,16 @@ function getTabElementsIndicator(instancesCount) {
 const tabRouteHandler = {
   determineSelectedTab: function(tabList) {
     const selectedTab = LuigiClient.getNodeParams().selectedTab;
-    return tabList.indexOf(selectedTab) >= 0 ? tabList.indexOf(selectedTab) : undefined;
+    return tabList.indexOf(selectedTab) >= 0
+      ? tabList.indexOf(selectedTab)
+      : undefined;
   },
   selectTab: function(tabList, index) {
     const activeTab = tabList[index];
-    LuigiClient.linkManager().withParams({ selectedTab: activeTab }).navigate('');
-  }
+    LuigiClient.linkManager()
+      .withParams({ selectedTab: activeTab })
+      .navigate('');
+  },
 };
 
 const ServiceClassTabs = ({ serviceClass }) => {
@@ -47,8 +51,8 @@ const ServiceClassTabs = ({ serviceClass }) => {
           content: (
             <ServiceClassInstancesTable tableData={serviceClass.instances} />
           ),
-          id: serviceClassConstants.instancesTabText
-        }
+          id: serviceClassConstants.instancesTabText,
+        },
       ]
     : [];
 

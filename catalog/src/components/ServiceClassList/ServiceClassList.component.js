@@ -15,6 +15,7 @@ import {
   Tooltip,
   Panel,
   PanelBody,
+  instancesTabUtils,
 } from '@kyma-project/react-components';
 
 import { serviceClassConstants } from '../../variables';
@@ -56,7 +57,14 @@ class ServiceClassList extends React.Component {
     };
   }
 
-  setTabFilter = filterValue => {
+  setTabFilter = currentTabIndex => {
+    let filterValue;
+    if (currentTabIndex === 0) {
+      filterValue = true;
+    }
+    if (currentTabIndex === 1) {
+      filterValue = false;
+    }
     this.props.setServiceClassesFilter('local', filterValue);
   };
 
@@ -133,40 +141,24 @@ class ServiceClassList extends React.Component {
     const { filtersExists } = this.state;
 
     const determineSelectedTab = () => {
-      const selectedTab = LuigiClient.getNodeParams().selectedTab;
-      let selectedTabIndex = null;
+      const selectedTabName = LuigiClient.getNodeParams().selectedTab;
+      const selectedTabIndex = instancesTabUtils.convertTabNameToIndex(
+        selectedTabName,
+      );
 
-      switch (selectedTab) {
-        case 'addons':
-          selectedTabIndex = 0;
-          break;
-        case 'services':
-          selectedTabIndex = 1;
-          break;
-        default:
-          selectedTabIndex = 0;
-      }
+      this.setTabFilter(selectedTabIndex);
       return selectedTabIndex;
     };
 
     const handleTabChange = ({ defaultActiveTabIndex }) => {
-      defaultActiveTabIndex
-        ? this.setTabFilter(false)
-        : this.setTabFilter(true);
+      this.setTabFilter(defaultActiveTabIndex);
 
-      let tabName = '';
-      switch (defaultActiveTabIndex) {
-        case 0:
-          tabName = 'addons';
-          break;
-        case 1:
-          tabName = 'services';
-          break;
-        default:
-          tabName = 'addons';
-      }
+      const selectedTabName = instancesTabUtils.convertIndexToTabName(
+        defaultActiveTabIndex,
+      );
+
       LuigiClient.linkManager()
-        .withParams({ selectedTab: tabName })
+        .withParams({ selectedTab: selectedTabName })
         .navigate('');
     };
 
