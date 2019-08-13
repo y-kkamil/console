@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Panel, PanelBody } from 'fundamental-react';
+import { Panel, PanelBody } from '../Panel';
 
 import { Wrapper } from './styled';
 
