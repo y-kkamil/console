@@ -87,10 +87,6 @@ class CreateInstanceModal extends Component {
     });
   };
 
-  componentDidMount() {
-    this.prepareFormData();
-  }
-
   componentDidUpdate(nextProps, nextState) {
     if (nextState && nextState.tooltipData && nextState.tooltipData.show) {
       this.setState({
