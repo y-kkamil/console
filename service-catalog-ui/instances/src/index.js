@@ -23,21 +23,19 @@ class AppWrapper extends React.Component {
           <App />
         </ApolloProvider>
       </BrowserRouter>
-    )
+    );
   }
 }
 
-
 (async () => {
   await builder.init();
-  const client = createApolloClient();
   ReactDOM.render(
     <>
       {backendModuleExists('servicecatalog') ? (
         <AppWrapper />
       ) : (
-          <BackendModuleDisabled mod="Service Catalog" />
-        )}
+        <BackendModuleDisabled mod="Service Catalog" />
+      )}
     </>,
     document.getElementById('root'),
   );

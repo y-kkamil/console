@@ -55,10 +55,10 @@ const AppWrapper: React.FunctionComponent = () => {
       {appInitializer.backendModuleExists(BACKEND_MODULE_SERVICE_CATALOG) ? (
         <AppWrapper />
       ) : (
-          <BackendModuleDisabled
-            mod={BACKEND_MODULE_SERVICE_CATALOG_DISPLAY_NAME}
-          />
-        )}
+        <BackendModuleDisabled
+          mod={BACKEND_MODULE_SERVICE_CATALOG_DISPLAY_NAME}
+        />
+      )}
     </>,
     document.getElementById('root'),
   );
