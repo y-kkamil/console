@@ -3,6 +3,7 @@
   "packages": [
     "core",
     "compass",
+    "service-catalog-ui",
     "service-catalog-ui/*",
     "content",
     "add-ons",
