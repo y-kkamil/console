@@ -66,5 +66,10 @@
   ],
   "config": {
     "unsafe-perm": true
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/crypto-mock.js"
+    ]
   }
 }
