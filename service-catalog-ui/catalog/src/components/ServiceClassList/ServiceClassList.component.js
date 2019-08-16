@@ -58,14 +58,7 @@ class ServiceClassList extends React.Component {
   }
 
   setTabFilter = currentTabIndex => {
-    let filterValue;
-    if (currentTabIndex === 0) {
-      filterValue = true;
-    }
-    if (currentTabIndex === 1) {
-      filterValue = false;
-    }
-    this.props.setServiceClassesFilter('local', filterValue);
+    this.props.setServiceClassesFilter('local', currentTabIndex === 0);
   };
 
   componentDidMount() {

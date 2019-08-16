@@ -21,14 +21,7 @@ import { transformDataScalarStringsToObjects } from '../../store/transformers';
 
 class ServiceInstances extends React.Component {
   setTabFilter = currentTabIndex => {
-    let filterValue;
-    if (currentTabIndex === 0) {
-      filterValue = true;
-    }
-    if (currentTabIndex === 1) {
-      filterValue = false;
-    }
-    this.props.filterClassesAndSetActiveFilters('local', filterValue);
+    this.props.filterClassesAndSetActiveFilters('local', currentTabIndex === 0);
   };
 
   componentDidMount() {
