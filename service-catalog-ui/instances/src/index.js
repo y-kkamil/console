@@ -1,42 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { ApolloProvider } from 'react-apollo';
-import { BrowserRouter } from 'react-router-dom';
-import { BackendModuleDisabled } from '@kyma-project/react-components';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import InstancesViewContent from './components/App/InstancesViewContent.component';
 
 import './index.css';
 
-import { backendModuleExists } from './commons/helpers';
-import App from './components/App/App.container';
-
-import builder from './commons/builder';
-
-import { createApolloClient } from './store';
-
-class AppWrapper extends React.Component {
-  render() {
-    const client = createApolloClient();
-    return (
-      <BrowserRouter>
-        <ApolloProvider client={client}>
-          <App />
-        </ApolloProvider>
-      </BrowserRouter>
-    );
-  }
+function Preload() {
+  return <div></div>;
 }
 
-(async () => {
-  await builder.init();
-  ReactDOM.render(
-    <>
-      {backendModuleExists('servicecatalog') ? (
-        <AppWrapper />
-      ) : (
-        <BackendModuleDisabled mod="Service Catalog" />
-      )}
-    </>,
-    document.getElementById('root'),
-  );
-})();
+ReactDOM.render(
+  <BrowserRouter>
+    <Switch>
+      <Route exact path="/preload" component={Preload} />
+      <Route component={InstancesViewContent} />
+    </Switch>
+  </BrowserRouter>,
+  document.getElementById('root'),
+);
