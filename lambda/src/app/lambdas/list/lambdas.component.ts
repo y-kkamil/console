@@ -226,11 +226,8 @@ export class LambdasComponent extends GenericTableComponent
     this.initListenerId = luigiClient.addInitListener(() =>
       this.loadData(this),
     );
-    this.contextUpdateListenerId = luigiClient.addContextUpdateListener(
-      context => {
-        context;
-        this.loadData(this);
-      },
+    this.contextUpdateListenerId = luigiClient.addContextUpdateListener(() =>
+      this.loadData(this),
     );
   }
 

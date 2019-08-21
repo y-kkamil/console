@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo-hooks';
-import { BackendModuleDisabled } from '@kyma-project/react-components';
 
 import App from './core/App';
 import 'fiori-fundamentals/dist/fiori-fundamentals.min.css';
@@ -18,11 +17,6 @@ import {
   UrlsProvider,
 } from './services';
 
-import {
-  BACKEND_MODULE_SERVICE_CATALOG,
-  BACKEND_MODULE_SERVICE_CATALOG_DISPLAY_NAME,
-} from './constants';
-
 import appInitializer from './core/app-initializer';
 import { createApolloClient } from './core/apollo-client';
 
@@ -37,29 +31,15 @@ const Services = nestServices(
   SubscriptionsProvider,
 );
 
-const AppWrapper: React.FunctionComponent = () => {
+(async () => {
+  await appInitializer.init();
   const client = createApolloClient();
-  return (
+  ReactDOM.render(
     <ApolloProvider client={client}>
       <Services>
         <App />
       </Services>
-    </ApolloProvider>
-  );
-};
-
-(async () => {
-  await appInitializer.init();
-  ReactDOM.render(
-    <>
-      {appInitializer.backendModuleExists(BACKEND_MODULE_SERVICE_CATALOG) ? (
-        <AppWrapper />
-      ) : (
-        <BackendModuleDisabled
-          mod={BACKEND_MODULE_SERVICE_CATALOG_DISPLAY_NAME}
-        />
-      )}
-    </>,
+    </ApolloProvider>,
     document.getElementById('root'),
   );
 })();
