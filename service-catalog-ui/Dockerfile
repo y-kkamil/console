@@ -19,7 +19,6 @@ COPY catalog/package.json catalog/package-lock.json catalog/config-overrides.js 
 COPY instances/package.json instances/package-lock.json instances/config-overrides.js instances/.env /app/instances/
 
 RUN npm install --no-optional --unsafe-perm
-RUN npm run install-apps
 
 # Copy sources
 COPY brokers/src /app/brokers/src
