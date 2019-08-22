@@ -7,7 +7,7 @@ import BrokersViewContent from './components/App/BrokersViewContent.component';
 import './index.css';
 
 function Preload() {
-  return <div></div>;
+  return <div />;
 }
 
 ReactDOM.render(
