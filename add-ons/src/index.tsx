@@ -8,13 +8,13 @@ import AddonsViewContent from './core/AddonsViewContent';
 import 'fiori-fundamentals/dist/fiori-fundamentals.min.css';
 
 function Preload() {
-  return <div></div>;
+  return <div />;
 }
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route exact path="/preload" component={Preload} />
+      <Route exact={true} path="/preload" component={Preload} />
       <Route component={AddonsViewContent} />
     </Switch>
   </BrowserRouter>,
