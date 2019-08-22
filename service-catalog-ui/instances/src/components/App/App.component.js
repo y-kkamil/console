@@ -1,8 +1,14 @@
 import React from 'react';
-import { Modal, Notification } from '@kyma-project/react-components';
+import {
+  Modal,
+  Notification,
+  BackendModuleDisabled,
+} from '@kyma-project/react-components';
 
 import DataProvider from '../DataProvider/DataProvider';
 import RouteWrapper from './RouteWrapper';
+
+import { backendModuleExists } from '../../commons/helpers';
 
 Modal.MODAL_APP_REF = '#root';
 const NOTIFICATION_VISIBILITY_TIME = 5000;
