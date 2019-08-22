@@ -52,12 +52,14 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     label: '',
     showOutdatedLogs: false,
     showHealthChecks: false,
+    showIstioLogs: false,
   };
 
   selectedLabels: Map<string, string | string[]> = new Map();
   mandatoryLabels: Map<string, string> = new Map();
 
   private namespace: string;
+  private istioProxyFilter = ', container_name != "istio-proxy"';
 
   public loaded: Observable<boolean> = observableOf(false);
   private pollingSubscription: Subscription;
@@ -145,8 +147,31 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.refreshResults();
   }
 
+  addQueryFilters(searchQuery: IPlainLogQuery): IPlainLogQuery {
+    let { query } = searchQuery;
+
+    if (this.model.showIstioLogs) {
+      // remove istio proxy filer from query
+      query = query.replace(this.istioProxyFilter, '');
+    } else {
+      if (query.indexOf(this.istioProxyFilter) === -1) {
+        // add istio proxy filer to query
+        query = query.replace('}', this.istioProxyFilter + '}');
+      }
+    }
+
+    return { ...searchQuery, query };
+  }
+
   refreshResults() {
-    const searchQuery: IPlainLogQuery = this.getSearchQuery();
+    const searchQuery: IPlainLogQuery = this.addQueryFilters(
+      this.getSearchQuery(),
+    );
+
+    this.isFunctionLabelPresent =
+      searchQuery &&
+      searchQuery.query &&
+      searchQuery.query.indexOf('function=') > -1;
 
     this.searchService.search(searchQuery).subscribe(
       data => {
@@ -180,6 +205,10 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     if (!this.model.showHealthChecks) {
       result.streams = result.streams.map(this.filterHealthchecks);
     }
+
+    result.streams = result.streams
+      .sort(this.sortFromNewestLogs)
+      .filter((s: ILogStream) => s.entries && s.entries.length);
 
     return result;
   }
@@ -357,10 +386,32 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
     allPodsQuery.valueChanges.subscribe((response: IPodQueryResponse) => {
       this.podsForFunction = response.data.pods.filter(
-        (p: IPod) => p.labels && (p.labels.function === lambdaName),
+        (p: IPod) => p.labels && p.labels.function === lambdaName,
       );
       this.onSubmit();
     });
+  }
+
+  sortFromNewestLogs(stream1: ILogStream, stream2: ILogStream): number {
+    if (!(stream1 && stream1.entries && stream2 && stream2.entries)) {
+      return 0;
+    }
+
+    const getTimestamp = (stream: ILogStream) => {
+      const streamLastEntry =
+        stream && stream.entries && stream.entries.length
+          ? stream.entries[stream.entries.length - 1]
+          : {};
+      const streamLastEntryTimestamp = new Date(
+        streamLastEntry && streamLastEntry.ts ? streamLastEntry.ts : 0,
+      );
+      return streamLastEntryTimestamp;
+    };
+
+    const stream1Timestamp = getTimestamp(stream1);
+    const stream2Timestamp = getTimestamp(stream2);
+
+    return stream2Timestamp.getTime() - stream1Timestamp.getTime();
   }
 
   onToTimeChanged(event: { target: { value: string } }) {
@@ -405,12 +456,8 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   }
 
   public isSearchResultEmpty(searchResult: ISearchResult): boolean {
-    return !(
-      searchResult &&
-      searchResult.streams &&
-      searchResult.streams[0] &&
-      !!searchResult.streams[0].entries &&
-      !!searchResult.streams[0].entries.length
+    return !searchResult.streams.some(
+      (s: ILogStream) => !!(s.entries && s.entries.length),
     );
   }
 }

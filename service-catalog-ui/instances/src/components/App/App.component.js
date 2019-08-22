@@ -40,7 +40,11 @@ class App extends React.Component {
       <div>
         <Notification {...notification} onClick={this.clearNotification} />
         <div className="ph3 pv1 background-gray">
-          <DataProvider>{props => <RouteWrapper {...props} />}</DataProvider>
+          {backendModuleExists('servicecatalog') ? (
+            <DataProvider>{props => <RouteWrapper {...props} />}</DataProvider>
+          ) : (
+            <BackendModuleDisabled mod="Service Catalog" />
+          )}
         </div>
       </div>
     );
