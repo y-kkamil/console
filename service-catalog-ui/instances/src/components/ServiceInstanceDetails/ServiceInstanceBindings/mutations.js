@@ -72,8 +72,6 @@ export const SEND_NOTIFICATION = gql`
       color: $color
       icon: $icon
       instanceName: $instanceName
-    ) @client {
-      title
-    }
+    )
   }
 `;

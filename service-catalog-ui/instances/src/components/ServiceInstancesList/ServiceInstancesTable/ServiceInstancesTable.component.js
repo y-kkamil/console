@@ -65,9 +65,6 @@ export class ServiceInstancesTable extends Component {
 
   render() {
     const { data, deleteServiceInstance, loading } = this.props;
-    const handleDelete = async element => {
-      await deleteServiceInstance(element.name);
-    };
 
     const serviceCatalogAddonsBackendModuleExists = backendModuleExists(
       'servicecatalogaddons',
@@ -190,7 +187,7 @@ export class ServiceInstancesTable extends Component {
               title="Warning"
               content={`Are you sure you want to delete instance "${instance.name}"?`}
               confirmText="Delete"
-              onConfirm={() => handleDelete(instance)}
+              onConfirm={() => deleteServiceInstance(instance.name)}
               modalOpeningComponent={deleteButton}
               type="negative"
               onShow={() => LuigiClient.uxManager().addBackdrop()}

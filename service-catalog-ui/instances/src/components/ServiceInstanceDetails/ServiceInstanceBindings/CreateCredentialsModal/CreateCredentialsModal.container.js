@@ -1,4 +1,5 @@
-import { graphql, withApollo, compose } from 'react-apollo';
+import { graphql, withApollo } from 'react-apollo';
+import { compose } from 'recompose';
 
 import { SEND_NOTIFICATION } from '../mutations';
 

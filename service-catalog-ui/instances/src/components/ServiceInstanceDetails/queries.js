@@ -3,7 +3,7 @@ import { SERVICE_INSTANCE_DETAILS_FRAGMENT } from '../DataProvider/fragments';
 
 export const SERVICE_INSTANCES_DETAILS = gql`
   query allItems($namespace: String!) {
-    serviceInstances(namespace: $namespace) @client {
+    serviceInstances(namespace: $namespace) {
       ...serviceInstanceDetails
     }
   }

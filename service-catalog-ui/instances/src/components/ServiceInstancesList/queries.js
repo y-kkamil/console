@@ -3,7 +3,7 @@ import { SERVICE_INSTANCE_DETAILS_FRAGMENT } from '../DataProvider/fragments';
 
 export const ACTIVE_FILTERS_QUERY = gql`
   query activeFilters {
-    activeFilters @client {
+    activeFilters {
       search
       labels
       local
@@ -13,9 +13,9 @@ export const ACTIVE_FILTERS_QUERY = gql`
 
 export const ALL_FILTERS_QUERY = gql`
   query allFilters {
-    allFilters @client {
+    allFilters {
       name
-      values @client {
+      values {
         name
         value
         count
@@ -26,7 +26,7 @@ export const ALL_FILTERS_QUERY = gql`
 
 export const FILTERED_INSTANCES_COUNTS_QUERY = gql`
   query filteredInstancesCounts {
-    filteredInstancesCounts @client {
+    filteredInstancesCounts {
       local
       notLocal
     }
@@ -35,7 +35,7 @@ export const FILTERED_INSTANCES_COUNTS_QUERY = gql`
 
 export const ALL_ITEMS_QUERY = gql`
   query allItems($namespace: String!) {
-    serviceInstances(namespace: $namespace) @client {
+    serviceInstances(namespace: $namespace) {
       ...serviceInstanceDetails
     }
   }
@@ -44,7 +44,7 @@ export const ALL_ITEMS_QUERY = gql`
 
 export const FILTERED_ITEMS_QUERY = gql`
   query filteredItems {
-    filteredItems @client {
+    filteredItems {
       name
     }
   }

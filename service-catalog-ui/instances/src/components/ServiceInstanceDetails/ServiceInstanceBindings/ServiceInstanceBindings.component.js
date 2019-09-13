@@ -9,7 +9,7 @@ import {
 } from '@kyma-project/react-components';
 
 import BindApplicationModal from './BindApplicationModal/BindApplicationModal.container';
-import CreateCredentialsModal from './CreateCredentialsModal/CreateCredentialsModal.container';
+import CreateCredentialsModal from './CreateCredentialsModal/CreateCredentialsModal.component';
 import SecretDataModal from './SecretDataModal/SecretDataModal.component';
 import ParametersDataModal from './ParametersDataModal/ParametersDataModal.component';
 import DeleteBindingModal from './DeleteBindingModal/DeleteBindingModal.component';
@@ -22,7 +22,7 @@ import {
   ActionsWrapper,
 } from './styled';
 
-import { TextOverflowWrapper } from '../../ServiceInstances/ServiceInstancesTable/styled';
+import { TextOverflowWrapper } from '../../ServiceInstancesList/ServiceInstancesTable/styled';
 
 import { backendModuleExists } from '../../../commons/helpers';
 

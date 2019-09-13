@@ -2,25 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { ApolloProvider } from 'react-apollo';
-import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
 
-import App from './components/App/App.container';
+import App from './components/App/App';
 
 import builder from './commons/builder';
 
 import { createApolloClient } from './store';
 
+// TODO MOVE DEPS TO OUTER PACKAGE.JSON
+
 (async () => {
   await builder.init();
+
   const client = createApolloClient();
+
   ReactDOM.render(
-    <BrowserRouter>
-      <ApolloProvider client={client}>
-        <App />
-      </ApolloProvider>
-    </BrowserRouter>,
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>,
     document.getElementById('root'),
   );
 })();

@@ -8,7 +8,7 @@ const getActiveFilters = cache => {
     cache.readQuery({
       query: gql`
         query activeFilters {
-          activeFilters @client {
+          activeFilters {
             search
             labels
             local

@@ -20,7 +20,7 @@ const resolvers = {
       const notification = cache.readQuery({
         query: gql`
           query notification {
-            notification @client {
+            notification {
               title
               content
               color

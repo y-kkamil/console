@@ -7,23 +7,17 @@ import SearchDropdown from './SearchDropdown.component';
 import FilterDropdown from './FilterDropdown.component';
 
 const ServiceInstancesToolbar = ({
-  filterClassesAndSetActiveFilters,
-  labelFilter,
+  searchFn,
+  allInstancesLabels,
+  filterFn,
   serviceInstancesExists,
 }) => {
   return (
     <Toolbar background="#fff" title={serviceInstanceConstants.title}>
       {serviceInstancesExists ? (
         <>
-          <SearchDropdown
-            onChange={e =>
-              filterClassesAndSetActiveFilters('search', e.target.value)
-            }
-          />
-          <FilterDropdown
-            onChange={filterClassesAndSetActiveFilters}
-            filter={labelFilter}
-          />
+          <SearchDropdown onChange={e => searchFn(e.target.value)} />
+          <FilterDropdown onChange={null} filter={null} />
         </>
       ) : null}
     </Toolbar>

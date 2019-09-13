@@ -9,11 +9,9 @@ import InfoButton from '../InfoButton/InfoButton.component';
 import { clearEmptyPropertiesInObject } from '../../../../commons/helpers';
 import LuigiClient from '@kyma-project/luigi-client';
 
-import TnotificationsContext from '../../../App/NotificationContext/notification.context';
+import { ApolloProvider } from '@apollo/react-hooks';
 
 class CreateCredentialsModal extends React.Component {
-  static contextType = TnotificationsContext;
-
   constructor(props) {
     super(props);
     this.child = React.createRef();
@@ -58,7 +56,7 @@ class CreateCredentialsModal extends React.Component {
   };
 
   create = async isOpenedModal => {
-    const { serviceInstance, createBinding } = this.props;
+    const { serviceInstance, createBinding, sendNotification } = this.props;
     const { bindingCreateParameters } = this.state;
 
     let success = true;
@@ -84,19 +82,23 @@ class CreateCredentialsModal extends React.Component {
         this.child.child.handleCloseModal();
       }
 
-      this.context.open({
-        content: `Credentials "${createdBindingName}" created successfully`,
-        title: `${createdBindingName}`,
-        color: '#359c46',
-        icon: 'accept',
-        instanceName: createdBindingName,
-      });
+      if (typeof sendNotification === 'function') {
+        sendNotification({
+          variables: {
+            content: `Credentials "${createdBindingName}" created successfully`,
+            title: `${createdBindingName}`,
+            color: '#359c46',
+            icon: 'accept',
+            instanceName: createdBindingName,
+          },
+        });
+      }
     } catch (e) {
       success = false;
       this.setState({
         tooltipData: {
           type: 'error',
-          title: 'Error occurred during creation',
+          title: 'Error occored during creation',
           content: e.message,
           show: true,
           minWidth: '261px',
