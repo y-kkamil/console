@@ -19,6 +19,16 @@ import { transformDataScalarStringsToObjects } from '../../store/transformers';
 import { backendModuleExists } from '../../commons/helpers';
 import builder from '../../commons/builder';
 import { getServiceInstanceDetails } from '../../queries/queries';
+import {
+  SERVICE_BINDING_EVENT_SUBSCRIPTION,
+  SERVICE_BINDING_USAGE_EVENT_SUBSCRIPTION,
+  SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
+} from '../DataProvider/subscriptions';
+import {
+  handleInstanceEvent,
+  handleServiceBindingEvent,
+  handleServiceBindingUsageEvent,
+} from '../../store/ServiceInstances/events';
 
 // class ServiceInstanceDetails extends React.Component {
 //   state = { defaultActiveTabIndex: 0 };
@@ -83,10 +93,54 @@ import { getServiceInstanceDetails } from '../../queries/queries';
 function callback() {}
 
 export default function ServiceInstanceDetails({ match }) {
-  const { loading, error, data } = useQuery(getServiceInstanceDetails, {
+  const { loading, error, data, subscribeToMore } = useQuery(
+    getServiceInstanceDetails,
+    {
+      variables: {
+        namespace: builder.getCurrentEnvironmentId(),
+        name: match.params.name,
+      },
+    },
+  );
+
+  subscribeToMore({
     variables: {
       namespace: builder.getCurrentEnvironmentId(),
-      name: match.params.name,
+    },
+    document: SERVICE_BINDING_EVENT_SUBSCRIPTION,
+    updateQuery: (prev, { subscriptionData }) => {
+      if (
+        !subscriptionData.data ||
+        !subscriptionData.data.serviceBindingEvent
+      ) {
+        return prev;
+      }
+
+      return handleServiceBindingEvent(
+        prev,
+        subscriptionData.data.serviceBindingEvent,
+      );
+    },
+  });
+
+  subscribeToMore({
+    variables: {
+      namespace: builder.getCurrentEnvironmentId(),
+    },
+    document: SERVICE_BINDING_USAGE_EVENT_SUBSCRIPTION,
+    updateQuery: (prev, { subscriptionData }) => {
+      debugger;
+      if (
+        !subscriptionData.data ||
+        !subscriptionData.data.serviceBindingUsageEvent
+      ) {
+        return prev;
+      }
+
+      return handleServiceBindingUsageEvent(
+        prev,
+        subscriptionData.data.serviceBindingUsageEvent,
+      );
     },
   });
 

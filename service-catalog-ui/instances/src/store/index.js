@@ -1,4 +1,3 @@
-import ApolloClient from 'apollo-boost';
 // import { InMemoryCache } from 'apollo-cache-inmemory';
 // import { createHttpLink } from 'apollo-link-http';
 // import { split, ApolloLink } from 'apollo-link';
@@ -8,17 +7,65 @@ import ApolloClient from 'apollo-boost';
 // import { createTransformerLink } from 'apollo-client-transform';
 // import { onError } from 'apollo-link-error';
 
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import { onError } from 'apollo-link-error';
+import { ApolloLink, split } from 'apollo-link';
+import { WebSocketLink } from './ws';
+import { getMainDefinition } from 'apollo-utilities';
+
 import builder from './../commons/builder';
 import resolvers from './resolvers';
 import defaults from './defaults';
 import { getURL } from './../commons/api-url';
-import { WebSocketLink } from './ws';
 import { getLinkTransformers } from './transformers';
 
 export function createApolloClient() {
   const graphqlApiUrl = getURL(
     process.env.REACT_APP_LOCAL_API ? 'graphqlApiUrlLocal' : 'graphqlApiUrl',
   );
+
+  const wsLink = new WebSocketLink({
+    uri: getURL('subscriptionsApiUrl'),
+    options: {
+      reconnect: true,
+    },
+  });
+
+  const httpLink = new HttpLink({
+    uri: graphqlApiUrl,
+    headers: {
+      authorization: builder.getBearerToken() || null,
+    },
+  });
+
+  const link = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query);
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      );
+    },
+    wsLink,
+    httpLink,
+  );
+
+  const client = new ApolloClient({
+    // link: ApolloLink.from([
+    //   onError(({ graphQLErrors, networkError }) => {
+    //     if (graphQLErrors)
+    //       graphQLErrors.forEach(({ message, locations, path }) =>
+    //         console.log(
+    //           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+    //         ),
+    //       );
+    //     if (networkError) console.log(`[Network error]: ${networkError}`);
+    //   }),
+    link,
+    cache: new InMemoryCache(),
+  });
 
   // const httpLink = createHttpLink({ uri: graphqlApiUrl });
   // const authLink = setContext((_, { headers }) => {
@@ -77,12 +124,12 @@ export function createApolloClient() {
   //   enhancedAuthHttpLink,
   // );
 
-  const client = new ApolloClient({
-    uri: graphqlApiUrl,
-    headers: {
-      authorization: builder.getBearerToken() || null,
-    },
-  });
+  // const client = new ApolloClient({
+  //   uri: graphqlApiUrl,
+  //   headers: {
+  //     authorization: builder.getBearerToken() || null,
+  //   },
+  // });
 
   return client;
 }

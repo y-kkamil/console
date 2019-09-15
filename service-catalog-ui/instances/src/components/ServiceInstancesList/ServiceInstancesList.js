@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import LuigiClient from '@kyma-project/luigi-client';
 
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks';
+
+import { StatusWrapper, StatusesList } from './styled';
 
 import builder from '../../commons/builder';
 import { getAllServiceInstances } from '../../queries/queries';
@@ -22,6 +24,8 @@ import ServiceInstancesTable from './ServiceInstancesTable/ServiceInstancesTable
 import ServiceInstancesToolbar from './ServiceInstancesToolbar/ServiceInstancesToolbar.component';
 
 import { ServiceInstancesWrapper } from './styled';
+import { SERVICE_INSTANCE_EVENT_SUBSCRIPTION } from '../DataProvider/subscriptions';
+import { handleInstanceEvent } from '../../store/ServiceInstances/events';
 
 const determineSelectedTab = () => {
   const selectedTabName = LuigiClient.getNodeParams().selectedTab;
@@ -38,53 +42,104 @@ const handleTabChange = ({ defaultActiveTabIndex }) => {
     .navigate('');
 };
 
+const status = (data, id) => {
+  return (
+    <StatusesList>
+      <StatusWrapper key={id}>
+        <Counter data-e2e-id={id}>{data}</Counter>
+      </StatusWrapper>
+    </StatusesList>
+  );
+};
+
 export default function ServiceInstancesList() {
-  const [addOnsToDisplay, setAddOnsToDisplay] = useState([]);
-  const [servicesToDisplay, setServicesToDisplay] = useState([]);
+  const [serviceInstances, setServiceInstances] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterQuery, setFilterQuery] = useState([]);
 
   const [
     deleteServiceInstanceMutation,
     { deleteServiceMutationData },
   ] = useMutation(deleteServiceInstance);
 
-  const { loading, error, data } = useQuery(getAllServiceInstances, {
+  const {
+    data: queryData,
+    loading: queryLoading,
+    error: queryError,
+    subscribeToMore,
+  } = useQuery(getAllServiceInstances, {
     variables: {
       namespace: builder.getCurrentEnvironmentId(),
     },
   });
 
-  const createInstancesLabelsList = visibleInstances => {};
+  subscribeToMore({
+    variables: {
+      namespace: builder.getCurrentEnvironmentId(),
+    },
+    document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
+    updateQuery: (prev, { subscriptionData }) => {
+      if (
+        !subscriptionData.data ||
+        !subscriptionData.data.serviceInstanceEvent
+      ) {
+        return prev;
+      }
+
+      return handleInstanceEvent(
+        prev,
+        subscriptionData.data.serviceInstanceEvent,
+      );
+    },
+  });
 
   useEffect(() => {
-    if (data && data.serviceInstances) {
-      filterInstancesByName('');
+    if (queryData && queryData.serviceInstances) {
+      setServiceInstances([...queryData.serviceInstances]);
     }
-  }, [data]);
+  }, [queryData]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  if (queryLoading) return <p>Loading...</p>;
+  if (queryError) return <p>Error :(</p>;
 
-  const filterInstancesByName = searchQuery => {
-    const filtered = data.serviceInstances.filter(instance =>
+  const determineDisplayedInstances = (
+    serviceInstances,
+    tabName,
+    searchQuery,
+    filterQuery,
+  ) => {
+    const searched = serviceInstances.filter(instance =>
       new RegExp(searchQuery, 'i').test(instance.name),
     );
 
-    const addOns = filtered.filter(instance => {
-      // ARE THESE CONDITIONS OK?
-      if (instance.clusterServiceClass && instance.clusterServiceClass.labels) {
-        return instance.clusterServiceClass.labels.local === 'true';
-      }
-      return false;
-    });
-    const services = filtered.filter(instance => {
-      if (instance.clusterServiceClass && instance.clusterServiceClass.labels) {
-        return instance.clusterServiceClass.labels.local !== 'true';
-      }
-      return true;
-    });
+    const filtered = searched.filter(() => true);
 
-    setAddOnsToDisplay(addOns);
-    setServicesToDisplay(services);
+    let filteredByTab = [];
+    if (tabName === 'addons') {
+      filteredByTab = filtered.filter(instance => {
+        // ARE THESE CONDITIONS OK?
+        if (
+          instance.clusterServiceClass &&
+          instance.clusterServiceClass.labels
+        ) {
+          return instance.clusterServiceClass.labels.local === 'true';
+        }
+        return false;
+      });
+    }
+    if (tabName === 'services') {
+      filteredByTab = filtered.filter(instance => {
+        if (
+          instance.clusterServiceClass &&
+          instance.clusterServiceClass.labels
+        ) {
+          return instance.clusterServiceClass.labels.local !== 'true';
+        }
+        return true;
+      });
+    }
+
+    return filteredByTab;
   };
 
   const filterInstancesByLabels = labelsChecked => {
@@ -103,9 +158,9 @@ export default function ServiceInstancesList() {
   return (
     <ThemeWrapper>
       <ServiceInstancesToolbar
-        searchFn={filterInstancesByName}
+        searchFn={setSearchQuery}
         filterFn={filterInstancesByLabels}
-        serviceInstancesExists={data.serviceInstances.length > 0}
+        serviceInstancesExists={serviceInstances.length > 0}
       />
 
       <NotificationMessage
@@ -125,7 +180,11 @@ export default function ServiceInstancesList() {
       >
         <Tab
           noMargin
-          status={addOnsToDisplay.length}
+          status={status(
+            determineDisplayedInstances(serviceInstances, 'addons', searchQuery)
+              .length,
+            'addons-status',
+          )}
           title={
             <Tooltip
               content={serviceInstanceConstants.addonsTooltipDescription}
@@ -139,14 +198,25 @@ export default function ServiceInstancesList() {
         >
           <ServiceInstancesWrapper data-e2e-id="instances-wrapper">
             <ServiceInstancesTable
-              data={addOnsToDisplay}
+              data={determineDisplayedInstances(
+                serviceInstances,
+                'addons',
+                searchQuery,
+              )}
               deleteServiceInstance={handleDelete}
             />
           </ServiceInstancesWrapper>
         </Tab>
         <Tab
           noMargin
-          status={servicesToDisplay.length}
+          status={status(
+            determineDisplayedInstances(
+              serviceInstances,
+              'services',
+              searchQuery,
+            ).length,
+            'services-status',
+          )}
           title={
             <Tooltip
               content={serviceInstanceConstants.servicesTooltipDescription}
@@ -160,7 +230,11 @@ export default function ServiceInstancesList() {
         >
           <ServiceInstancesWrapper data-e2e-id="instances-wrapper">
             <ServiceInstancesTable
-              data={servicesToDisplay}
+              data={determineDisplayedInstances(
+                serviceInstances,
+                'services',
+                searchQuery,
+              )}
               deleteServiceInstance={handleDelete}
             />
           </ServiceInstancesWrapper>
