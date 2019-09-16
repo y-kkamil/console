@@ -73,29 +73,28 @@ export default function ServiceInstancesList() {
     },
   });
 
-  // subscribeToMore({
-  //   variables: {
-  //     namespace: builder.getCurrentEnvironmentId(),
-  //   },
-  //   document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-  //   updateQuery: (prev, { subscriptionData }) => {
-  //     if (
-  //       !subscriptionData.data ||
-  //       !subscriptionData.data.serviceInstanceEvent
-  //     ) {
-  //       return prev;
-  //     }
-  //
-  //     return handleInstanceEvent(
-  //       prev,
-  //       subscriptionData.data.serviceInstanceEvent,
-  //     );
-  //   },
-  // });
+  subscribeToMore({
+    variables: {
+      namespace: builder.getCurrentEnvironmentId(),
+    },
+    document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
+    updateQuery: (prev, { subscriptionData }) => {
+      if (
+        !subscriptionData.data ||
+        !subscriptionData.data.serviceInstanceEvent
+      ) {
+        return prev;
+      }
+
+      return handleInstanceEvent(
+        prev,
+        subscriptionData.data.serviceInstanceEvent,
+      );
+    },
+  });
 
   useEffect(() => {
     if (queryData && queryData.serviceInstances) {
-      console.error('DUPA: INSIDE USEEFFECT');
       setServiceInstances([...queryData.serviceInstances]);
     }
   }, [queryData]);
