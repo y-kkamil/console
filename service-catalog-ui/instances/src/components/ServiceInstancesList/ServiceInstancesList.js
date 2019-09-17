@@ -11,6 +11,7 @@ import { deleteServiceInstance } from '../../queries/mutations';
 
 import {
   NotificationMessage,
+  Spinner,
   Tab,
   Tabs,
   Tooltip,
@@ -73,25 +74,25 @@ export default function ServiceInstancesList() {
     },
   });
 
-  subscribeToMore({
-    variables: {
-      namespace: builder.getCurrentEnvironmentId(),
-    },
-    document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-    updateQuery: (prev, { subscriptionData }) => {
-      if (
-        !subscriptionData.data ||
-        !subscriptionData.data.serviceInstanceEvent
-      ) {
-        return prev;
-      }
-
-      return handleInstanceEvent(
-        prev,
-        subscriptionData.data.serviceInstanceEvent,
-      );
-    },
-  });
+  // subscribeToMore({
+  //   variables: {
+  //     namespace: builder.getCurrentEnvironmentId(),
+  //   },
+  //   document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
+  //   updateQuery: (prev, { subscriptionData }) => {
+  //     if (
+  //       !subscriptionData.data ||
+  //       !subscriptionData.data.serviceInstanceEvent
+  //     ) {
+  //       return prev;
+  //     }
+  //
+  //     return handleInstanceEvent(
+  //       prev,
+  //       subscriptionData.data.serviceInstanceEvent,
+  //     );
+  //   },
+  // });
 
   useEffect(() => {
     if (queryData && queryData.serviceInstances) {
@@ -99,7 +100,7 @@ export default function ServiceInstancesList() {
     }
   }, [queryData]);
 
-  if (queryLoading) return <p>Loading...</p>;
+  if (queryLoading) return <Spinner />;
   if (queryError) return <p>Error :(</p>;
 
   const determineDisplayedInstances = (
