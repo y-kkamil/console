@@ -8,7 +8,7 @@ import FilterDropdown from './FilterDropdown.component';
 
 const ServiceInstancesToolbar = ({
   searchFn,
-  allInstancesLabels,
+  availableLabels,
   filterFn,
   serviceInstancesExists,
 }) => {
@@ -17,7 +17,11 @@ const ServiceInstancesToolbar = ({
       {serviceInstancesExists ? (
         <>
           <SearchDropdown onChange={e => searchFn(e.target.value)} />
-          <FilterDropdown onChange={null} filter={null} />
+          <FilterDropdown
+            onChange={null}
+            filter={true}
+            availableLabels={availableLabels}
+          />
         </>
       ) : null}
     </Toolbar>

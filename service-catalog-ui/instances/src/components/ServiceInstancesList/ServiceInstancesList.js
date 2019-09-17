@@ -56,7 +56,7 @@ const status = (data, id) => {
 export default function ServiceInstancesList() {
   const [serviceInstances, setServiceInstances] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterQuery, setFilterQuery] = useState([]);
+  const [activeFilters, setActiveFilters] = useState([]);
 
   const [
     deleteServiceInstanceMutation,
@@ -70,7 +70,7 @@ export default function ServiceInstancesList() {
     subscribeToMore,
   } = useQuery(getAllServiceInstances, {
     variables: {
-      namespace: 'TEST',
+      namespace: builder.getCurrentEnvironmentId(),
     },
   });
 
@@ -118,7 +118,6 @@ export default function ServiceInstancesList() {
     let filteredByTab = [];
     if (tabName === 'addons') {
       filteredByTab = filtered.filter(instance => {
-        // ARE THESE CONDITIONS OK?
         if (
           instance.clusterServiceClass &&
           instance.clusterServiceClass.labels
@@ -156,11 +155,51 @@ export default function ServiceInstancesList() {
     });
   };
 
+  const determineAvailableLabels = (
+    serviceInstances,
+    tabName,
+    searchQuery,
+    filterQuery,
+  ) => {
+    const displayedInstances = determineDisplayedInstances(
+      serviceInstances,
+      tabName,
+      searchQuery,
+      filterQuery,
+    );
+
+    const allLabels = serviceInstances.reduce(
+      (labelsCombined, instance) => [...labelsCombined, ...instance.labels],
+      [],
+    );
+
+    const labelsWithOccurrences = allLabels.reduce(
+      (labelsWithOccurrences, label) => ({
+        ...labelsWithOccurrences,
+        [label]: 0,
+      }),
+      {},
+    );
+
+    displayedInstances.forEach(instance => {
+      instance.labels.forEach(label => {
+        ++labelsWithOccurrences[label];
+      });
+    });
+
+    return labelsWithOccurrences;
+  };
+
   return (
     <ThemeWrapper>
       <ServiceInstancesToolbar
         searchFn={setSearchQuery}
-        filterFn={filterInstancesByLabels}
+        filterFn={setActiveFilters}
+        availableLabels={determineAvailableLabels(
+          serviceInstances,
+          'addons',
+          searchQuery,
+        )}
         serviceInstancesExists={serviceInstances.length > 0}
       />
 
