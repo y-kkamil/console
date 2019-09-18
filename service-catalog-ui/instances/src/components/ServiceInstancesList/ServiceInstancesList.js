@@ -11,6 +11,7 @@ import { deleteServiceInstance } from '../../queries/mutations';
 
 import {
   NotificationMessage,
+  Spinner,
   Tab,
   Tabs,
   Tooltip,
@@ -55,7 +56,7 @@ const status = (data, id) => {
 export default function ServiceInstancesList({testNamespace}) {
   const [serviceInstances, setServiceInstances] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterQuery, setFilterQuery] = useState([]);
+  const [activeLabelFilters, setActiveLabelFilters] = useState([]);
 
   const [
     deleteServiceInstanceMutation,
@@ -85,7 +86,7 @@ export default function ServiceInstancesList({testNamespace}) {
       ) {
         return prev;
       }
-
+  
       return handleInstanceEvent(
         prev,
         subscriptionData.data.serviceInstanceEvent,
@@ -99,25 +100,26 @@ export default function ServiceInstancesList({testNamespace}) {
     }
   }, [queryData]);
 
-  if (queryLoading) return <p>Loading...</p>;
+  if (queryLoading) return <Spinner />;
   if (queryError) return <p>Error :(</p>;
-
+  //TODO REMOVE TAB INDEX MAGIC NUBMERS
   const determineDisplayedInstances = (
     serviceInstances,
-    tabName,
+    tabIndex,
     searchQuery,
-    filterQuery,
+    activeLabels,
   ) => {
     const searched = serviceInstances.filter(instance =>
       new RegExp(searchQuery, 'i').test(instance.name),
     );
 
-    const filtered = searched.filter(() => true);
+    const filteredByLabels = searched.filter(instance =>
+      activeLabels.every(activeLabel => instance.labels.includes(activeLabel)),
+    );
 
     let filteredByTab = [];
-    if (tabName === 'addons') {
-      filteredByTab = filtered.filter(instance => {
-        // ARE THESE CONDITIONS OK?
+    if (tabIndex === 0) {
+      filteredByTab = filteredByLabels.filter(instance => {
         if (
           instance.clusterServiceClass &&
           instance.clusterServiceClass.labels
@@ -127,8 +129,8 @@ export default function ServiceInstancesList({testNamespace}) {
         return false;
       });
     }
-    if (tabName === 'services') {
-      filteredByTab = filtered.filter(instance => {
+    if (tabIndex === 1) {
+      filteredByTab = filteredByLabels.filter(instance => {
         if (
           instance.clusterServiceClass &&
           instance.clusterServiceClass.labels
@@ -142,10 +144,6 @@ export default function ServiceInstancesList({testNamespace}) {
     return filteredByTab;
   };
 
-  const filterInstancesByLabels = labelsChecked => {
-    console.log(labelsChecked);
-  };
-
   const handleDelete = instanceName => {
     deleteServiceInstanceMutation({
       variables: {
@@ -155,11 +153,62 @@ export default function ServiceInstancesList({testNamespace}) {
     });
   };
 
+  const determineAvailableLabels = (
+    serviceInstances,
+    tabName,
+    searchQuery,
+    filterQuery,
+  ) => {
+    const displayedInstances = determineDisplayedInstances(
+      serviceInstances,
+      tabName,
+      searchQuery,
+      [],
+    );
+
+    const allLabels = serviceInstances.reduce(
+      (labelsCombined, instance) => [...labelsCombined, ...instance.labels],
+      [],
+    );
+
+    const labelsWithOccurrences = allLabels.reduce(
+      (labelsWithOccurrences, label) => ({
+        ...labelsWithOccurrences,
+        [label]: 0,
+      }),
+      {},
+    );
+
+    displayedInstances.forEach(instance => {
+      instance.labels.forEach(label => {
+        ++labelsWithOccurrences[label];
+      });
+    });
+
+    return labelsWithOccurrences;
+  };
+
+  const handleLabelChange = (labelId, checked) => {
+    if (checked) {
+      setActiveLabelFilters([...activeLabelFilters, labelId]);
+    } else {
+      setActiveLabelFilters(
+        [...activeLabelFilters].filter(label => label !== labelId),
+      );
+    }
+  };
+
   return (
     <ThemeWrapper>
       <ServiceInstancesToolbar
         searchFn={setSearchQuery}
-        filterFn={filterInstancesByLabels}
+        onLabelChange={handleLabelChange}
+        activeLabelFilters={activeLabelFilters}
+        availableLabels={determineAvailableLabels(
+          serviceInstances,
+          determineSelectedTab(),
+          searchQuery,
+        )}
         serviceInstancesExists={serviceInstances.length > 0}
       />
 
@@ -181,8 +230,12 @@ export default function ServiceInstancesList({testNamespace}) {
         <Tab
           noMargin
           status={status(
-            determineDisplayedInstances(serviceInstances, 'addons', searchQuery)
-              .length,
+            determineDisplayedInstances(
+              serviceInstances,
+              0,
+              searchQuery,
+              activeLabelFilters,
+            ).length,
             'addons-status',
           )}
           title={
@@ -200,8 +253,9 @@ export default function ServiceInstancesList({testNamespace}) {
             <ServiceInstancesTable
               data={determineDisplayedInstances(
                 serviceInstances,
-                'addons',
+                0,
                 searchQuery,
+                activeLabelFilters,
               )}
               deleteServiceInstance={handleDelete}
             />
@@ -212,8 +266,9 @@ export default function ServiceInstancesList({testNamespace}) {
           status={status(
             determineDisplayedInstances(
               serviceInstances,
-              'services',
+              1,
               searchQuery,
+              activeLabelFilters,
             ).length,
             'services-status',
           )}
@@ -232,8 +287,9 @@ export default function ServiceInstancesList({testNamespace}) {
             <ServiceInstancesTable
               data={determineDisplayedInstances(
                 serviceInstances,
-                'services',
+                1,
                 searchQuery,
+                activeLabelFilters,
               )}
               deleteServiceInstance={handleDelete}
             />

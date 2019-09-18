@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Button,
@@ -15,39 +15,47 @@ import {
   PanelBody,
 } from './styled';
 
-const FilterDropdown = ({ filter, onChange }) => {
-  const disabled = !(filter && filter.values && filter.values.length > 0);
+const FilterDropdown = ({
+  onLabelChange,
+  availableLabels,
+  activeLabelFilters,
+}) => {
+  const disabled = Object.entries(availableLabels).length === 0;
   const control = (
     <Button option="emphasized" disabled={disabled} data-e2e-id="toggle-filter">
       Filter
     </Button>
   );
 
-  return !filter ? null : (
+  const handleLabelClick = ev => {
+    onLabelChange(ev.target.id, ev.target.checked);
+  };
+
+  return (
     <FiltersDropdownWrapper>
       <Dropdown control={control} disabled={disabled}>
         <Panel>
           <PanelBody>
             <FormFieldset>
-              {filter.values.map((item, index) => {
-                const count = item.count !== null ? ` (${item.count})` : '';
-
-                return (
-                  <FormItem isCheck key={index}>
-                    <FormInput
-                      data-e2e-id={`filter-${item.name}`}
-                      type="checkbox"
-                      id={`checkbox-${index}`}
-                      name={`checkbox-name-${index}`}
-                      onClick={() => onChange(filter.name, item.value)}
-                    />
-                    <FormLabel htmlFor={`checkbox-${index}`}>
-                      {item.name}
-                      {count}
-                    </FormLabel>
-                  </FormItem>
-                );
-              })}
+              {Object.entries(availableLabels).map(
+                ({ 0: label, 1: count }, index) => {
+                  return (
+                    <FormItem isCheck key={index}>
+                      <FormInput
+                        data-e2e-id={`filter-${label}`}
+                        type="checkbox"
+                        id={label}
+                        name={`checkbox-name-${index}`}
+                        onClick={handleLabelClick}
+                        checked={activeLabelFilters.includes(label)}
+                      />
+                      <FormLabel htmlFor={`checkbox-${index}`}>
+                        {label} ({count})
+                      </FormLabel>
+                    </FormItem>
+                  );
+                },
+              )}
             </FormFieldset>
           </PanelBody>
         </Panel>
