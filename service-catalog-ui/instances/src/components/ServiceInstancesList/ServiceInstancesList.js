@@ -52,7 +52,7 @@ const status = (data, id) => {
   );
 };
 
-export default function ServiceInstancesList() {
+export default function ServiceInstancesList({testNamespace}) {
   const [serviceInstances, setServiceInstances] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterQuery, setFilterQuery] = useState([]);
@@ -69,13 +69,13 @@ export default function ServiceInstancesList() {
     subscribeToMore,
   } = useQuery(getAllServiceInstances, {
     variables: {
-      namespace: 'TEST',
+      namespace: testNamespace || builder.getCurrentEnvironmentId(),
     },
   });
 
   subscribeToMore({
     variables: {
-      namespace: builder.getCurrentEnvironmentId(),
+      namespace: testNamespace || builder.getCurrentEnvironmentId(),
     },
     document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
     updateQuery: (prev, { subscriptionData }) => {
@@ -149,8 +149,8 @@ export default function ServiceInstancesList() {
   const handleDelete = instanceName => {
     deleteServiceInstanceMutation({
       variables: {
-        namespace: 'TEST',
-        name: 'TEST',
+        namespace: builder.getCurrentEnvironmentId(),
+        name: instanceName,
       },
     });
   };
