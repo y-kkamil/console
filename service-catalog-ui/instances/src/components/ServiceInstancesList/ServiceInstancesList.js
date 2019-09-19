@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LuigiClient from '@kyma-project/luigi-client';
 
-import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { StatusWrapper, StatusesList } from './styled';
 
@@ -53,7 +53,7 @@ const status = (data, id) => {
   );
 };
 
-export default function ServiceInstancesList({testNamespace}) {
+export default function ServiceInstancesList() {
   const [serviceInstances, setServiceInstances] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeLabelFilters, setActiveLabelFilters] = useState([]);
@@ -70,14 +70,14 @@ export default function ServiceInstancesList({testNamespace}) {
     subscribeToMore,
   } = useQuery(getAllServiceInstances, {
     variables: {
-      namespace: testNamespace || builder.getCurrentEnvironmentId(),
+      namespace: builder.getCurrentEnvironmentId(),
     },
   });
 
   useEffect(() => {
     return subscribeToMore({
       variables: {
-        namespace: testNamespace || builder.getCurrentEnvironmentId(),
+        namespace: builder.getCurrentEnvironmentId(),
       },
       document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
       updateQuery: (prev, { subscriptionData }) => {
@@ -87,14 +87,13 @@ export default function ServiceInstancesList({testNamespace}) {
         ) {
           return prev;
         }
-    
+
         return handleInstanceEvent(
           prev,
           subscriptionData.data.serviceInstanceEvent,
         );
       },
     });
-
   }, [subscribeToMore]);
 
   useEffect(() => {

@@ -22,8 +22,7 @@ const serviceInstance1 = {
     externalName: 'redis',
     description:
       '[Experimental] Redis by Helm Broker. This is an example add-on. It is not recommended for production scenarios.',
-    documentationUrl:
-      'https://github.com/bitnami/bitnami-docker-redis',
+    documentationUrl: 'https://github.com/bitnami/bitnami-docker-redis',
     supportUrl: 'https://bitnami.com/support',
     labels: { experimental: 'true', local: 'true' },
     clusterDocsTopic: {
@@ -86,8 +85,7 @@ const serviceInstance1 = {
       type: 'object',
     },
     bindingCreateParameterSchema: null,
-    relatedClusterServiceClassName:
-      'a2257daa-0e26-4c61-a68d-8a7453c1b767',
+    relatedClusterServiceClassName: 'a2257daa-0e26-4c61-a68d-8a7453c1b767',
     __typename: 'ClusterServicePlan',
   },
   serviceBindings: {
@@ -152,8 +150,7 @@ const serviceInstance1 = {
         __typename: 'ServiceBindingUsageStatus',
       },
       usedBy: {
-        name:
-          'hb-redis-enterprise-c6ca8420-d71f-11e9-9df2-b636baf2f-redis',
+        name: 'hb-redis-enterprise-c6ca8420-d71f-11e9-9df2-b636baf2f-redis',
         kind: 'deployment',
         __typename: 'LocalObjectReference',
       },
@@ -291,12 +288,10 @@ const serviceInstance2 = {
     name: '631dae68-98e1-4e45-b79f-1036ca5b29cb',
     displayName: 'Minimal',
     externalName: 'minimal',
-    description:
-      'Minimal plan which contains only necessary parameters.',
+    description: 'Minimal plan which contains only necessary parameters.',
     instanceCreateParameterSchema: null,
     bindingCreateParameterSchema: null,
-    relatedClusterServiceClassName:
-      'faebbe18-0a84-11e9-ab14-d663bd873d94',
+    relatedClusterServiceClassName: 'faebbe18-0a84-11e9-ab14-d663bd873d94',
     __typename: 'ClusterServicePlan',
   },
   serviceBindings: {
@@ -314,38 +309,39 @@ const serviceInstance2 = {
   __typename: 'ServiceInstance',
 };
 
+export const serviceInstancesQuery = {
+  request: {
+    query: getAllServiceInstances,
+    variables: {
+      namespace: builder.getCurrentEnvironmentId(),
+    },
+  },
+  result: jest.fn().mockReturnValue({
+    data: {
+      serviceInstances: [serviceInstance1, serviceInstance2],
+    },
+  }),
+};
 
-export default [
-  {
-    request: {
-      query: getAllServiceInstances,
-      variables: {
-        namespace: builder.getCurrentEnvironmentId(),
+export const serviceInstanceDeleteMutation = {
+  request: {
+    query: deleteServiceInstance,
+    variables: {
+      namespace: builder.getCurrentEnvironmentId(),
+      name: 'redis-motherly-deposit',
+    },
+  },
+  result: jest.fn().mockReturnValue({
+    data: {
+      deleteServiceInstance: {
+        ...serviceInstance1,
       },
     },
-    result: jest.fn().mockReturnValue({
-      data: {
-        serviceInstances: [serviceInstance1, serviceInstance2]
-      },
-    }),
-  },
-  {
-    request: {
-      query: deleteServiceInstance,
-      variables: {
-        namespace: builder.getCurrentEnvironmentId(),
-        name: 'redis-motherly-deposit',
-      },
-    },
-    result: jest.fn().mockReturnValue({
-      data: {
-        deleteServiceInstance: {
-           ...serviceInstance1,
-        }
-      },
-    }),
-  },
-  {
+  }),
+};
+
+export function serviceInstancesSubscription(type) {
+  return {
     request: {
       query: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
       variables: {
@@ -355,71 +351,25 @@ export default [
     result: {
       data: {
         serviceInstanceEvent: {
-          type: 'UPDATE',
+          type: type,
           serviceInstance: serviceInstance2,
           __typename: 'ServiceInstanceEvent',
-        }
+        },
       },
+    },
+  };
+}
+
+export const serviceInstancesSubscriptionEmpty = {
+  request: {
+    query: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
+    variables: {
+      namespace: builder.getCurrentEnvironmentId(),
     },
   },
-  {
-    request: {
-      query: getAllServiceInstances,
-      variables: {
-        namespace: 'delete',
-      },
-    },
-    result: jest.fn().mockReturnValue({
-      data: {
-        serviceInstances: [serviceInstance1, serviceInstance2]
-      },
-    }),
-  },
-  {
-    request: {
-      query: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-      variables: {
-        namespace: 'delete',
-      },
-    },
-    result: {
-      data: {
-        serviceInstanceEvent: {
-          type: 'DELETE',
-          serviceInstance: serviceInstance2,
-          __typename: 'ServiceInstanceEvent',
-        }
-      },
+  result: {
+    data: {
+      serviceInstanceEvent: null,
     },
   },
-  {
-    request: {
-      query: getAllServiceInstances,
-      variables: {
-        namespace: 'add',
-      },
-    },
-    result: jest.fn().mockReturnValue({
-      data: {
-        serviceInstances: [serviceInstance1, serviceInstance2]
-      },
-    }),
-  },
-  {
-    request: {
-      query: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-      variables: {
-        namespace: 'add',
-      },
-    },
-    result: {
-      data: {
-        serviceInstanceEvent: {
-          type: 'ADD',
-          serviceInstance: serviceInstance2,
-          __typename: 'ServiceInstanceEvent',
-        }
-      },
-    },
-  },
-];
+};
