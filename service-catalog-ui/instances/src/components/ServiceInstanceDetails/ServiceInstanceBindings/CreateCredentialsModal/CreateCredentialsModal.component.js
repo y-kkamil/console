@@ -9,7 +9,7 @@ import InfoButton from '../InfoButton/InfoButton.component';
 import { clearEmptyPropertiesInObject } from '../../../../commons/helpers';
 import LuigiClient from '@kyma-project/luigi-client';
 
-import NotificationsContext from '../../../App/NotificationContext/NotificationContext';
+import NotificationsContext from '../../../../contexts/NotificationContext/NotificationContext';
 
 class CreateCredentialsModal extends React.Component {
   static contextType = NotificationsContext;
