@@ -16,6 +16,14 @@ const mockNavigate = jest.fn();
 const mockAddBackdrop = jest.fn();
 const mockRemoveBackdrop = jest.fn();
 
+function mountWithModalBg(component){
+  return mount(
+    <div className="modal-demo-bg">
+      <span />
+      {component}
+    </div>, { attachTo: document.body }
+  );
+}
 jest.mock('@kyma-project/luigi-client', () => {
   return {
     linkManager: function () {
@@ -51,15 +59,13 @@ describe('InstancesList UI', () => {
         </MockedProvider>,
       );
       await wait(0); // wait for response
+      await wait(0);
     });
 
     component.update();
     const table = component.find(ServiceInstancesTable);
     expect(table.exists()).toBe(true);
-
-    const tableProps = table.props();
-    const rowData = tableProps.data;
-    expect(rowData).toHaveLength(1);
+    expect(table.prop("data")).toHaveLength(1);
   });
 
   it(`Test adding instances via subscription`, async () => {
@@ -71,36 +77,32 @@ describe('InstancesList UI', () => {
         </MockedProvider>,
       );
       await wait(0); // wait for response
+      await wait(0);
     });
 
     component.update();
     const table = component.find(ServiceInstancesTable);
     expect(table.exists()).toBe(true);
-
-    const tableProps = table.props();
-    const rowData = tableProps.data;
-    expect(rowData).toHaveLength(3);
+    expect(table.prop("data")).toHaveLength(3);
   });
 
-  it(`Renders "loading" when there's no GQL response`, async () => {
+  it(`Validate if modal delete button fires deleteMutation`, async () => {
     let component = null;
+    const deleteButtonSelector = 'button[data-e2e-id="modal-confirmation-button"]';
     await act(async () => {
-      component = mount(
-        <MockedProvider addTypename={true} mocks={networkMock}>
-          <ServiceInstancesList />
-        </MockedProvider>,
+      component = mountWithModalBg(
+          <MockedProvider addTypename={true} mocks={networkMock}>
+            <ServiceInstancesList />
+          </MockedProvider>
       );
       await wait(0); // wait for response
+      await wait(0);
     });
 
     component.update();
     const table = component.find(ServiceInstancesTable);
     expect(table.exists()).toBe(true);
-
-    const tableProps = table.props();
-    const rowData = tableProps.data;
-
-    expect(rowData).toHaveLength(2);
+    expect(table.prop("data")).toHaveLength(2);
 
     const displayedInstanceLinks = table
       .find('tr')
@@ -112,17 +114,15 @@ describe('InstancesList UI', () => {
     expect(firstInstanceButton.exists()).toBe(true);
 
     firstInstanceButton.simulate('click');
-
-    const deleteButton = component.find('button[data-e2e-id="modal-confirmation-button"]');
+    const deleteButton = component.find(deleteButtonSelector);
 
     expect(deleteButton.exists()).toBe(true);
     await act(async () => {
       deleteButton.simulate('click');
-      await wait(0); // wait for response
     });
     component.update();
-    // const deleteButton2 = component.find('button[data-e2e-id="modal-confirmation-button"]');
-    // expect(deleteButton2.exists()).toBe(false);
+
+    expect(component.find(deleteButtonSelector).exists()).toBe(false);
     const mockDeleteMutation = networkMock[1].result;
     expect(mockDeleteMutation).toHaveBeenCalled();
   });
@@ -222,5 +222,4 @@ describe('InstancesList UI', () => {
       );
     });
   });
-
 });

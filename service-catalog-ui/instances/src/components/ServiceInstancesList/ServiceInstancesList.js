@@ -74,25 +74,28 @@ export default function ServiceInstancesList({testNamespace}) {
     },
   });
 
-  subscribeToMore({
-    variables: {
-      namespace: testNamespace || builder.getCurrentEnvironmentId(),
-    },
-    document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-    updateQuery: (prev, { subscriptionData }) => {
-      if (
-        !subscriptionData.data ||
-        !subscriptionData.data.serviceInstanceEvent
-      ) {
-        return prev;
-      }
-  
-      return handleInstanceEvent(
-        prev,
-        subscriptionData.data.serviceInstanceEvent,
-      );
-    },
-  });
+  useEffect(() => {
+    return subscribeToMore({
+      variables: {
+        namespace: testNamespace || builder.getCurrentEnvironmentId(),
+      },
+      document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (
+          !subscriptionData.data ||
+          !subscriptionData.data.serviceInstanceEvent
+        ) {
+          return prev;
+        }
+    
+        return handleInstanceEvent(
+          prev,
+          subscriptionData.data.serviceInstanceEvent,
+        );
+      },
+    });
+
+  }, [subscribeToMore]);
 
   useEffect(() => {
     if (queryData && queryData.serviceInstances) {
