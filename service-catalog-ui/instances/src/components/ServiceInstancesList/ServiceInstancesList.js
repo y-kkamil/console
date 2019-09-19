@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LuigiClient from '@kyma-project/luigi-client';
 
-import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { StatusWrapper, StatusesList } from './styled';
 
@@ -74,25 +74,27 @@ export default function ServiceInstancesList() {
     },
   });
 
-  // subscribeToMore({
-  //   variables: {
-  //     namespace: builder.getCurrentEnvironmentId(),
-  //   },
-  //   document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-  //   updateQuery: (prev, { subscriptionData }) => {
-  //     if (
-  //       !subscriptionData.data ||
-  //       !subscriptionData.data.serviceInstanceEvent
-  //     ) {
-  //       return prev;
-  //     }
-  //
-  //     return handleInstanceEvent(
-  //       prev,
-  //       subscriptionData.data.serviceInstanceEvent,
-  //     );
-  //   },
-  // });
+  useEffect(() => {
+    return subscribeToMore({
+      variables: {
+        namespace: builder.getCurrentEnvironmentId(),
+      },
+      document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (
+          !subscriptionData.data ||
+          !subscriptionData.data.serviceInstanceEvent
+        ) {
+          return prev;
+        }
+
+        return handleInstanceEvent(
+          prev,
+          subscriptionData.data.serviceInstanceEvent,
+        );
+      },
+    });
+  }, [subscribeToMore]);
 
   useEffect(() => {
     if (queryData && queryData.serviceInstances) {
@@ -147,8 +149,8 @@ export default function ServiceInstancesList() {
   const handleDelete = instanceName => {
     deleteServiceInstanceMutation({
       variables: {
-        namespace: 'TEST',
-        name: 'TEST',
+        namespace: builder.getCurrentEnvironmentId(),
+        name: instanceName,
       },
     });
   };

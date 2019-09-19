@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 
-import {
-  Button,
-  Dropdown,
-  FormFieldset,
-  FormInput,
-} from '@kyma-project/react-components';
+import { Button, Dropdown, FormFieldset } from '@kyma-project/react-components';
 
 import {
   FiltersDropdownWrapper,
@@ -13,6 +8,7 @@ import {
   FormItem,
   Panel,
   PanelBody,
+  FormInput,
 } from './styled';
 
 const FilterDropdown = ({

@@ -1,16 +1,33 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { mount } from 'enzyme';
-import networkMock from './networkMock';
+import {
+  serviceInstancesQuery,
+  serviceInstancesSubscription,
+  serviceInstancesSubscriptionEmpty,
+  serviceInstanceDeleteMutation,
+} from './networkMock';
+import ServiceInstancesTable from '../ServiceInstancesTable/ServiceInstancesTable.component';
 
+import { Button } from '@kyma-project/react-components';
 import ServiceInstancesList from '../ServiceInstancesList';
 import { act } from 'react-dom/test-utils';
-
 import { Spinner } from '@kyma-project/react-components';
-import ServiceInstancesTable from '../ServiceInstancesTable/ServiceInstancesTable.component';
 import { Link } from '../ServiceInstancesTable/styled.js';
 
 const mockNavigate = jest.fn();
+const mockAddBackdrop = jest.fn();
+const mockRemoveBackdrop = jest.fn();
+
+function mountWithModalBg(component) {
+  return mount(
+    <div className="modal-demo-bg">
+      <span />
+      {component}
+    </div>,
+    { attachTo: document.body },
+  );
+}
 
 jest.mock('@kyma-project/luigi-client', () => {
   return {
@@ -28,14 +45,21 @@ jest.mock('@kyma-project/luigi-client', () => {
         selectedTab: 'addons',
       };
     },
+    uxManager: function() {
+      return {
+        addBackdrop: mockAddBackdrop,
+        removeBackdrop: mockRemoveBackdrop,
+      };
+    },
   };
 });
 
-describe('Service Instances List list', () => {
+describe('InstancesList UI', () => {
   it('Shows loading indicator only when data is not yet loaded', async () => {
+    const mocks = [serviceInstancesSubscriptionEmpty];
     await act(async () => {
       const component = mount(
-        <MockedProvider addTypename={true} mocks={networkMock}>
+        <MockedProvider addTypename={true} mocks={mocks}>
           <ServiceInstancesList />
         </MockedProvider>,
       );
@@ -50,9 +74,10 @@ describe('Service Instances List list', () => {
   });
 
   it('Displays instances with their corresponding names in the table', async () => {
+    const mocks = [serviceInstancesQuery, serviceInstancesSubscriptionEmpty];
     await act(async () => {
       const component = mount(
-        <MockedProvider addTypename={true} mocks={networkMock}>
+        <MockedProvider addTypename={true} mocks={mocks}>
           <ServiceInstancesList />
         </MockedProvider>,
       );
@@ -84,9 +109,10 @@ describe('Service Instances List list', () => {
   });
 
   it('Navigates to Service Catalog when clicked on "Add instance" button', async () => {
+    const mocks = [serviceInstancesQuery, serviceInstancesSubscriptionEmpty];
     await act(async () => {
       const component = mount(
-        <MockedProvider addTypename={true} mocks={networkMock}>
+        <MockedProvider addTypename={true} mocks={mocks}>
           <ServiceInstancesList />
         </MockedProvider>,
       );
@@ -106,9 +132,10 @@ describe('Service Instances List list', () => {
   });
 
   it('Navigates to Instance details when clicked on Instance link', async () => {
+    const mocks = [serviceInstancesQuery, serviceInstancesSubscriptionEmpty];
     await act(async () => {
       const component = mount(
-        <MockedProvider addTypename={true} mocks={networkMock}>
+        <MockedProvider addTypename={true} mocks={mocks}>
           <ServiceInstancesList />
         </MockedProvider>,
       );
@@ -126,5 +153,90 @@ describe('Service Instances List list', () => {
         'cmf-instances/details/testing-curly-tax',
       );
     });
+  });
+
+  it(`Test deleting instances via subscription`, async () => {
+    const mocks = [
+      serviceInstancesQuery,
+      serviceInstancesSubscription('DELETE'),
+    ];
+    let component = null;
+    await act(async () => {
+      component = mount(
+        <MockedProvider addTypename={true} mocks={mocks}>
+          <ServiceInstancesList />
+        </MockedProvider>,
+      );
+      await wait(0); // wait for response
+      await wait(0);
+    });
+
+    component.update();
+    const table = component.find(ServiceInstancesTable);
+    expect(table.exists()).toBe(true);
+    expect(table.prop('data')).toHaveLength(1);
+  });
+
+  it(`Test adding instances via subscription`, async () => {
+    const mocks = [serviceInstancesQuery, serviceInstancesSubscription('ADD')];
+    let component = null;
+    await act(async () => {
+      component = mount(
+        <MockedProvider addTypename={true} mocks={mocks}>
+          <ServiceInstancesList />
+        </MockedProvider>,
+      );
+      await wait(0); // wait for response
+      await wait(0);
+    });
+
+    component.update();
+    const table = component.find(ServiceInstancesTable);
+    expect(table.exists()).toBe(true);
+    expect(table.prop('data')).toHaveLength(3);
+  });
+
+  it(`Validate if modal delete button fires deleteMutation`, async () => {
+    const mocks = [
+      serviceInstancesQuery,
+      serviceInstancesSubscription(),
+      serviceInstanceDeleteMutation,
+    ];
+    let component = null;
+    const deleteButtonSelector =
+      'button[data-e2e-id="modal-confirmation-button"]';
+    await act(async () => {
+      component = mountWithModalBg(
+        <MockedProvider addTypename={true} mocks={mocks}>
+          <ServiceInstancesList />
+        </MockedProvider>,
+      );
+      await wait(0); // wait for response
+      await wait(0);
+    });
+
+    component.update();
+    const table = component.find(ServiceInstancesTable);
+    expect(table.exists()).toBe(true);
+    expect(table.prop('data')).toHaveLength(2);
+
+    const displayedInstanceLinks = table.find('tr').find(Button);
+
+    expect(displayedInstanceLinks).toHaveLength(2);
+    const firstInstanceButton = displayedInstanceLinks.at(0).find('button');
+
+    expect(firstInstanceButton.exists()).toBe(true);
+
+    firstInstanceButton.simulate('click');
+    const deleteButton = component.find(deleteButtonSelector);
+
+    expect(deleteButton.exists()).toBe(true);
+    await act(async () => {
+      deleteButton.simulate('click');
+    });
+    component.update();
+
+    expect(component.find(deleteButtonSelector).exists()).toBe(false);
+    expect(serviceInstanceDeleteMutation.result).toHaveBeenCalled();
   });
 });
