@@ -9,10 +9,10 @@ import InfoButton from '../InfoButton/InfoButton.component';
 import { clearEmptyPropertiesInObject } from '../../../../commons/helpers';
 import LuigiClient from '@kyma-project/luigi-client';
 
-import TnotificationsContext from '../../../App/NotificationContext/notification.context';
+import NotificationsContext from '../../../App/NotificationContext/NotificationContext';
 
 class CreateCredentialsModal extends React.Component {
-  static contextType = TnotificationsContext;
+  static contextType = NotificationsContext;
 
   constructor(props) {
     super(props);
@@ -90,6 +90,7 @@ class CreateCredentialsModal extends React.Component {
         color: '#359c46',
         icon: 'accept',
         instanceName: createdBindingName,
+        visible: true,
       });
     } catch (e) {
       success = false;

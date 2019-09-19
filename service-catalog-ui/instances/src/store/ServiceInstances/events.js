@@ -46,8 +46,6 @@ export const handleServiceBindingUsageEvent = (
   instanceObj = {},
   event = {},
 ) => {
-  debugger;
-
   if (!instanceObj.serviceInstance) return instanceObj;
 
   const bindingUsage = event.serviceBindingUsage;

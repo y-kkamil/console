@@ -22,6 +22,8 @@ export const serviceInstanceConstants = {
   cancel: 'Cancel',
   link: 'Link',
   error: 'Error',
+
+  //instance list tabs
 };
 
 export const serviceInstanceTabs = {

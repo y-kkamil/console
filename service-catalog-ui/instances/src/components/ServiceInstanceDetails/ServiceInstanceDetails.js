@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { createBrowserHistory } from 'history';
 
 import {
   NotificationMessage,
@@ -15,7 +16,6 @@ import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBi
 import { serviceInstanceConstants } from './../../variables';
 
 import { ServiceInstanceWrapper, EmptyList } from './styled';
-import { transformDataScalarStringsToObjects } from '../../store/transformers';
 import { backendModuleExists } from '../../commons/helpers';
 import builder from '../../commons/builder';
 import { getServiceInstanceDetails } from '../../queries/queries';
@@ -29,70 +29,13 @@ import {
   handleServiceBindingEvent,
   handleServiceBindingUsageEvent,
 } from '../../store/ServiceInstances/events';
-
-// class ServiceInstanceDetails extends React.Component {
-//   state = { defaultActiveTabIndex: 0 };
-//
-//   callback = data => {
-//     this.setState({ ...data });
-//   };
-//
-//   render() {
-//     const { serviceInstance = {}, deleteServiceInstance, history } = this.props;
-//
-//     if (serviceInstance && serviceInstance.loading) {
-//       return (
-//         <EmptyList>
-//           <Spinner />
-//         </EmptyList>
-//       );
-//     }
-//
-//     const instance =
-//       serviceInstance &&
-//       transformDataScalarStringsToObjects(serviceInstance.serviceInstance);
-//     const serviceClass =
-//       instance && (instance.serviceClass || instance.clusterServiceClass);
-//
-//     if (!serviceInstance.loading && !instance) {
-//       return (
-//         <EmptyList>{serviceInstanceConstants.instanceNotExists}</EmptyList>
-//       );
-//     }
-//
-//     return (
-//       <ThemeWrapper>
-//         <ServiceInstanceHeader
-//           serviceInstance={instance}
-//           deleteServiceInstance={deleteServiceInstance}
-//           history={history}
-//         />
-//         <ServiceInstanceWrapper>
-//           <ServiceInstanceBindings
-//             defaultActiveTabIndex={this.state.defaultActiveTabIndex}
-//             callback={this.callback}
-//             serviceInstance={instance}
-//           />
-//           {serviceClass &&
-//           backendModuleExists('cms') &&
-//           backendModuleExists('assetstore') ? (
-//             <ServiceInstanceTabs serviceClass={serviceClass} />
-//           ) : null}
-//         </ServiceInstanceWrapper>
-//
-//         <NotificationMessage
-//           type="error"
-//           title={serviceInstanceConstants.error}
-//           message={serviceInstance.error && serviceInstance.error.message}
-//         />
-//       </ThemeWrapper>
-//     );
-//   }
-// }
+import { deleteServiceInstance } from '../../queries/mutations';
 
 function callback() {}
 
 export default function ServiceInstanceDetails({ match }) {
+  const history = createBrowserHistory();
+
   const { loading, error, data, subscribeToMore } = useQuery(
     getServiceInstanceDetails,
     {
@@ -129,7 +72,6 @@ export default function ServiceInstanceDetails({ match }) {
     },
     document: SERVICE_BINDING_USAGE_EVENT_SUBSCRIPTION,
     updateQuery: (prev, { subscriptionData }) => {
-      debugger;
       if (
         !subscriptionData.data ||
         !subscriptionData.data.serviceBindingUsageEvent
@@ -143,6 +85,8 @@ export default function ServiceInstanceDetails({ match }) {
       );
     },
   });
+
+  const [deleteServiceInstanceMutation] = useMutation(deleteServiceInstance);
 
   if (loading)
     return (
@@ -162,8 +106,8 @@ export default function ServiceInstanceDetails({ match }) {
     <ThemeWrapper>
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
-        deleteServiceInstance={null}
-        history={[]}
+        deleteServiceInstance={deleteServiceInstanceMutation}
+        history={history}
       />
       <ServiceInstanceWrapper>
         <ServiceInstanceBindings
