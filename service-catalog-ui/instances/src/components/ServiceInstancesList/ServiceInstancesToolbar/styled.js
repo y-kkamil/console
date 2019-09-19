@@ -6,6 +6,7 @@ import {
   Panel as UnstyledPanel,
   PanelBody as UnstyledPanelBody,
   FormItem as UnstyledFormItem,
+  FormInput as UnstyledFormInput,
 } from '@kyma-project/react-components';
 
 export const FiltersDropdownWrapper = styled.div`
@@ -36,6 +37,11 @@ export const FiltersDropdownWrapper = styled.div`
 
 export const FormItem = styled(UnstyledFormItem)`
   display: flex;
+`;
+export const FormInput = styled(UnstyledFormInput)`
+  &&:checked:before {
+    border-color: #fff;
+  }
 `;
 
 export const FormLabel = styled(UnstyledFormLabel)`
