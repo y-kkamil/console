@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '@kyma-project/react-components';
-import { useNotification } from '../contexts/notifications';
+import { Button } from '../react-components/components/Button';
+import { useNotification } from 'contexts/notifications';
 
 export default function HelloKyma() {
   const { notify } = useNotification();

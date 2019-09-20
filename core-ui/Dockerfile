@@ -15,15 +15,9 @@ RUN apk update && apk upgrade && \
     apk add --no-cache curl
 
 # Install root and app dependencies
-COPY ./temp /app
+COPY . /app
 RUN npm run bootstrap:prod
-
-COPY package.json package-lock.json /app/core-ui/
-RUN cd /app/core-ui && npm install --no-optional --unsafe-perm
-
-# Copy sources
-COPY src /app/core-ui/src
-COPY public /app/core-ui/public
+RUN cd /app/core-ui && npm ci --no-optional --unsafe-perm
 
 # Set env variables 
 ENV PRODUCTION true
