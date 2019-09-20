@@ -8,7 +8,7 @@ import { preloadingStrategy } from '@kyma-project/common';
 
 import './index.css';
 
-import App from './components/App/App.container';
+import App from './components/App/App';
 
 import builder from './commons/builder';
 

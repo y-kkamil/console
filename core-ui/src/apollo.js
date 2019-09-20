@@ -4,7 +4,6 @@ import { createHttpLink } from 'apollo-link-http';
 import { ApolloLink, split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { setContext } from 'apollo-link-context';
-import { createTransformerLink } from 'apollo-client-transform';
 import { onError } from 'apollo-link-error';
 
 import { getURL } from './commons/api-url';
@@ -51,10 +50,6 @@ export function createApolloClient() {
     },
   );
 
-  const linkTransformers = getLinkTransformers();
-  const transformerLink = createTransformerLink(linkTransformers);
-  const enhancedAuthHttpLink = transformerLink.concat(authHttpLink);
-
   const link = split(
     ({ query }) => {
       const definition = getMainDefinition(query);
@@ -64,13 +59,13 @@ export function createApolloClient() {
       );
     },
     wsLink,
-    enhancedAuthHttpLink,
+    authHttpLink,
   );
 
   return new ApolloClient({
     uri: graphqlApiUrl,
     cache,
-    link: ApolloLink.from([stateLink, errorLink, link]),
+    link: ApolloLink.from([errorLink, link]),
     connectToDevTools: true,
   });
 }

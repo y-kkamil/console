@@ -1,47 +1,48 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Notification } from '@kyma-project/react-components';
 
-const DEFAULT_NOTIFICATION_VISIBILITY_TIME = 35000;
-
 const defaultState = {
   isOpen: false,
   notify: () => {},
-  visibilityTime: DEFAULT_NOTIFICATION_VISIBILITY_TIME,
 };
 
-export const Index = createContext(defaultState);
+export const NotificationContext = createContext(defaultState);
 
-export const NotificationProvider = ({ children, visibilityTime }) => {
-  const [notificationData, setNotificationData] = useState({
-    ...defaultState,
-    visibilityTime,
+export const NotificationProvider = ({
+  children,
+  defaultVisibilityTime = 35000,
+}) => {
+  const [state, setState] = useState({
+    isOpen: false,
   });
+
   return (
-    <Index.Provider
+    <NotificationContext.Provider
       value={{
-        ...notificationData,
+        isOpen: state.isOpen,
         notify: function(
-          data,
-          visibilityTime = notificationData.visibilityTime,
+          notificationProps,
+          visibilityTime = defaultVisibilityTime,
         ) {
-          setNotificationData({ isOpen: true, data });
+          setState({ isOpen: true, notificationProps });
           setTimeout(() => {
-            setNotificationData({ isOpen: false });
+            setState({ isOpen: false });
           }, visibilityTime);
         },
       }}
     >
-      {notificationData.isOpen ? (
+      {state.isOpen && (
         <Notification
-          {...notificationData.data}
-          onclick={setNotificationData({ isOpen: false })}
+          visible={true}
+          {...state.notificationProps}
+          onClick={setState({ isOpen: false })}
         />
-      ) : null}
+      )}
       {children}
-    </Index.Provider>
+    </NotificationContext.Provider>
   );
 };
 
 export function useNotification() {
-  return useContext(Index);
+  return useContext(NotificationContext);
 }
