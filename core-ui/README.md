@@ -1,8 +1,8 @@
-# K8s UI
+# Core UI
 
 ## Overview
 
-This project contains an application with the K8s UI page for the Kyma Console.
+This project contains an application with the Core UI page for the Kyma Console.
 
 The [create-react-app](https://github.com/facebook/create-react-app) project provides the structure for this application. Read the project's [README](https://github.com/facebook/create-react-app/tree/next/packages/react-scripts/template) document for more information.
 

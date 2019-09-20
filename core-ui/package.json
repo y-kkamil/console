@@ -1,6 +1,6 @@
 {
-  "name": "@kyma-project/k8s-ui",
-  "description": "K8s UI",
+  "name": "@kyma-project/core-ui",
+  "description": "Core UI",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
