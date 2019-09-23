@@ -29,6 +29,6 @@ COPY ./${app_name}/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/${app_name}/build var/public
 COPY --from=builder /app/${app_name}/licenses/ /app/licenses/
 
-EXPOSE 80 8888
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
