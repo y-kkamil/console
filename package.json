@@ -3,9 +3,10 @@
   "license": "Apache-2.0",
   "scripts": {
     "bootstrap": "npm install && npm run install:libraries && npm run build:libraries && npm run install:apps && npm run append-hosts && npm run git-ignore-config",
-    "bootstrap:ci": "npm install && npm run install:libraries && npm run build:libraries",
-    "bootstrap:prod": "npm install --no-optional && npm run install:libraries && npm run build:libraries",
+    "bootstrap:ci": "npm ci && npm run ci:libraries && npm run build:libraries",
+    "bootstrap:prod": "npm ci --no-optional && npm run ci:libraries && npm run build:libraries",
     "install:libraries": "gulp install:libraries",
+    "ci:libraries": "gulp ci:libraries",
     "build:libraries": "gulp build:libraries",
     "watch:libraries": "gulp watch:libraries",
     "install:apps": "gulp install:apps",

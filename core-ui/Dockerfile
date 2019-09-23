@@ -1,40 +1,33 @@
 # This Dockerfile must be execute with higher context, because firstly we have to create react components lib with local changes.
 # If you want to build image without local changes of react components, delete 16 line of code.
-
-FROM node:10.11.0-alpine as ui-generator
-
+FROM node:10.11.0-alpine as builder
+ARG app_name=core-ui
 WORKDIR /app
 
-# Copy licenses
-COPY licenses/ /app/licenses/
-
 # Install global dependencies
-RUN apk update && apk upgrade && \
-    apk add --no-cache curl
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache curl make
 
 # Install root and app dependencies
-COPY ./temp /app
-RUN npm run bootstrap:prod
-COPY package.json package-lock.json /app/core-ui/
-RUN cd /app/core-ui && npm install --no-optional
-
-# Copy sources
-COPY ./src /app/core-ui/src
-COPY ./public /app/core-ui/public
+COPY . /app
+RUN cd /app/${app_name} && \
+    make resolve
 
 # Set env variables
 ENV PRODUCTION true
 ENV CI true
 
 # Test & Build
-RUN cd /app/core-ui && npm run build
+RUN cd /app/${app_name} && make build
 
 FROM nginx:1.14.0-alpine
 LABEL source git@github.com:kyma-project/console.git
+ARG app_name=core-ui
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=ui-generator /app/core-ui/build var/public
-COPY --from=ui-generator /app/licenses/ /app/licenses/
+COPY ./${app_name}/nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/${app_name}/build var/public
+COPY --from=builder /app/${app_name}/licenses/ /app/licenses/
 
 EXPOSE 80 8888
 

@@ -1,12 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Notification } from '@kyma-project/react-components';
 
-const defaultState = {
+export const NotificationContext = createContext({
   isOpen: false,
   notify: () => {},
-};
-
-export const NotificationContext = createContext(defaultState);
+});
 
 export const NotificationProvider = ({
   children,

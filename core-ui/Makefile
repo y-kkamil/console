@@ -1,10 +1,10 @@
-IMG_NAME = compass-ui
-IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMG_NAME)
+APP_NAME = core-ui
+IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(APP_NAME)
 TAG = $(DOCKER_TAG)
 
-all: root-pr resolve test build pre-build-image build-image push-image
-ci-pr: root-pr resolve test build pre-build-image pull-licenses build-image push-image
-ci-master: root-master resolve test build pre-build-image pull-licenses build-image push-image
+all: root-pr resolve test build-image push-image
+ci-pr: root-pr resolve test build-image push-image
+ci-master: root-master resolve test build-image push-image
 
 .PHONY: root-pr
 root-pr:
@@ -16,7 +16,8 @@ root-master:
 
 .PHONY: resolve
 resolve:
-	npm install --no-optional
+	cd .. && npm ci && npm run ci:libraries
+	npm ci --no-optional
 
 .PHONY: test
 test:
@@ -26,12 +27,7 @@ test:
 build:
 	npm run build
 
-.PHONY: pre-build-image
-pre-build-image:
-	../scripts/pre-build-docker-image.sh
-
-.PHONY: pull-licenses
-pull-licenses:
+licenses:
 ifdef LICENSE_PULLER_PATH
 	bash $(LICENSE_PULLER_PATH) --dirs-to-pulling="../,../common,../components/react,../components/shared,../components/generic-documentation"
 else
@@ -39,8 +35,8 @@ else
 endif
 
 .PHONY: build-image
-build-image:
-	docker build -t $(IMG_NAME) .
+build-image: licenses
+	docker build -t $(APP_NAME) -f Dockerfile ..
 
 .PHONY: push-image
 push-image:
