@@ -29,12 +29,12 @@ The build is minified and the filenames include hashes.
 ## Development
 
 Run the `npm start` command to start the application in the development mode.
-Open the `[http://localhost:8004](http://localhost:8004)` link to view it in the browser.
+Open the [`http://localhost:8004`](http://localhost:8004) link to view it in the browser.
 
 The page reloads if you make edits.
 If lint errors appear, the console displays them.
 
-## Test the application
+### Test the application
 
 Run the `npm test` command to launch the test runner in the interactive watch mode.
 
