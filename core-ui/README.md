@@ -4,7 +4,7 @@
 
 This project contains an application with the Core UI page for the Kyma Console.
 
-The [create-react-app](https://github.com/facebook/create-react-app) project provides the structure for this application. Read the project's [README](https://github.com/facebook/create-react-app/tree/next/packages/react-scripts/template) document for more information.
+The [create-react-app](https://github.com/facebook/create-react-app) project provides the structure for this application. Read the project's [README](https://github.com/facebook/create-react-app/tree/master/packages/react-scripts/template) document for more information.
 
 ## Installation
 
