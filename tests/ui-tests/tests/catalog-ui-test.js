@@ -72,7 +72,7 @@ describeIf(dex.isStaticUser(), 'Catalog basic tests', () => {
       throw new Error('Failed to create a namespace:', err);
     }
     await retry(async () => {
-      const data = await common.beforeAll();
+      const data = await common.beforeAll(null, 60);
       browser = data.browser;
       page = data.page;
     });
@@ -305,6 +305,10 @@ describeIf(dex.isStaticUser(), 'Catalog basic tests', () => {
       );
       const closeModalSelector = '.fd-modal__close';
 
+      const exampleInstanceLink = catalog.prepareSelector(
+        `instance-name-${instanceTitle}`,
+      );
+
       const frame = await waitForCatalogFrame(page);
       const testingBundle = await frame.waitForSelector(
         exampleServiceClassButton,
@@ -347,6 +351,10 @@ describeIf(dex.isStaticUser(), 'Catalog basic tests', () => {
       );
 
       expect(instancesHeader).toContain(instancesExpectedHeader);
+
+      await frame3.waitForSelector(exampleInstanceLink, {
+        visible: true,
+      });
 
       console.log('Validate instances list');
       const allInstances = await catalog.getInstances(frame3);
@@ -506,6 +514,9 @@ describeIf(dex.isStaticUser(), 'Catalog basic tests', () => {
     console.log(
       'Go to Credentials tab and create credentials and fill in the schema form',
     );
+
+    await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
+
     const frame = await waitForInstancesFrame(page);
     await frame.waitForSelector(serviceBindingCredentialsTab);
     await frame.click(serviceBindingCredentialsTab);
