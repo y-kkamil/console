@@ -12,10 +12,6 @@ To install dependencies, run the `npm install` command.
 
 ## Usage
 
-This section describes how to build the application.
-
-### Build the application
-
 Use the following command to build the application in the production environment, in the `build` folder:
 
 ```bash
