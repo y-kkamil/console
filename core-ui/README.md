@@ -12,7 +12,7 @@ To install dependencies, run the `npm install` command.
 
 ## Usage
 
-This section describes how to build the application, and how to build and publish the image.
+This section describes how to build the application.
 
 ### Build the application
 
