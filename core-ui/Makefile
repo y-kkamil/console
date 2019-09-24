@@ -40,5 +40,5 @@ build-image: licenses
 
 .PHONY: push-image
 push-image:
-	docker tag $(IMG_NAME) $(IMG):$(TAG)
+	docker tag $(APP_NAME) $(IMG):$(TAG)
 	docker push $(IMG):$(TAG)
