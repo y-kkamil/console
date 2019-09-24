@@ -1,1 +1,1 @@
-todo('fake test');
+it('fake test', () => {});
