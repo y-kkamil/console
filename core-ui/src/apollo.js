@@ -1,10 +1,10 @@
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createHttpLink } from 'apollo-link-http';
-import { ApolloLink, split } from 'apollo-link';
-import { getMainDefinition } from 'apollo-utilities';
-import { setContext } from 'apollo-link-context';
+import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
+import { ApolloLink } from 'apollo-link';
+import { split } from 'apollo-link';
+import { getMainDefinition } from 'apollo-utilities';
 
 import { getURL } from './commons/api-url';
 import builder from './commons/builder';
@@ -15,16 +15,12 @@ export function createApolloClient() {
     process.env.REACT_APP_LOCAL_API ? 'graphqlApiUrlLocal' : 'graphqlApiUrl',
   );
 
-  const httpLink = createHttpLink({ uri: graphqlApiUrl });
-  const authLink = setContext((_, { headers }) => {
-    return {
-      headers: {
-        ...headers,
-        authorization: builder.getBearerToken() || null,
-      },
-    };
+  const httpLink = new HttpLink({
+    uri: graphqlApiUrl,
+    headers: {
+      authorization: builder.getBearerToken() || null,
+    },
   });
-  const authHttpLink = authLink.concat(httpLink);
 
   const wsLink = new WebSocketLink({
     uri: getURL('subscriptionsApiUrl'),
@@ -32,7 +28,6 @@ export function createApolloClient() {
       reconnect: true,
     },
   });
-  const cache = new InMemoryCache();
 
   const errorLink = onError(
     ({ operation, response, graphQLErrors, networkError }) => {
@@ -59,14 +54,12 @@ export function createApolloClient() {
       );
     },
     wsLink,
-    authHttpLink,
+    httpLink,
   );
 
   return new ApolloClient({
-    uri: graphqlApiUrl,
-    cache,
     link: ApolloLink.from([errorLink, link]),
-    connectToDevTools: true,
+    cache: new InMemoryCache(),
   });
 }
 

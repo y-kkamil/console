@@ -14,5 +14,5 @@ export default function NamespaceList() {
     return <Spinner />;
   }
 
-  return { data };
+  return data.namespaces.map(namespace => <p>{namespace.name}</p>);
 }
