@@ -1,8 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_NAMESPACES } from '../../queries/queries';
-import { Spinner } from '@kyma-project/react-components';
-import CreateNamespaceModal from '../CreateNamespaceModal/CreateNamespaceModal';
+import { Spinner, ModalWithForm } from '@kyma-project/react-components';
+import CreateNamespaceForm from '../CreateNamespaceForm/CreateNamespaceForm';
 
 export default function NamespaceList() {
   const { data, error, loading } = useQuery(GET_NAMESPACES);
@@ -17,7 +17,10 @@ export default function NamespaceList() {
 
   return (
     <>
-      <CreateNamespaceModal />
+      <ModalWithForm
+        title="Create new runtime"
+        button={{ text: 'Create runtime', glyph: 'add' }}
+      ></ModalWithForm>
 
       {data.namespaces.map(namespace => (
         <p key={namespace.name}>{namespace.name}</p>
