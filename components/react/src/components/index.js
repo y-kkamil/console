@@ -51,6 +51,8 @@ import Toolbar from './Toolbar';
 import Tooltip from './Tooltip';
 import { MenuItem, MenuList, Menu } from 'fundamental-react';
 import Modal from './Modal';
+import ModalWithForm from './ModalWithForm/ModalWithForm';
+
 import {
   FormFieldset,
   FormItem,
@@ -125,5 +127,6 @@ module.exports = {
   PanelBody,
   FormSet,
   Modal,
+  ModalWithForm,
   Counter,
 };

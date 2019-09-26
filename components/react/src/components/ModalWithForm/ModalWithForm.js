@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'fundamental-react/Modal';
-import { Button } from 'fundamental-react/Button';
+import { Modal } from '../Modal/index';
+import { Button } from '../Button/index';
 import LuigiClient from '@kyma-project/luigi-client';
 
 const ModalWithForm = ({
