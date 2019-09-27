@@ -19,7 +19,7 @@
       window.addEventListener('message', function(ev) {
         if (ev.data === 'unauthorized') {
           localStorage.removeItem('luigi.auth');
-          window.parent.location.reload();
+          window.location.reload();
         }
       });
     </script>
