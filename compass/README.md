@@ -18,4 +18,4 @@ This is an **experimental** user interface for the [Compass](https://github.com/
     npm start
     ```
 
-3. The Compass website opens in a new tab of your browser. If not, go to `http://compass-dev.kyma.local:8080`.
+3. The Compass website opens in a new tab of your browser. If not, go to `http://localhost:8080`.
