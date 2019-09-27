@@ -68,7 +68,25 @@ const EnableIstioField = ({ reference }) => (
   </>
 );
 
-const MemoryQuotasSection = ({}) => <span>section</span>;
+const MemoryQuotasSection = ({}) => (
+  <FormSet className="input-fields">
+    <FormLabel htmlFor="memory-limits">Memory limits *</FormLabel>
+    <FormInput
+      id="memory-limits"
+      placeholder="Memory limit"
+      type="text"
+      defaultValue="3Gi"
+    />
+
+    <FormLabel htmlFor="memory-requests">Memory requests *</FormLabel>
+    <FormInput
+      id="memory-requests"
+      placeholder="Memory requests"
+      type="text"
+      defaultValue="2.8Gi"
+    />
+  </FormSet>
+);
 
 const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
