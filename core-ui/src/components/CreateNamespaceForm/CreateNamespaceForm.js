@@ -17,6 +17,9 @@ import {
 } from 'fundamental-react';
 import './CreateNamespaceForm.scss';
 
+const LIMIT_REGEX =
+  '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
+
 const NameField = ({ reference }) => (
   <>
     <label className="fd-form__label" htmlFor="runtime-name">
@@ -68,26 +71,6 @@ const EnableIstioField = ({ reference }) => (
   </>
 );
 
-const MemoryQuotasSection = ({}) => (
-  <FormSet className="input-fields">
-    <FormLabel htmlFor="memory-limits">Memory limits *</FormLabel>
-    <FormInput
-      id="memory-limits"
-      placeholder="Memory limit"
-      type="text"
-      defaultValue="3Gi"
-    />
-
-    <FormLabel htmlFor="memory-requests">Memory requests *</FormLabel>
-    <FormInput
-      id="memory-requests"
-      placeholder="Memory requests"
-      type="text"
-      defaultValue="2.8Gi"
-    />
-  </FormSet>
-);
-
 const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
@@ -98,10 +81,6 @@ const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
           ref={checkboxRef}
           type="checkbox"
           id="memory-quotas"
-          data-target="#ukryta-tresc"
-          aria-expanded="false"
-          aria-controls="ukryta-tresc"
-          data-toggle="collapse"
           onChange={e => setIsExpanded(e.target.checked)}
         />
         <FormLabel htmlFor="memory-quotas">
@@ -122,6 +101,93 @@ const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
   );
 };
 
+const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
+  <FormSet className="input-fields">
+    <FormLabel htmlFor="memory-limits">Memory limits *</FormLabel>
+    <FormInput
+      id="memory-limits"
+      placeholder="Memory limit"
+      type="text"
+      defaultValue="3Gi"
+      pattern={LIMIT_REGEX}
+      ref={limitsRef}
+    />
+
+    <FormLabel htmlFor="memory-requests">Memory requests *</FormLabel>
+    <FormInput
+      id="memory-requests"
+      placeholder="Memory requests"
+      type="text"
+      defaultValue="2.8Gi"
+      pattern={LIMIT_REGEX}
+      ref={requestsRef}
+    />
+  </FormSet>
+);
+
+const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  return (
+    <FormFieldset>
+      <FormItem isCheck>
+        <input
+          className="fd-form__control"
+          ref={checkboxRef}
+          type="checkbox"
+          id="container-limits"
+          onChange={e => setIsExpanded(e.target.checked)}
+        />
+        <FormLabel htmlFor="container-limits">
+          Apply limits per container
+          <InlineHelp
+            placement="bottom-right"
+            text="
+                  Define memory constraints for individual containers in your
+                  namespace. <br />Use plain value in bytes, or suffix
+                  equivalents. For example: 128974848, 129e6, 129M, 123Mi.
+                "
+          />
+        </FormLabel>
+        {isExpanded && children}
+      </FormItem>
+    </FormFieldset>
+  );
+};
+
+const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
+  <FormSet className="input-fields">
+    <FormLabel htmlFor="container-max">Max *</FormLabel>
+    <FormInput
+      id="container-max"
+      placeholder="Max"
+      type="text"
+      defaultValue="1Gi"
+      pattern={LIMIT_REGEX}
+      ref={maxRef}
+    />
+
+    <FormLabel htmlFor="container-default">Default *</FormLabel>
+    <FormInput
+      id="container-default"
+      placeholder="Default"
+      type="text"
+      defaultValue="512Mi"
+      pattern={LIMIT_REGEX}
+      ref={defaultRef}
+    />
+
+    <FormLabel htmlFor="container-default-request">Default request *</FormLabel>
+    <FormInput
+      id="container-default-request"
+      placeholder="Default request"
+      type="text"
+      defaultValue="32Mi"
+      pattern={LIMIT_REGEX}
+      ref={requestRef}
+    />
+  </FormSet>
+);
+
 const CreateNamespaceForm = ({
   formElementRef,
   onChange,
@@ -131,7 +197,17 @@ const CreateNamespaceForm = ({
   const formValues = {
     name: useRef(null),
     enableIstio: useRef(null),
-    enableMemoryQuotas: useRef(null),
+    memoryQuotas: {
+      enableMemoryQuotas: useRef(null),
+      memoryLimits: useRef(null),
+      memoryRequests: useRef(null),
+    },
+    containerLimits: {
+      enableContainerLimits: useRef(null),
+      max: useRef(null),
+      default: useRef(null),
+      defaultRequest: useRef(null),
+    },
   };
 
   const handleFormSubmit = async e => {
@@ -149,12 +225,7 @@ const CreateNamespaceForm = ({
   };
 
   return (
-    <form
-      onChange={onChange}
-      ref={formElementRef}
-      // style={{ width: '30em' }}
-      onSubmit={handleFormSubmit}
-    >
+    <form onChange={onChange} ref={formElementRef} onSubmit={handleFormSubmit}>
       <div className="fd-form__set">
         <div className="fd-form__item">
           <NameField reference={formValues.name} />
@@ -163,9 +234,24 @@ const CreateNamespaceForm = ({
           <EnableIstioField reference={formValues.enableIstio} />
         </div>
         <div className="fd-form__item">
-          <MemoryQuotasCheckbox checkboxRef={formValues.enableMemoryQuotas}>
-            <MemoryQuotasSection />
+          <MemoryQuotasCheckbox
+            checkboxRef={formValues.memoryQuotas.enableMemoryQuotas}
+          >
+            <MemoryQuotasSection
+              limitsRef={formValues.memoryQuotas.limitsRef}
+              requestsRef={formValues.memoryQuotas.requestsRef}
+            />
           </MemoryQuotasCheckbox>
+
+          <ContainerLimitsCheckbox
+            checkboxRef={formValues.containerLimits.enableContainerLimits}
+          >
+            <ContainerLimitSection
+              max={formValues.containerLimits.max}
+              default={formValues.containerLimits.default}
+              defaultRequest={formValues.containerLimits.defaultRequest}
+            />
+          </ContainerLimitsCheckbox>
         </div>
       </div>
     </form>
