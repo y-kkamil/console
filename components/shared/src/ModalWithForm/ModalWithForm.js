@@ -9,6 +9,7 @@ export const ModalWithForm = ({
   title,
   button,
   children,
+  ...props
 }) => {
   const [isOpen, setOpen] = useState(false);
 
@@ -65,6 +66,7 @@ export const ModalWithForm = ({
         {button.text}
       </Button>
       <Modal
+        {...props}
         show={isOpen}
         actions={
           <React.Fragment>

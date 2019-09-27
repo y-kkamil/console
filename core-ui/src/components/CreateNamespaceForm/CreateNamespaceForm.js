@@ -1,7 +1,73 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { CustomPropTypes } from '@kyma-project/components';
-import { InlineHelp } from 'fundamental-react';
+import {
+  InlineHelp,
+  FormFieldset,
+  FormInput,
+  FormItem,
+  FormLabel,
+  FormLegend,
+  FormMessage,
+  FormRadioGroup,
+  FormRadioItem,
+  FormSelect,
+  FormSet,
+  FormTextarea,
+} from 'fundamental-react';
+import './CreateNamespaceForm.scss';
+
+const NameField = ({ reference }) => (
+  <>
+    <label className="fd-form__label" htmlFor="runtime-name">
+      Name *
+      <InlineHelp
+        placement="bottom-right"
+        text="
+            The name must consist of lower case alphanumeric characters or dashes, 
+            and must start and end with an alphanumeric character (e.g. 'my-name1').
+            "
+      />
+    </label>
+    <input
+      className="fd-form__control"
+      ref={reference}
+      type="text"
+      id="runtime-name"
+      placeholder="Runtime name"
+      aria-required="true"
+      required
+      pattern="^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+    />
+  </>
+);
+
+const EnableIstioField = ({ reference }) => (
+  <>
+    <FormFieldset>
+      <FormLegend>Checkboxes</FormLegend>
+      <FormItem isCheck>
+        <input
+          className="fd-form__control"
+          ref={reference}
+          type="checkbox"
+          id="enable-istio"
+          placeholder="Enable Istio"
+        />
+        <FormLabel htmlFor="enable-istio">
+          Enable Istio
+          <InlineHelp
+            placement="bottom-right"
+            text="
+                Select this option to enable istio to mediate all
+                  communication between the pods in your namespace.
+                "
+          />
+        </FormLabel>
+      </FormItem>
+    </FormFieldset>
+  </>
+);
 
 const CreateNamespaceForm = ({
   formElementRef,
@@ -12,7 +78,7 @@ const CreateNamespaceForm = ({
 }) => {
   const formValues = {
     name: useRef(null),
-    description: useRef(null),
+    enableIstio: useRef(null),
   };
 
   const handleFormSubmit = async e => {
@@ -29,61 +95,31 @@ const CreateNamespaceForm = ({
     }
   };
 
-  const nameField = () => (
-    <>
-      <label className="fd-form__label" htmlFor="runtime-name">
-        Name *
-        <InlineHelp
-          placement="bottom-right"
-          text="Name must be no longer than 63 characters, must start and end with a lowercase letter or number, and may contain lowercase letters, numbers, and dashes."
-        />
-      </label>
-      <input
-        className="fd-form__control"
-        ref={formValues.name}
-        type="text"
-        id="runtime-name"
-        placeholder="Runtime name"
-        aria-required="true"
-        required
-        pattern="^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
-      />
-    </>
-  );
-
   return (
     <form
       onChange={onChange}
       ref={formElementRef}
-      style={{ width: '30em' }}
+      // style={{ width: '30em' }}
       onSubmit={handleFormSubmit}
     >
       <div className="fd-form__set">
-        <div className="fd-form__item">{nameField()}</div>
         <div className="fd-form__item">
-          <label className="fd-form__label" htmlFor="runtime-desc">
-            Description
-          </label>
-
-          <input
-            className="fd-form__control"
-            ref={formValues.description}
-            type="text"
-            id="runtime-desc"
-            placeholder="Runtime description"
-          />
+          <NameField reference={formValues.name} />
+        </div>
+        <div className="fd-form__item">
+          <EnableIstioField reference={formValues.enableIstio} />
         </div>
       </div>
     </form>
   );
 };
 
-CreateNamespaceForm.propTypes = {
-  formElementRef: CustomPropTypes.elementRef, // used to store <form> element reference
-  isValid: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired, // args: title(string), message(string)
-  onCompleted: PropTypes.func.isRequired, // args: title(string), message(string)
-};
+// CreateNamespaceForm.propTypes = {
+//   formElementRef: CustomPropTypes.elementRef, // used to store <form> element reference
+//   isValid: PropTypes.bool.isRequired,
+//   onChange: PropTypes.func.isRequired,
+//   onError: PropTypes.func.isRequired, // args: title(string), message(string)
+//   onCompleted: PropTypes.func.isRequired, // args: title(string), message(string)
+// };
 
 export default CreateNamespaceForm;

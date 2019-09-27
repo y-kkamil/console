@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import './NamespaceList.scss';
 import { GET_NAMESPACES } from '../../queries/queries';
 import { Spinner } from '@kyma-project/react-components';
 import { ModalWithForm } from '@kyma-project/components';
@@ -21,6 +22,7 @@ export default function NamespaceList() {
       <ModalWithForm
         title="Add new namespace"
         button={{ text: 'Add new namespace', glyph: 'add' }}
+        id="add-namespace-modal"
       >
         <CreateNamespaceForm />
       </ModalWithForm>
