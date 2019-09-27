@@ -101,26 +101,46 @@ const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
   );
 };
 
+const SectionRow = ({
+  id,
+  description,
+  placeholder,
+  pattern,
+  reference,
+  defaultValue,
+  type = 'text',
+}) => (
+  <>
+    <FormLabel htmlFor={id}>{description}</FormLabel>
+    <FormInput
+      id={id}
+      placeholder={placeholder}
+      type={type}
+      defaultValue={defaultValue}
+      pattern={pattern}
+      ref={reference}
+    />
+  </>
+);
+
 const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
   <FormSet className="input-fields">
-    <FormLabel htmlFor="memory-limits">Memory limits *</FormLabel>
-    <FormInput
-      id="memory-limits"
-      placeholder="Memory limit"
-      type="text"
+    <SectionRow
+      id="memory-limit"
+      reference={limitsRef}
       defaultValue="3Gi"
       pattern={LIMIT_REGEX}
-      ref={limitsRef}
+      description="Memory limit *"
+      placeholder="Memory limit"
     />
-
-    <FormLabel htmlFor="memory-requests">Memory requests *</FormLabel>
-    <FormInput
+    <SectionRow
       id="memory-requests"
       placeholder="Memory requests"
       type="text"
       defaultValue="2.8Gi"
       pattern={LIMIT_REGEX}
-      ref={requestsRef}
+      reference={requestsRef}
+      description="Memory requests *"
     />
   </FormSet>
 );
@@ -156,34 +176,32 @@ const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
 
 const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
   <FormSet className="input-fields">
-    <FormLabel htmlFor="container-max">Max *</FormLabel>
-    <FormInput
+    <SectionRow
       id="container-max"
       placeholder="Max"
       type="text"
       defaultValue="1Gi"
       pattern={LIMIT_REGEX}
       ref={maxRef}
+      description="Max *"
     />
-
-    <FormLabel htmlFor="container-default">Default *</FormLabel>
-    <FormInput
+    <SectionRow
       id="container-default"
       placeholder="Default"
       type="text"
       defaultValue="512Mi"
       pattern={LIMIT_REGEX}
       ref={defaultRef}
+      description="Default *"
     />
-
-    <FormLabel htmlFor="container-default-request">Default request *</FormLabel>
-    <FormInput
+    <SectionRow
       id="container-default-request"
       placeholder="Default request"
       type="text"
       defaultValue="32Mi"
       pattern={LIMIT_REGEX}
       ref={requestRef}
+      description="Default request *"
     />
   </FormSet>
 );
@@ -199,7 +217,7 @@ const CreateNamespaceForm = ({
     enableIstio: useRef(null),
     memoryQuotas: {
       enableMemoryQuotas: useRef(null),
-      memoryLimits: useRef(null),
+      memoryLimit: useRef(null),
       memoryRequests: useRef(null),
     },
     containerLimits: {
