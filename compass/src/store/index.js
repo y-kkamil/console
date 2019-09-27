@@ -35,7 +35,6 @@ export function createApolloClient() {
   const cache = new InMemoryCache();
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {
-    debugger;
     if (networkError && networkError.statusCode === 401) {
       return handleUnauthorized();
     }
