@@ -3,8 +3,17 @@
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "./src",
-    "declaration": true
+    "allowJs": true
   },
-  "include": ["src/*.ts", "src/**/*.ts", "src/*.tsx", "src/**/*.tsx"],
+  "include": [
+    "src/*.ts",
+    "src/**/*.ts",
+    "src/*.tsx",
+    "src/**/*.tsx",
+    "src/*.js",
+    "src/*.jsx",
+    "src/**/*.js",
+    "src/**/*.jsx"
+  ],
   "exclude": ["dist/**/*"]
 }
