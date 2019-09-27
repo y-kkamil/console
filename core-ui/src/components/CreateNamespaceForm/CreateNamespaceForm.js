@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CustomPropTypes } from '@kyma-project/components';
 import {
@@ -34,7 +34,7 @@ const NameField = ({ reference }) => (
       ref={reference}
       type="text"
       id="runtime-name"
-      placeholder="Runtime name"
+      placeholder="Namespace name"
       aria-required="true"
       required
       pattern="^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
@@ -45,7 +45,6 @@ const NameField = ({ reference }) => (
 const EnableIstioField = ({ reference }) => (
   <>
     <FormFieldset>
-      <FormLegend>Checkboxes</FormLegend>
       <FormItem isCheck>
         <input
           className="fd-form__control"
@@ -69,26 +68,62 @@ const EnableIstioField = ({ reference }) => (
   </>
 );
 
+const MemoryQuotasSection = ({}) => <span>section</span>;
+
+const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  return (
+    <FormFieldset>
+      <FormItem isCheck>
+        <input
+          className="fd-form__control"
+          ref={checkboxRef}
+          type="checkbox"
+          id="memory-quotas"
+          data-target="#ukryta-tresc"
+          aria-expanded="false"
+          aria-controls="ukryta-tresc"
+          data-toggle="collapse"
+          onChange={e => setIsExpanded(e.target.checked)}
+        />
+        <FormLabel htmlFor="memory-quotas">
+          Apply Total Memory Quotas
+          <InlineHelp
+            placement="bottom-right"
+            text="
+                 Define constraints that limit total memory consumption in your
+                  namespace. <br />
+                  Use plain value in bytes, or suffix equivalents. For example:
+                  128974848, 129e6, 129M, 123Mi.
+                "
+          />
+        </FormLabel>
+        {isExpanded && children}
+      </FormItem>
+    </FormFieldset>
+  );
+};
+
 const CreateNamespaceForm = ({
   formElementRef,
   onChange,
   onCompleted,
   onError,
-  addRuntime,
 }) => {
   const formValues = {
     name: useRef(null),
     enableIstio: useRef(null),
+    enableMemoryQuotas: useRef(null),
   };
 
   const handleFormSubmit = async e => {
     e.preventDefault();
     const runtimeName = formValues.name.current.value;
     try {
-      await addRuntime({
-        name: runtimeName,
-        description: formValues.description.current.value,
-      });
+      //   await addRuntime({
+      //     name: runtimeName,
+      //     description: formValues.description.current.value,
+      //   });
       onCompleted(runtimeName, `Runtime created succesfully`);
     } catch (e) {
       onError(`The runtime could not be created succesfully`, e.message || ``);
@@ -108,6 +143,11 @@ const CreateNamespaceForm = ({
         </div>
         <div className="fd-form__item">
           <EnableIstioField reference={formValues.enableIstio} />
+        </div>
+        <div className="fd-form__item">
+          <MemoryQuotasCheckbox checkboxRef={formValues.enableMemoryQuotas}>
+            <MemoryQuotasSection />
+          </MemoryQuotasCheckbox>
         </div>
       </div>
     </form>
