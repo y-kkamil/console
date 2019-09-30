@@ -10,7 +10,7 @@ const ModalWithForm = ({
   sendNotification,
   title,
   button,
-  children,
+  renderForm,
   ...props
 }) => {
   const [isOpen, setOpen] = useState(false);
@@ -104,13 +104,12 @@ const ModalWithForm = ({
         }}
         title={title}
       >
-        {React.createElement(children.type, {
+        {renderForm({
           formElementRef,
           isValid,
           onChange: handleFormChanged,
           onError: handleFormError,
           onCompleted: handleFormSuccess,
-          ...children.props,
         })}
       </Modal>
     </div>
@@ -125,7 +124,7 @@ ModalWithForm.propTypes = {
     text: PropTypes.string.isRequired,
     glyph: PropTypes.string,
   }).isRequired,
-  children: PropTypes.node.isRequired,
+  renderForm: PropTypes.func.isRequired,
 };
 ModalWithForm.defaultProps = {
   sendNotification: () => {},

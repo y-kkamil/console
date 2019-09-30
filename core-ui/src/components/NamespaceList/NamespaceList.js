@@ -23,9 +23,8 @@ export default function NamespaceList() {
         title="Add new namespace"
         button={{ text: 'Add new namespace', glyph: 'add' }}
         id="add-namespace-modal"
-      >
-        <CreateNamespaceForm />
-      </ModalWithForm>
+        renderForm={props => <CreateNamespaceForm {...props} />}
+      />
 
       {data.namespaces.map(namespace => (
         <p key={namespace.name}>{namespace.name}</p>
