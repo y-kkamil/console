@@ -39,4 +39,12 @@
     margin-right: 4px;
   }
   border: 1px solid var(--fd-color-neutral-3);
+
+  &--non-removable {
+    @extend .label;
+    cursor: default;
+    &:after {
+      content: unset;
+    }
+  }
 }
