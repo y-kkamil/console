@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import {
   InlineHelp,
   FormFieldset,
-  FormInput,
   FormItem,
   FormLabel,
   FormSet,
 } from 'fundamental-react';
 import './CreateNamespaceForm.scss';
 import LabelSelectorInput from '../LabelSelectorInput/LabelSelectorInput';
+import CustomPropTypes from '../typechecking/CustomPropTypes';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -321,7 +321,7 @@ const CreateNamespaceForm = ({
 };
 
 CreateNamespaceForm.propTypes = {
-  formElementRef: CustomPropTypes.elementRef, // used to store <form> element reference
+  formElementRef: PropTypes.shape({ current: PropTypes.any }).isRequired, // used to store <form> element reference
   isValid: PropTypes.bool,
   onChange: PropTypes.func,
   onError: PropTypes.func, // args: title(string), message(string)
