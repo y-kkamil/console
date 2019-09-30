@@ -243,12 +243,11 @@ const CreateNamespaceForm = ({
 
   async function handleFormSubmit(e) {
     e.preventDefault();
+
     const namespaceData = {
       name: formValues.name.current.value,
       labels: [...labels, ...readonlyLabels],
     };
-
-    console.log(formValues.memoryQuotas.enableMemoryQuotas.current.checked);
 
     const memoryQuotas = formValues.memoryQuotas.enableMemoryQuotas.current
       .checked
@@ -268,7 +267,6 @@ const CreateNamespaceForm = ({
         }
       : null;
 
-    console.log(namespaceData, memoryQuotas, containerLimits);
     try {
       //   await addRuntime({
       //     name: runtimeName,
@@ -322,12 +320,12 @@ const CreateNamespaceForm = ({
   );
 };
 
-// CreateNamespaceForm.propTypes = {
-//   formElementRef: CustomPropTypes.elementRef, // used to store <form> element reference
-//   isValid: PropTypes.bool.isRequired,
-//   onChange: PropTypes.func.isRequired,
-//   onError: PropTypes.func.isRequired, // args: title(string), message(string)
-//   onCompleted: PropTypes.func.isRequired, // args: title(string), message(string)
-// };
+CreateNamespaceForm.propTypes = {
+  formElementRef: CustomPropTypes.elementRef, // used to store <form> element reference
+  isValid: PropTypes.bool,
+  onChange: PropTypes.func,
+  onError: PropTypes.func, // args: title(string), message(string)
+  onCompleted: PropTypes.func, // args: title(string), message(string)
+};
 
 export default CreateNamespaceForm;
