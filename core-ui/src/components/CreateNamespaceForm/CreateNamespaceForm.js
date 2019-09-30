@@ -15,6 +15,8 @@ import LabelSelectorInput from '../LabelSelectorInput/LabelSelectorInput';
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
 
+const ISTIO_INJECTION_LABEL = 'istio-injection=disabled';
+
 const NameField = ({ reference }) => (
   <>
     <label className="fd-form__label" htmlFor="runtime-name">
@@ -40,16 +42,16 @@ const NameField = ({ reference }) => (
   </>
 );
 
-const DisableSidecarField = ({ reference }) => (
-  <>
+const DisableSidecarField = ({ onChange }) => {
+  return (
     <FormFieldset>
       <FormItem isCheck>
         <input
           className="fd-form__control"
-          ref={reference}
           type="checkbox"
           id="disable-istio"
           placeholder="disable side-car"
+          onChange={e => onChange(e.target.checked)}
         />
         <FormLabel htmlFor="disable-istio">
           Disable side-car injection
@@ -63,8 +65,8 @@ const DisableSidecarField = ({ reference }) => (
         </FormLabel>
       </FormItem>
     </FormFieldset>
-  </>
-);
+  );
+};
 
 const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -210,9 +212,9 @@ const CreateNamespaceForm = ({
   onError,
 }) => {
   const [labels, setLabels] = useState([]);
+  const [readonlyLabels, setReadonlyLabels] = useState([]);
   const formValues = {
     name: useRef(null),
-    enableIstio: useRef(null),
     memoryQuotas: {
       enableMemoryQuotas: useRef(null),
       memoryLimit: useRef(null),
@@ -228,6 +230,16 @@ const CreateNamespaceForm = ({
 
   function handleLabelsChanged(newLabels) {
     setLabels(newLabels);
+  }
+
+  function handleIstioChange(disableSidecar) {
+    let newLabels = readonlyLabels.filter(l => l !== ISTIO_INJECTION_LABEL);
+
+    if (disableSidecar) {
+      newLabels.push(ISTIO_INJECTION_LABEL);
+    }
+
+    setReadonlyLabels(newLabels);
   }
 
   const handleFormSubmit = async e => {
@@ -252,10 +264,14 @@ const CreateNamespaceForm = ({
         </div>
         <div className="fd-form__item">
           <label className="fd-form__label">Labels</label>
-          <LabelSelectorInput labels={labels} onChange={handleLabelsChanged} />
+          <LabelSelectorInput
+            labels={labels}
+            readonlyLabels={readonlyLabels}
+            onChange={handleLabelsChanged}
+          />
         </div>
         <div className="fd-form__item">
-          <DisableSidecarField reference={formValues.enableIstio} />
+          <DisableSidecarField onChange={handleIstioChange} />
         </div>
         <div className="fd-form__item">
           <MemoryQuotasCheckbox
