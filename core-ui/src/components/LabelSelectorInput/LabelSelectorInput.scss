@@ -10,13 +10,15 @@
   transition: border-color 125ms;
   padding-left: 8px;
   align-items: center;
-  height: var(--fd-forms-height);
+  min-height: var(--fd-forms-height);
+  flex-wrap: wrap;
   display: flex;
   .fd-form__control {
     padding-left: 8px;
     border: none;
     height: calc(var(--fd-forms-height) - 2px);
-
+    width: auto;
+    flex-grow: 1;
     &:active,
     &:focus {
       box-shadow: none !important;
@@ -31,6 +33,7 @@
 
 .label {
   height: calc(var(--fd-forms-height) - 2 * 6px);
+  margin: 4px 0;
   flex-shrink: 0;
   &:not(:last-of-type) {
     margin-right: 4px;
