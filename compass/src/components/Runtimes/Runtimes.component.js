@@ -9,7 +9,6 @@ import handleDelete from '../../shared/components/GenericList/actionHandlers/sim
 
 import ModalWithForm from '../../shared/components/ModalWithForm/ModalWithForm.container';
 import CreateRuntimeForm from './CreateRuntimeForm/CreateRuntimeForm.container';
-import { SEND_NOTIFICATION } from '../../gql';
 class Runtimes extends React.Component {
   static propTypes = {
     runtimes: PropTypes.object.isRequired,
@@ -75,7 +74,6 @@ class Runtimes extends React.Component {
       <GenericList
         extraHeaderContent={
           <ModalWithForm
-            sendNotificationQuery={SEND_NOTIFICATION}
             title="Create new runtime"
             button={{ text: 'Create runtime', glyph: 'add' }}
             performRefetch={() => runtimesQuery.refetch()} // to be removed after subscriptions are done

@@ -2,12 +2,10 @@ import { graphql, compose } from 'react-apollo';
 
 import { SEND_NOTIFICATION } from '../../../gql';
 
-import ModalWithForm from '@kyma-project/react-components';
+import ModalWithForm from './ModalWithForm.component';
 
-const ModalWithFormContainer = ({ sendNotificationQuery }) =>
-  compose(
-    graphql(sendNotificationQuery, {
-      name: 'sendNotification',
-    }),
-  )(ModalWithForm);
-export default ModalWithFormContainer;
+export default compose(
+  graphql(SEND_NOTIFICATION, {
+    name: 'sendNotification',
+  }),
+)(ModalWithForm);
