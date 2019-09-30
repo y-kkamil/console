@@ -16,6 +16,7 @@ import {
   FormTextarea,
 } from 'fundamental-react';
 import './CreateNamespaceForm.scss';
+import LabelSelectorInput from '../LabelSelectorInput/LabelSelectorInput';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -45,7 +46,7 @@ const NameField = ({ reference }) => (
   </>
 );
 
-const EnableIstioField = ({ reference }) => (
+const DisableSidecarField = ({ reference }) => (
   <>
     <FormFieldset>
       <FormItem isCheck>
@@ -53,15 +54,15 @@ const EnableIstioField = ({ reference }) => (
           className="fd-form__control"
           ref={reference}
           type="checkbox"
-          id="enable-istio"
-          placeholder="Enable Istio"
+          id="disable-istio"
+          placeholder="disable side-car"
         />
-        <FormLabel htmlFor="enable-istio">
-          Enable Istio
+        <FormLabel htmlFor="disable-istio">
+          Disable side-car injection
           <InlineHelp
             placement="bottom-right"
             text="
-                Select this option to enable istio to mediate all
+                Select this option to disable istio to mediate all
                   communication between the pods in your namespace.
                 "
           />
@@ -89,7 +90,7 @@ const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
             placement="bottom-right"
             text="
                  Define constraints that limit total memory consumption in your
-                  namespace. <br />
+                  namespace. 
                   Use plain value in bytes, or suffix equivalents. For example:
                   128974848, 129e6, 129M, 123Mi.
                 "
@@ -109,6 +110,7 @@ const SectionRow = ({
   reference,
   defaultValue,
   type = 'text',
+  required = true,
 }) => (
   <>
     <FormLabel htmlFor={id}>{description}</FormLabel>
@@ -119,6 +121,7 @@ const SectionRow = ({
       defaultValue={defaultValue}
       pattern={pattern}
       ref={reference}
+      required={required}
     />
   </>
 );
@@ -163,7 +166,7 @@ const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
             placement="bottom-right"
             text="
                   Define memory constraints for individual containers in your
-                  namespace. <br />Use plain value in bytes, or suffix
+                  namespace. Use plain value in bytes, or suffix
                   equivalents. For example: 128974848, 129e6, 129M, 123Mi.
                 "
           />
@@ -249,7 +252,11 @@ const CreateNamespaceForm = ({
           <NameField reference={formValues.name} />
         </div>
         <div className="fd-form__item">
-          <EnableIstioField reference={formValues.enableIstio} />
+          <label className="fd-form__label">Labels</label>
+          <LabelSelectorInput reference={formValues.name} />
+        </div>
+        <div className="fd-form__item">
+          <DisableSidecarField reference={formValues.enableIstio} />
         </div>
         <div className="fd-form__item">
           <MemoryQuotasCheckbox

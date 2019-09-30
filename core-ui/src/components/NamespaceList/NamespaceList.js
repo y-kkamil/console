@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import './NamespaceList.scss';
 import { GET_NAMESPACES } from '../../queries/queries';
 import { Spinner } from '@kyma-project/react-components';
-import { ModalWithForm } from '@kyma-project/components';
+import ModalWithForm from '../ModalWithForm/ModalWithForm';
 import CreateNamespaceForm from '../CreateNamespaceForm/CreateNamespaceForm';
 
 export default function NamespaceList() {

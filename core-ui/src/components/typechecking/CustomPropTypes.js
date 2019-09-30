@@ -1,4 +1,5 @@
-export class CustomPropTypes {
+//TODO: move this component to a shared "place"
+class CustomPropTypes {
   static elementRef = (props, propName, componentName) =>
     props[propName].current !== undefined
       ? null
@@ -21,3 +22,5 @@ export class CustomPropTypes {
     }
   };
 }
+
+export default CustomPropTypes;

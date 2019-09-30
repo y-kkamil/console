@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Modal, Button } from 'fundamental-react';
 import LuigiClient from '@kyma-project/luigi-client';
 
-export const ModalWithForm = ({
+//TODO: move this component to a shared "place"
+
+const ModalWithForm = ({
   performRefetch,
   sendNotification,
   title,
@@ -129,3 +131,5 @@ ModalWithForm.defaultProps = {
   sendNotification: () => {},
   performRefetch: () => {},
 };
+
+export default ModalWithForm;
