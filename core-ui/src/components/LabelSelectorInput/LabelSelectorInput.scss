@@ -13,7 +13,7 @@
   height: var(--fd-forms-height);
   display: flex;
   .fd-form__control {
-    margin-left: 0px;
+    padding-left: 8px;
     border: none;
     height: calc(var(--fd-forms-height) - 2px);
 

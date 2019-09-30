@@ -1,19 +1,13 @@
 import React, { useRef, useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
-import { CustomPropTypes } from '@kyma-project/components';
+
 import {
   InlineHelp,
   FormFieldset,
   FormInput,
   FormItem,
   FormLabel,
-  FormLegend,
-  FormMessage,
-  FormRadioGroup,
-  FormRadioItem,
-  FormSelect,
   FormSet,
-  FormTextarea,
 } from 'fundamental-react';
 import './CreateNamespaceForm.scss';
 import LabelSelectorInput from '../LabelSelectorInput/LabelSelectorInput';
@@ -215,6 +209,7 @@ const CreateNamespaceForm = ({
   onCompleted,
   onError,
 }) => {
+  const [labels, setLabels] = useState([]);
   const formValues = {
     name: useRef(null),
     enableIstio: useRef(null),
@@ -230,6 +225,10 @@ const CreateNamespaceForm = ({
       defaultRequest: useRef(null),
     },
   };
+
+  function handleLabelsChanged(newLabels) {
+    setLabels(newLabels);
+  }
 
   const handleFormSubmit = async e => {
     e.preventDefault();
@@ -253,7 +252,7 @@ const CreateNamespaceForm = ({
         </div>
         <div className="fd-form__item">
           <label className="fd-form__label">Labels</label>
-          <LabelSelectorInput reference={formValues.name} />
+          <LabelSelectorInput labels={labels} onChange={handleLabelsChanged} />
         </div>
         <div className="fd-form__item">
           <DisableSidecarField reference={formValues.enableIstio} />
