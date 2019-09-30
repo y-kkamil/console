@@ -1,6 +1,5 @@
 import React, { useRef, useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import {
   InlineHelp,
   FormFieldset,
@@ -110,7 +109,7 @@ const SectionRow = ({
 }) => (
   <>
     <FormLabel htmlFor={id}>{description}</FormLabel>
-    <FormInput
+    <input
       id={id}
       placeholder={placeholder}
       type={type}
@@ -181,7 +180,7 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
       type="text"
       defaultValue="1Gi"
       pattern={LIMIT_REGEX}
-      ref={maxRef}
+      reference={maxRef}
       description="Max *"
     />
     <SectionRow
@@ -190,7 +189,7 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
       type="text"
       defaultValue="512Mi"
       pattern={LIMIT_REGEX}
-      ref={defaultRef}
+      reference={defaultRef}
       description="Default *"
     />
     <SectionRow
@@ -199,7 +198,7 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
       type="text"
       defaultValue="32Mi"
       pattern={LIMIT_REGEX}
-      ref={requestRef}
+      reference={requestRef}
       description="Default request *"
     />
   </FormSet>
@@ -242,19 +241,44 @@ const CreateNamespaceForm = ({
     setReadonlyLabels(newLabels);
   }
 
-  const handleFormSubmit = async e => {
+  async function handleFormSubmit(e) {
     e.preventDefault();
-    const runtimeName = formValues.name.current.value;
+    const namespaceData = {
+      name: formValues.name.current.value,
+      labels: [...labels, ...readonlyLabels],
+    };
+
+    console.log(formValues.memoryQuotas.enableMemoryQuotas.current.checked);
+
+    const memoryQuotas = formValues.memoryQuotas.enableMemoryQuotas.current
+      .checked
+      ? {
+          memoryLimit: formValues.memoryQuotas.memoryLimit.current.value,
+          memoryRequests: formValues.memoryQuotas.memoryRequests.current.value,
+        }
+      : null;
+
+    const containerLimits = formValues.containerLimits.enableContainerLimits
+      .current.checked
+      ? {
+          max: formValues.containerLimits.max.current.value,
+          default: formValues.containerLimits.default.current.value,
+          defaultRequest:
+            formValues.containerLimits.defaultRequest.current.value,
+        }
+      : null;
+
+    console.log(namespaceData, memoryQuotas, containerLimits);
     try {
       //   await addRuntime({
       //     name: runtimeName,
       //     description: formValues.description.current.value,
       //   });
-      onCompleted(runtimeName, `Runtime created succesfully`);
+      // onCompleted(runtimeName, `Runtime created succesfully`);
     } catch (e) {
-      onError(`The runtime could not be created succesfully`, e.message || ``);
+      // onError(`The runtime could not be created succesfully`, e.message || ``);
     }
-  };
+  }
 
   return (
     <form onChange={onChange} ref={formElementRef} onSubmit={handleFormSubmit}>
@@ -278,8 +302,8 @@ const CreateNamespaceForm = ({
             checkboxRef={formValues.memoryQuotas.enableMemoryQuotas}
           >
             <MemoryQuotasSection
-              limitsRef={formValues.memoryQuotas.limitsRef}
-              requestsRef={formValues.memoryQuotas.requestsRef}
+              limitsRef={formValues.memoryQuotas.memoryLimit}
+              requestsRef={formValues.memoryQuotas.memoryRequests}
             />
           </MemoryQuotasCheckbox>
 
@@ -287,9 +311,9 @@ const CreateNamespaceForm = ({
             checkboxRef={formValues.containerLimits.enableContainerLimits}
           >
             <ContainerLimitSection
-              max={formValues.containerLimits.max}
-              default={formValues.containerLimits.default}
-              defaultRequest={formValues.containerLimits.defaultRequest}
+              maxRef={formValues.containerLimits.max}
+              defaultRef={formValues.containerLimits.default}
+              requestRef={formValues.containerLimits.defaultRequest}
             />
           </ContainerLimitsCheckbox>
         </div>
