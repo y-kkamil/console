@@ -122,7 +122,7 @@ const SectionRow = ({
 );
 
 const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
-  <FormSet className="input-fields">
+  <FormSet className="input-fields" data-test-id="memory-quotas-section">
     <SectionRow
       id="memory-limit"
       reference={limitsRef}
@@ -173,7 +173,7 @@ const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
 };
 
 const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
-  <FormSet className="input-fields">
+  <FormSet className="input-fields" data-test-id="container-limits-section">
     <SectionRow
       id="container-max"
       placeholder="Max"

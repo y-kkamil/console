@@ -6,13 +6,13 @@ import { Token } from 'fundamental-react/Token';
 
 const labelRegexp = /[a-z0-9A-Z-_.]+=[a-z0-9A-Z-_.]+/;
 
-const Label = ({ text, onClick }) => (
+export const Label = ({ text, onClick }) => (
   <Token title="Click to remove" className="label" onClick={onClick}>
     {text}
   </Token>
 );
 
-const NonRemovableLabel = ({ text }) => (
+export const NonRemovableLabel = ({ text }) => (
   <Token className="label--non-removable">{text}</Token>
 );
 
