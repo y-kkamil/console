@@ -1,4 +1,4 @@
-import React, { useRef, useReducer, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   InlineHelp,
@@ -9,7 +9,6 @@ import {
 } from 'fundamental-react';
 import './CreateNamespaceForm.scss';
 import LabelSelectorInput from '../LabelSelectorInput/LabelSelectorInput';
-import CustomPropTypes from '../typechecking/CustomPropTypes';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -244,6 +243,7 @@ const CreateNamespaceForm = ({
   async function handleFormSubmit(e) {
     e.preventDefault();
 
+    /* eslint-disable no-unused-vars */
     const namespaceData = {
       name: formValues.name.current.value,
       labels: [...labels, ...readonlyLabels],
@@ -266,7 +266,7 @@ const CreateNamespaceForm = ({
             formValues.containerLimits.defaultRequest.current.value,
         }
       : null;
-
+    /* eslint-enable no-unused-vars */
     try {
       //   await addRuntime({
       //     name: runtimeName,
