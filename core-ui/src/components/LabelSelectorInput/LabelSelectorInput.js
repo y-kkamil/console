@@ -7,13 +7,17 @@ import { Token } from 'fundamental-react/Token';
 const labelRegexp = /[a-z0-9A-Z-_.]+=[a-z0-9A-Z-_.]+/;
 
 export const Label = ({ text, onClick }) => (
-  <Token title="Click to remove" className="label" onClick={onClick}>
+  <Token
+    title="Click to remove"
+    className="label-selector__label"
+    onClick={onClick}
+  >
     {text}
   </Token>
 );
 
 export const NonRemovableLabel = ({ text }) => (
-  <Token className="label--non-removable">{text}</Token>
+  <Token className="label-selector__label--non-removable">{text}</Token>
 );
 
 const LabelSelectorInput = ({ labels = [], readonlyLabels = [], onChange }) => {
@@ -29,7 +33,7 @@ const LabelSelectorInput = ({ labels = [], readonlyLabels = [], onChange }) => {
 
   return (
     <div className="fd-form__set">
-      <div className="wrapper">
+      <div className="label-selector">
         {readonlyLabels.map(l => (
           <NonRemovableLabel key={l} text={l} />
         ))}
@@ -38,7 +42,7 @@ const LabelSelectorInput = ({ labels = [], readonlyLabels = [], onChange }) => {
           <Label key={l} text={l} onClick={() => handleLabelRemoved(l)} />
         ))}
         <input
-          className="fd-form__control"
+          className="fd-form__control label-selector__input"
           type="text"
           id="input-1"
           placeholder="Enter new label"
