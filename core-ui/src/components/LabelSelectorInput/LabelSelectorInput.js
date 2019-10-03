@@ -44,7 +44,6 @@ const LabelSelectorInput = ({ labels = [], readonlyLabels = [], onChange }) => {
         <input
           className="fd-form__control label-selector__input"
           type="text"
-          id="input-1"
           placeholder="Enter new label"
           onKeyDown={handleLabelEntered}
         />
