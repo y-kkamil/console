@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Panel, Button, Search } from '@kyma-project/react-components';
+import { Panel, Search } from '@kyma-project/react-components';
 import NamespaceFilters from './NamespaceFilters/NamespaceFilters';
 import './NamespacesListHeader.scss';
 
