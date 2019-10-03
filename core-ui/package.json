@@ -3,15 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@kyma-project/luigi-core": "^0.6.4",
-    "apollo-boost": "^0.4.4",
-    "apollo-cache-inmemory": "^1.6.3",
-    "apollo-client": "^2.6.4",
-    "apollo-link": "^1.2.13",
-    "apollo-link-error": "^1.1.12",
-    "apollo-link-http": "^1.5.16",
-    "jsoneditor": "^6.2.1",
-    "react-ace": "^7.0.4"
+    "@kyma-project/luigi-core": "^0.6.4"
   },
   "scripts": {
     "start": "PORT=8889 ../node_modules/.bin/react-scripts start",
