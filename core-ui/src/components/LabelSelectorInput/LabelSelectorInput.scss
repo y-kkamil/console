@@ -22,7 +22,7 @@
     box-shadow: 0 0 0 1px var(--fd-color-action-focus);
   }
 
-  &__input {
+  input {
     height: calc(var(--fd-forms-height) - 2px);
     width: auto;
     padding-left: 8px;
