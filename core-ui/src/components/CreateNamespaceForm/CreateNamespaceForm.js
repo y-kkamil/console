@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useMutation } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 import {
   InlineHelp,
@@ -9,11 +10,20 @@ import {
 } from 'fundamental-react';
 import './CreateNamespaceForm.scss';
 import LabelSelectorInput from '../LabelSelectorInput/LabelSelectorInput';
+import {
+  CREATE_LIMIT_RANGE,
+  CREATE_NAMESPACE,
+  CREATE_RESOURCE_QUOTA,
+} from '../../gql/mutations';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection=disabled';
+
+function convertLabelsArrayToObject(labelsArray) {
+  return Object.fromEntries(labelsArray.map(label => label.split('=')));
+}
 
 const NameField = ({ reference }) => (
   <>
@@ -211,6 +221,7 @@ const CreateNamespaceForm = ({
 }) => {
   const [labels, setLabels] = useState([]);
   const [readonlyLabels, setReadonlyLabels] = useState([]);
+
   const formValues = {
     name: useRef(null),
     memoryQuotas: {
@@ -225,6 +236,10 @@ const CreateNamespaceForm = ({
       defaultRequest: useRef(null),
     },
   };
+
+  const [createNamespaceMutation] = useMutation(CREATE_NAMESPACE);
+  const [createLimitRangeMutation] = useMutation(CREATE_LIMIT_RANGE);
+  const [createResourceQuotaMutation] = useMutation(CREATE_RESOURCE_QUOTA);
 
   function handleLabelsChanged(newLabels) {
     setLabels(newLabels);
@@ -243,38 +258,106 @@ const CreateNamespaceForm = ({
   async function handleFormSubmit(e) {
     e.preventDefault();
 
-    /* eslint-disable no-unused-vars */
+    const k8sLabels = convertLabelsArrayToObject([
+      ...labels,
+      ...readonlyLabels,
+    ]);
     const namespaceData = {
       name: formValues.name.current.value,
-      labels: [...labels, ...readonlyLabels],
+      labels: k8sLabels,
     };
 
     const memoryQuotas = formValues.memoryQuotas.enableMemoryQuotas.current
       .checked
       ? {
-          memoryLimit: formValues.memoryQuotas.memoryLimit.current.value,
-          memoryRequests: formValues.memoryQuotas.memoryRequests.current.value,
+          resourceQuota: {
+            limits: {
+              memory: formValues.memoryQuotas.memoryLimit.current.value,
+            },
+            requests: {
+              memory: formValues.memoryQuotas.memoryRequests.current.value,
+            },
+          },
         }
       : null;
 
     const containerLimits = formValues.containerLimits.enableContainerLimits
       .current.checked
       ? {
-          max: formValues.containerLimits.max.current.value,
-          default: formValues.containerLimits.default.current.value,
-          defaultRequest:
-            formValues.containerLimits.defaultRequest.current.value,
+          limitRange: {
+            max: {
+              memory: formValues.containerLimits.max.current.value,
+            },
+            default: {
+              memory: formValues.containerLimits.default.current.value,
+            },
+            defaultRequest: {
+              memory: formValues.containerLimits.defaultRequest.current.value,
+            },
+            type: 'Container',
+          },
         }
       : null;
-    /* eslint-enable no-unused-vars */
+
     try {
-      //   await addRuntime({
-      //     name: runtimeName,
-      //     description: formValues.description.current.value,
-      //   });
-      // onCompleted(runtimeName, `Runtime created succesfully`);
+      await createNamespaceMutation({ variables: namespaceData });
+
+      try {
+        const additionalRequests = [];
+        if (memoryQuotas)
+          additionalRequests.push(
+            createResourceQuotaMutation({
+              variables: {
+                ...memoryQuotas,
+                namespace: namespaceData.name,
+                name: `${namespaceData.name}-res-quota`,
+              },
+            }),
+          );
+        if (containerLimits)
+          additionalRequests.push(
+            createLimitRangeMutation({
+              variables: {
+                ...containerLimits,
+                namespace: namespaceData.name,
+                name: `${namespaceData.name}-limit-range`,
+              },
+            }),
+          );
+        await Promise.all(additionalRequests);
+        onCompleted('Success', `Namespace ${namespaceData.name} created.`);
+      } catch (e) {
+        const { graphQLErrors, networkError } = e;
+        let errorToDisplay = [];
+        if (networkError) {
+          errorToDisplay = networkError.result.errors
+            .map(({ message }) => message)
+            .join(' | ');
+        } else if (graphQLErrors) {
+          errorToDisplay = graphQLErrors
+            .map(({ message }) => message)
+            .join(' | ');
+        }
+
+        onError(
+          'WARNING',
+          `Your namespace ${namespaceData.name} was created successfully, however, Limit Range and/or Resource Quota creation failed. You have to create them manually later: ${errorToDisplay}`,
+          true,
+        );
+      }
     } catch (e) {
-      // onError(`The runtime could not be created succesfully`, e.message || ``);
+      const { graphQLErrors, networkError } = e;
+      let errorToDisplay = [];
+      if (networkError) {
+        errorToDisplay = networkError.result.errors
+          .map(({ message }) => message)
+          .join(' | ');
+      } else if (graphQLErrors) {
+        errorToDisplay = graphQLErrors
+          .map(({ message }) => message)
+          .join(' | ');
+      }
+      onError('ERROR', `Error while creating namespace: ${errorToDisplay}`);
     }
   }
 
