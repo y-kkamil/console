@@ -106,6 +106,7 @@ export default function NamespaceList() {
       showSystemNamespaces: storage.shouldShowSystemNamespaces(),
       withInactiveStatus: true,
     },
+    pollInterval: POLL_INTERVAL,
   });
 
   React.useEffect(() => {

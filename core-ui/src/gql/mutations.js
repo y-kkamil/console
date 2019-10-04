@@ -28,7 +28,6 @@ export const CREATE_LIMIT_RANGE = gql`
       limitRange: $limitRange
     ) {
       name
-      dupa
     }
   }
 `;
@@ -45,7 +44,6 @@ export const CREATE_RESOURCE_QUOTA = gql`
       resourceQuota: $resourceQuota
     ) {
       name
-      dupa
     }
   }
 `;

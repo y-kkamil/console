@@ -15,6 +15,7 @@ import {
   CREATE_NAMESPACE,
   CREATE_RESOURCE_QUOTA,
 } from '../../gql/mutations';
+import extractGraphQlErrors from '../../shared/graphqlErrorExtractor';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -213,6 +214,30 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
   </FormSet>
 );
 
+function getResourceQuotaMutationVars(memoryQuotas, namespaceName) {
+  return memoryQuotas
+    ? {
+        variables: {
+          ...memoryQuotas,
+          namespace: namespaceName,
+          name: `${namespaceName}-res-quota`,
+        },
+      }
+    : null;
+}
+
+function getLimitRangeMutationVars(containerLimits, namespaceName) {
+  return containerLimits
+    ? {
+        variables: {
+          ...containerLimits,
+          namespace: namespaceName,
+          name: `${namespaceName}-limit-range`,
+        },
+      }
+    : null;
+}
+
 const CreateNamespaceForm = ({
   formElementRef,
   onChange,
@@ -306,57 +331,30 @@ const CreateNamespaceForm = ({
         const additionalRequests = [];
         if (memoryQuotas)
           additionalRequests.push(
-            createResourceQuotaMutation({
-              variables: {
-                ...memoryQuotas,
-                namespace: namespaceData.name,
-                name: `${namespaceData.name}-res-quota`,
-              },
-            }),
+            createResourceQuotaMutation(
+              getResourceQuotaMutationVars(memoryQuotas, namespaceData.name),
+            ),
           );
+
         if (containerLimits)
           additionalRequests.push(
-            createLimitRangeMutation({
-              variables: {
-                ...containerLimits,
-                namespace: namespaceData.name,
-                name: `${namespaceData.name}-limit-range`,
-              },
-            }),
+            createLimitRangeMutation(
+              getLimitRangeMutationVars(containerLimits, namespaceData.name),
+            ),
           );
+
         await Promise.all(additionalRequests);
         onCompleted('Success', `Namespace ${namespaceData.name} created.`);
       } catch (e) {
-        const { graphQLErrors, networkError } = e;
-        let errorToDisplay = [];
-        if (networkError) {
-          errorToDisplay = networkError.result.errors
-            .map(({ message }) => message)
-            .join(' | ');
-        } else if (graphQLErrors) {
-          errorToDisplay = graphQLErrors
-            .map(({ message }) => message)
-            .join(' | ');
-        }
-
+        const errorToDisplay = extractGraphQlErrors(e);
         onError(
-          'WARNING',
+          'Warning',
           `Your namespace ${namespaceData.name} was created successfully, however, Limit Range and/or Resource Quota creation failed. You have to create them manually later: ${errorToDisplay}`,
           true,
         );
       }
     } catch (e) {
-      const { graphQLErrors, networkError } = e;
-      let errorToDisplay = [];
-      if (networkError) {
-        errorToDisplay = networkError.result.errors
-          .map(({ message }) => message)
-          .join(' | ');
-      } else if (graphQLErrors) {
-        errorToDisplay = graphQLErrors
-          .map(({ message }) => message)
-          .join(' | ');
-      }
+      const errorToDisplay = extractGraphQlErrors(e);
       onError('ERROR', `Error while creating namespace: ${errorToDisplay}`);
     }
   }
