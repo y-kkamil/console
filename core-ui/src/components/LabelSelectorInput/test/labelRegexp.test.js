@@ -1,8 +1,11 @@
 import { labelRegexp } from '../LabelSelectorInput';
 
 describe('labelRegexp', () => {
+  console.log(labelRegexp);
   [
     'label=value',
+    'label=vAlUe',
+    'lAbEl=value',
     'label=valu3',
     'lab3l=value',
     'my-label=value',
@@ -41,6 +44,8 @@ describe('labelRegexp', () => {
     'domain_/label=value',
     'domain-/label=value',
     'domain./label=value',
+    'domain-.io/label=value',
+    'dOmAiN/label=value',
   ].forEach(label => {
     it(`doesn't match: '${label}`, () => {
       expect(labelRegexp.test(label)).toBe(false);
