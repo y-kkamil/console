@@ -1,6 +1,8 @@
 import CustomPropTypes from '../CustomPropTypes';
 import React from 'react';
 import PropTypes from 'prop-types';
+
+// secret is required to call validators directly
 import secret from 'prop-types/lib/ReactPropTypesSecret';
 
 import { createRef } from 'react';
