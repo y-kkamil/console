@@ -1,5 +1,7 @@
 import React from 'react';
 
+// TODO move to some shared place
+
 export const K8sNameField = ({ _ref, id, kind }) => (
   <>
     <label className="fd-form__label" htmlFor={id}>
