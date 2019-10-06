@@ -1,7 +1,11 @@
 import React from 'react';
-import CreateNamespaceForm from '../CreateNamespaceForm';
 import renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
+import { MockedProvider } from '@apollo/react-testing';
+import wait from 'waait';
+
+import CreateNamespaceForm from '../CreateNamespaceForm';
+import { CREATE_NAMESPACE } from '../../../gql/mutations';
 
 describe('CreateNamespaceForm', () => {
   it('Renders with minimal props', () => {
@@ -60,5 +64,75 @@ describe('CreateNamespaceForm', () => {
         .instance()
         .checkValidity(),
     ).toEqual(false);
+  });
+
+  it('Makes namespace creation request only, when no limits/quotas are provided', async () => {
+    const m = [
+      {
+        request: {
+          query: CREATE_NAMESPACE,
+          variables: { name: '', labels: {} },
+        },
+        result: jest.fn().mockReturnValue({ data: {} }),
+      },
+    ];
+
+    const onError = jest.fn();
+    const onCompleted = jest.fn();
+
+    const component = mount(
+      <MockedProvider mocks={m}>
+        <CreateNamespaceForm
+          onError={onError}
+          onCompleted={onCompleted}
+          formElementRef={{ current: null }}
+        />
+      </MockedProvider>,
+    );
+
+    const form = component.find('form');
+    form.simulate('submit');
+    await wait();
+
+    expect(m[0].result).toHaveBeenCalled();
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('Makes create namespace, limits, quotas requests, when all are provided', async () => {
+    const m = [
+      {
+        request: {
+          query: CREATE_NAMESPACE,
+          variables: { name: '', labels: {} },
+        },
+        result: jest.fn().mockReturnValue({ data: {} }),
+      },
+    ];
+
+    const onError = jest.fn();
+    const onCompleted = jest.fn();
+
+    const component = mount(
+      <MockedProvider mocks={m}>
+        <CreateNamespaceForm
+          onError={onError}
+          onCompleted={onCompleted}
+          formElementRef={{ current: null }}
+        />
+      </MockedProvider>,
+    );
+
+    const form = component.find('form');
+    const containerLimitsCheckbox = '#container-limits';
+
+    component
+      .find(containerLimitsCheckbox)
+      .simulate('change', { target: { checked: true } });
+
+    form.simulate('submit');
+    await wait();
+
+    expect(m[0].result).toHaveBeenCalled();
+    expect(onError).not.toHaveBeenCalled();
   });
 });
