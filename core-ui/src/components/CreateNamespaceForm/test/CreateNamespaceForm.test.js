@@ -73,7 +73,7 @@ describe('CreateNamespaceForm', () => {
     ).toEqual(false);
   });
 
-  xit('Makes Namespace creation request only, when no Limits/Quotas are provided', async () => {
+  it('Makes Namespace creation request only, when no Limits/Quotas are provided', async () => {
     const onError = jest.fn();
     const onCompleted = jest.fn();
     const ref = React.createRef();
@@ -109,7 +109,7 @@ describe('CreateNamespaceForm', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
-  xit('Makes create Namespace, Limits, Quotas requests, when all are provided', async () => {
+  it('Makes create Namespace, Limits, Quotas requests, when all are provided', async () => {
     const onError = jest.fn();
     const onCompleted = jest.fn();
     const ref = React.createRef();
