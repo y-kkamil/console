@@ -198,7 +198,7 @@ function getResourceQuotaMutationVars(memoryQuotas, namespaceName) {
         variables: {
           ...memoryQuotas,
           namespace: namespaceName,
-          name: `${namespaceName}-res-quota`,
+          name: `${namespaceName}`,
         },
       }
     : null;
@@ -210,7 +210,7 @@ function getLimitRangeMutationVars(containerLimits, namespaceName) {
         variables: {
           ...containerLimits,
           namespace: namespaceName,
-          name: `${namespaceName}-limit-range`,
+          name: `${namespaceName}`,
         },
       }
     : null;
