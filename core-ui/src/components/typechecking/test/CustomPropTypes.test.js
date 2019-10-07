@@ -1,62 +1,58 @@
 import CustomPropTypes from '../CustomPropTypes';
+import React from 'react';
+import PropTypes from 'prop-types';
+
+// secret is required to call validators directly
+import secret from 'prop-types/lib/ReactPropTypesSecret';
+
 import { createRef } from 'react';
+
+function assertPasses(validator, props) {
+  expect(
+    validator(props, 'testprop', 'testcomponent', 'prop', '', secret),
+  ).toBe(null);
+}
+
+function assertFails(validator, props) {
+  expect(
+    validator(props, 'testprop', 'testcomponent', 'prop', '', secret),
+  ).toBeInstanceOf(Error);
+}
 
 describe('CustomPropTypes', () => {
   describe('elementRef', () => {
-    it('Returns null for a valid ref', () => {
-      const props = {
-        testprop: createRef(null),
-      };
-
-      expect(
-        CustomPropTypes.elementRef(props, 'testprop', 'testcomponent'),
-      ).toBe(null);
+    it('Passes on empty ref', () => {
+      assertPasses(CustomPropTypes.elementRef, {
+        testprop: createRef(),
+      });
     });
 
-    it('Returns an error for string', () => {
-      const props = {
+    it('Passes on element ref', () => {
+      const ref = createRef();
+      ref.current = <div />;
+      assertPasses(CustomPropTypes.elementRef, {
+        testprop: ref,
+      });
+    });
+
+    it('Fails on non element ref', () => {
+      const ref = createRef();
+      ref.current = 'string';
+      assertFails(CustomPropTypes.elementRef, {
+        testprop: ref,
+      });
+    });
+
+    it('Fails on string', () => {
+      assertFails(CustomPropTypes.elementRef, {
         testprop: 'somestring',
-      };
-
-      expect(
-        CustomPropTypes.elementRef(props, 'testprop', 'testcomponent'),
-      ).toMatchSnapshot();
+      });
     });
 
-    it('Returns an error for null', () => {
-      const props = {
+    it('Fails on null if required', () => {
+      assertFails(CustomPropTypes.elementRef.isRequired, {
         testprop: 'somestring',
-      };
-
-      expect(
-        CustomPropTypes.elementRef(props, 'testprop', 'testcomponent'),
-      ).toMatchSnapshot();
-    });
-  });
-
-  describe('oneOfProps', () => {
-    const allProps = ['a', 'b', 'c'];
-
-    it('Returns no error if one of properties is provided', () => {
-      expect(
-        CustomPropTypes.oneOfProps({ a: 123 }, 'componentA', allProps),
-      ).toBe(undefined);
-    });
-
-    it('Returns no error all props are provided', () => {
-      expect(
-        CustomPropTypes.oneOfProps(
-          { a: 123, b: 55, c: 6436 },
-          'componentA',
-          allProps,
-        ),
-      ).toBe(undefined);
-    });
-
-    it('Returns error no prop is provided', () => {
-      expect(
-        CustomPropTypes.oneOfProps({}, 'componentA', allProps),
-      ).toMatchSnapshot();
+      });
     });
   });
 });

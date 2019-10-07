@@ -4,7 +4,14 @@ import { Token } from 'fundamental-react/Token';
 
 //TODO: move this component to a shared "place"
 
-const labelRegexp = /[a-z0-9A-Z-_.]+=[a-z0-9A-Z-_.]+/;
+const domainSegmentRegexp = '([a-z0-9]([a-z0-9-_]{0,61}[a-z0-9])?)';
+
+// Dot needs to be escaped for regexp
+const domainRegexp = `(${domainSegmentRegexp}\\.)*${domainSegmentRegexp}`;
+const nameAndValueRegexp = '[a-z0-9A-Z]([a-z0-9A-Z-_\\.]{0,61}[a-z0-9A-Z])?';
+export const labelRegexp = new RegExp(
+  `^((${domainRegexp})/)?${nameAndValueRegexp}=${nameAndValueRegexp}$`,
+);
 
 export const Label = ({ text, onClick }) => (
   <Token

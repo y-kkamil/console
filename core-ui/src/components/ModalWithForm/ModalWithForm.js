@@ -69,7 +69,7 @@ const ModalWithForm = ({
         {...props}
         show={isOpen}
         actions={
-          <React.Fragment>
+          <>
             <Button
               onClick={() => {
                 setOpenStatus(false);
@@ -95,7 +95,7 @@ const ModalWithForm = ({
             >
               Create
             </Button>
-          </React.Fragment>
+          </>
         }
         onClose={() => {
           setOpenStatus(false);

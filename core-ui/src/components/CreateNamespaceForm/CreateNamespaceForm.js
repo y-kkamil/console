@@ -10,12 +10,15 @@ import {
 } from 'fundamental-react';
 import './CreateNamespaceForm.scss';
 import LabelSelectorInput from '../LabelSelectorInput/LabelSelectorInput';
+
 import {
   CREATE_LIMIT_RANGE,
   CREATE_NAMESPACE,
   CREATE_RESOURCE_QUOTA,
 } from '../../gql/mutations';
 import extractGraphQlErrors from '../../shared/graphqlErrorExtractor';
+
+import { K8sNameField } from './K8sNameField';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -25,31 +28,6 @@ const ISTIO_INJECTION_LABEL = 'istio-injection=disabled';
 function convertLabelsArrayToObject(labelsArray) {
   return Object.fromEntries(labelsArray.map(label => label.split('=')));
 }
-
-const NameField = ({ reference }) => (
-  <>
-    <label className="fd-form__label" htmlFor="runtime-name">
-      Name *
-      <InlineHelp
-        placement="bottom-right"
-        text="
-            The name must consist of lower case alphanumeric characters or dashes, 
-            and must start and end with an alphanumeric character (e.g. 'my-name1').
-            "
-      />
-    </label>
-    <input
-      className="fd-form__control"
-      ref={reference}
-      type="text"
-      id="runtime-name"
-      placeholder="Namespace name"
-      aria-required="true"
-      required
-      pattern="^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
-    />
-  </>
-);
 
 const DisableSidecarField = ({ onChange }) => {
   return (
@@ -363,7 +341,11 @@ const CreateNamespaceForm = ({
     <form onChange={onChange} ref={formElementRef} onSubmit={handleFormSubmit}>
       <div className="fd-form__set">
         <div className="fd-form__item">
-          <NameField reference={formValues.name} />
+          <K8sNameField
+            _ref={formValues.name}
+            id="runtime-name"
+            kind="Namespace"
+          />
         </div>
         <div className="fd-form__item">
           <label className="fd-form__label">Labels</label>
