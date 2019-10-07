@@ -5,14 +5,14 @@ import { MockedProvider } from '@apollo/react-testing';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 
+import CreateNamespaceForm from '../CreateNamespaceForm';
+
 import {
   createNamespaceSuccessfulMock,
   createResourceQuotaSuccessfulMock,
   createLimitRangeSuccessfulMock,
   createResourceQuotaErrorMock,
 } from './gqlMocks';
-
-import CreateNamespaceForm from '../CreateNamespaceForm';
 
 describe('CreateNamespaceForm', () => {
   it('Renders with minimal props', () => {
@@ -194,6 +194,6 @@ describe('CreateNamespaceForm', () => {
       expect.anything(),
       expect.anything(),
       true,
-    ); //with third param true
+    );
   });
 });

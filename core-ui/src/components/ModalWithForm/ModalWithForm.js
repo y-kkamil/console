@@ -8,6 +8,7 @@ import { useNotification } from '../../contexts/notifications';
 
 const ModalWithForm = ({
   performRefetch,
+  sendNotification,
   title,
   button,
   renderForm,
@@ -55,6 +56,7 @@ const ModalWithForm = ({
 
     performRefetch();
   };
+
   return (
     <div>
       <Button
