@@ -29,7 +29,7 @@ export const NotificationProvider = ({
           setState({ isOpen: true, notificationProps });
           if (notificationProps.autoClose) {
             setTimeout(() => {
-              setState({ isOpen: false });
+              closeNotification();
             }, visibilityTime);
           }
         },
