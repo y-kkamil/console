@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../typechecking/CustomPropTypes';
+import { InlineHelp } from 'fundamental-react';
 
 // TODO move to some shared place
 
@@ -30,7 +31,7 @@ export const K8sNameField = ({ _ref, id, kind }) => (
 );
 
 K8sNameField.propTypes = {
-  _ref: CustomPropTypes.ref,
+  _ref: CustomPropTypes.elementRef,
   id: PropTypes.string,
   kind: PropTypes.string,
 };

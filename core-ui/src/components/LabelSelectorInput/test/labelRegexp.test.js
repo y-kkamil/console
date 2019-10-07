@@ -1,7 +1,6 @@
 import { labelRegexp } from '../LabelSelectorInput';
 
 describe('labelRegexp', () => {
-  console.log(labelRegexp);
   [
     'label=value',
     'label=vAlUe',
