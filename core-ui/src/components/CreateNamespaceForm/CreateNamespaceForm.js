@@ -305,35 +305,45 @@ const CreateNamespaceForm = ({
     try {
       await createNamespaceMutation({ variables: namespaceData });
 
-      try {
-        const additionalRequests = [];
-        if (memoryQuotas)
-          additionalRequests.push(
-            createResourceQuotaMutation(
-              getResourceQuotaMutationVars(memoryQuotas, namespaceData.name),
-            ),
-          );
-
-        if (containerLimits)
-          additionalRequests.push(
-            createLimitRangeMutation(
-              getLimitRangeMutationVars(containerLimits, namespaceData.name),
-            ),
-          );
-
-        await Promise.all(additionalRequests);
-        onCompleted('Success', `Namespace ${namespaceData.name} created.`);
-      } catch (e) {
-        const errorToDisplay = extractGraphQlErrors(e);
-        onError(
-          'Warning',
-          `Your namespace ${namespaceData.name} was created successfully, however, Limit Range and/or Resource Quota creation failed. You have to create them manually later: ${errorToDisplay}`,
-          true,
+      const additionalRequests = [];
+      if (memoryQuotas) {
+        additionalRequests.push(
+          createResourceQuotaMutation(
+            getResourceQuotaMutationVars(memoryQuotas, namespaceData.name),
+          ),
         );
       }
+
+      if (containerLimits) {
+        additionalRequests.push(
+          createLimitRangeMutation(
+            getLimitRangeMutationVars(containerLimits, namespaceData.name),
+          ),
+        );
+      }
+
+      const additionalResults = await Promise.allSettled(additionalRequests);
+      const rejectedRequest = additionalResults.find(
+        result => result.status === 'rejected',
+      );
+      if (rejectedRequest) {
+        const err = new Error(extractGraphQlErrors(rejectedRequest.reason));
+        err.additionalRequestFailed = true;
+        throw err;
+      }
+
+      onCompleted('Success', `Namespace ${namespaceData.name} created.`);
     } catch (e) {
-      const errorToDisplay = extractGraphQlErrors(e);
-      onError('ERROR', `Error while creating namespace: ${errorToDisplay}`);
+      if (e.additionalRequestFailed) {
+        onError(
+          'Warning',
+          `Your namespace ${namespaceData.name} was created successfully, however, Limit Range and/or Resource Quota creation failed. You have to create them manually later: ${e}`,
+          true,
+        );
+      } else {
+        const errorToDisplay = extractGraphQlErrors(e);
+        onError('ERROR', `Error while creating namespace: ${errorToDisplay}`);
+      }
     }
   }
 
