@@ -5,10 +5,13 @@ import { Token } from 'fundamental-react/Token';
 //TODO: move this component to a shared "place"
 
 const domainSegmentRegexp = '([a-z0-9]([a-z0-9-_]{0,61}[a-z0-9])?)';
+
+// Dot needs to be escaped for regexp
+// eslint-disable-next-line no-useless-escape
 const domainRegexp = `(${domainSegmentRegexp}\.)*${domainSegmentRegexp}`;
 const nameAndValueRegexp = '[a-z0-9A-Z]([a-z0-9A-Z-_.]{0,61}[a-z0-9A-Z])?';
 export const labelRegexp = new RegExp(
-  `^((${domainRegexp})\/)?${nameAndValueRegexp}=${nameAndValueRegexp}$`,
+  `^((${domainRegexp})/)?${nameAndValueRegexp}=${nameAndValueRegexp}$`,
 );
 
 export const Label = ({ text, onClick }) => (
