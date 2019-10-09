@@ -12,6 +12,7 @@ import {
   createResourceQuotaSuccessfulMock,
   createLimitRangeSuccessfulMock,
   createResourceQuotaErrorMock,
+  createNamespaceErrorMock,
 } from './gqlMocks';
 
 describe('CreateNamespaceForm', () => {
@@ -155,7 +156,7 @@ describe('CreateNamespaceForm', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
-  it('Shows warning, when Namespace was created, but Limit Range or Resource quota creation failed ', async () => {
+  it('Shows warning, when Namespace was created, but Limit Range or Resource quota creation failed', async () => {
     const onError = jest.fn();
     const onCompleted = jest.fn();
     const ref = React.createRef();
@@ -195,5 +196,43 @@ describe('CreateNamespaceForm', () => {
       expect.anything(),
       true,
     );
+  });
+
+  it('Exits with an error, and does not proceed with subsequent calls if create Namespace request failed', async () => {
+    const onError = jest.fn();
+    const onCompleted = jest.fn();
+    const ref = React.createRef();
+
+    const gqlMock = [
+      createNamespaceErrorMock(),
+      createResourceQuotaSuccessfulMock(),
+    ];
+
+    const component = mount(
+      <MockedProvider mocks={gqlMock} addTypename={false}>
+        <CreateNamespaceForm
+          onError={onError}
+          onCompleted={onCompleted}
+          formElementRef={ref}
+        />
+      </MockedProvider>,
+    );
+
+    const form = component.find('form');
+    const memoryQuotasCheckboxId = '#memory-quotas';
+
+    const memoryQuotasCheckbox = component.find(memoryQuotasCheckboxId);
+    memoryQuotasCheckbox.getDOMNode().checked = true;
+    memoryQuotasCheckbox.simulate('change', { target: { checked: true } });
+
+    form.simulate('submit');
+
+    await act(async () => {
+      await wait(100);
+    });
+
+    expect(onCompleted).not.toHaveBeenCalled();
+    expect(gqlMock[1].result).not.toHaveBeenCalled();
+    expect(onError).toHaveBeenCalledWith('ERROR', expect.anything());
   });
 });

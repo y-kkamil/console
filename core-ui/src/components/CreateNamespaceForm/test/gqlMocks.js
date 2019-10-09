@@ -54,6 +54,14 @@ const createNamespaceSuccessfulMock = () => ({
   result: jest.fn().mockReturnValue({ data: {} }),
 });
 
+const createNamespaceErrorMock = () => ({
+  request: {
+    query: CREATE_NAMESPACE,
+    variables: { name: '', labels: {} },
+  },
+  error: new Error(':('),
+});
+
 const createResourceQuotaErrorMock = () => ({
   request: {
     query: CREATE_RESOURCE_QUOTA,
@@ -77,5 +85,6 @@ export {
   createLimitRangeSuccessfulMock,
   createResourceQuotaSuccessfulMock,
   createNamespaceSuccessfulMock,
+  createNamespaceErrorMock,
   createResourceQuotaErrorMock,
 };
