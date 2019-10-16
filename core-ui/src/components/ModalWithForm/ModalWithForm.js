@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'fundamental-react';
 import LuigiClient from '@kyma-project/luigi-client';
+import { useNotification } from '../../contexts/notifications';
 
 //TODO: move this component to a shared "place"
 
@@ -14,49 +15,71 @@ const ModalWithForm = ({
   ...props
 }) => {
   const [isOpen, setOpen] = useState(false);
-
   const [isValid, setValid] = useState(false);
   const formElementRef = useRef(null);
+  const notificationManager = useNotification();
 
-  const setOpenStatus = status => {
+  function setOpenStatus(status) {
     if (status) {
       LuigiClient.uxManager().addBackdrop();
     } else {
       LuigiClient.uxManager().removeBackdrop();
     }
     setOpen(status);
-  };
+  }
 
-  const handleFormChanged = e => {
-    setValid(formElementRef.current.checkValidity());
+  function handleFormChanged(e) {
+    setValid(formElementRef.current.checkValidity()); // general form validity
     if (typeof e.target.reportValidity === 'function') {
       // for IE
       e.target.reportValidity();
     }
-  };
 
-  const handleFormError = (title, message) => {
-    sendNotification({
-      variables: {
-        content: message,
-        title: title,
-        color: '#BB0000',
-        icon: 'decline',
-      },
+    if (e.target.getAttribute('data-ignore-visual-validation')) {
+      return;
+    }
+
+    // current element validity
+    if (e.target.checkValidity()) {
+      e.target.classList.remove('is-invalid');
+    } else {
+      e.target.classList.add('is-invalid');
+    }
+  }
+
+  function handleFormError(title, message, isWarning) {
+    notificationManager.notify({
+      content: message,
+      title: title,
+      color: isWarning ? '#E9730C' : '#BB0000',
+      icon: 'decline',
+      autoClose: false,
     });
-  };
-  const handleFormSuccess = (title, message) => {
-    sendNotification({
-      variables: {
-        content: message,
-        title: title,
-        color: '#107E3E',
-        icon: 'accept',
-      },
+  }
+  function handleFormSuccess(title, message) {
+    notificationManager.notify({
+      content: message,
+      title: title,
+      color: '#107E3E',
+      icon: 'accept',
+      autoClose: true,
     });
 
     performRefetch();
-  };
+  }
+
+  function handleFormSubmit() {
+    const form = formElementRef.current;
+    if (
+      typeof form.reportValidity === 'function'
+        ? form.reportValidity()
+        : form.checkValidity() // IE workaround; HTML validation tooltips won't be visible
+    ) {
+      form.dispatchEvent(new Event('submit'));
+      setTimeout(() => setOpenStatus(false));
+    }
+  }
+
   return (
     <div>
       <Button
@@ -82,17 +105,7 @@ const ModalWithForm = ({
             </Button>
             <Button
               aria-disabled={!isValid}
-              onClick={() => {
-                const form = formElementRef.current;
-                if (
-                  typeof form.reportValidity === 'function'
-                    ? form.reportValidity()
-                    : form.checkValidity() // IE workaround; HTML validation tooltips won't be visible
-                ) {
-                  form.dispatchEvent(new Event('submit'));
-                  setOpenStatus(false);
-                }
-              }}
+              onClick={handleFormSubmit}
               option="emphasized"
             >
               Create
@@ -110,6 +123,7 @@ const ModalWithForm = ({
           onChange: handleFormChanged,
           onError: handleFormError,
           onCompleted: handleFormSuccess,
+          performManualSubmit: handleFormSubmit,
         })}
       </Modal>
     </div>
@@ -118,7 +132,6 @@ const ModalWithForm = ({
 
 ModalWithForm.propTypes = {
   performRefetch: PropTypes.func.isRequired,
-  sendNotification: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   button: PropTypes.exact({
     text: PropTypes.string.isRequired,
@@ -127,7 +140,6 @@ ModalWithForm.propTypes = {
   renderForm: PropTypes.func.isRequired,
 };
 ModalWithForm.defaultProps = {
-  sendNotification: () => {},
   performRefetch: () => {},
 };
 

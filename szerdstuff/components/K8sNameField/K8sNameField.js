@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { InlineHelp } from 'fundamental-react';
 
-export const K8sNameField = ({ _ref, id, kind }) => (
+export const K8sNameField = ({ _ref, id, kind, onKeyDown }) => (
   <>
     <label className="fd-form__label" htmlFor={id}>
       Name *
@@ -24,12 +24,14 @@ export const K8sNameField = ({ _ref, id, kind }) => (
       aria-required="true"
       required
       pattern="^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+      onKeyDown={onKeyDown}
     />
   </>
 );
 
 K8sNameField.propTypes = {
-  _ref: CustomPropTypes.elementRef,
+  _ref: CustomPropTypes.ref,
   id: PropTypes.string,
   kind: PropTypes.string,
+  onKeyDown: PropTypes.func,
 };
