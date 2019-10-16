@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "parcel build index.js --out-dir=build",
-    "start:kyma": "parcel watch index.js --out-dir=build"
+    "build": "webpack",
+    "start:kyma": "webpack --watch --config webpack-dev.config.js"
   },
   "author": "hasselhoff-team@kyma",
   "dependencies": {
@@ -17,6 +17,7 @@
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "babel-jest": "^24.9.0",
-    "parcel-bundler": "^1.12.4"
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
   }
 }
