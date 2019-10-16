@@ -6,7 +6,7 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: 'index.js',
     library: '',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
   },
   module: {
     rules: [
@@ -15,10 +15,10 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env', '@babel/react']
-        }
-      }
-    ]
+          presets: ['@babel/preset-env', '@babel/react'],
+        },
+      },
+    ],
   },
-  mode: 'development'
+  mode: 'development',
 };

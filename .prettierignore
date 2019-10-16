@@ -77,7 +77,7 @@ stats.html
 .rpt2_cache
 
 # symlinked shared components for react
-**/szerdstuff
+szerdstuff/build
 **/react-shared
 
 compass/public-luigi/luigi-core

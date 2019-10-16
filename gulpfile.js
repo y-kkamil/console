@@ -64,7 +64,7 @@ const ci = async dir => {
   );
 
   try {
-    await exec(`npm ci`, {
+    await exec(`pwd && which sh && npm ci`, {
       cwd: dir,
     });
   } catch (err) {
