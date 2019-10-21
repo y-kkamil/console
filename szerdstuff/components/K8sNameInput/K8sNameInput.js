@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { CustomPropTypes } from '../../typechecking/CustomPropTypes';
 import { InlineHelp } from 'fundamental-react';
 
-export const K8sNameField = ({ _ref, id, kind, onKeyDown }) => (
+export const K8sNameInput = ({ _ref, id, kind, onKeyDown }) => (
   <>
     <label className="fd-form__label" htmlFor={id}>
       Name *
@@ -29,7 +29,7 @@ export const K8sNameField = ({ _ref, id, kind, onKeyDown }) => (
   </>
 );
 
-K8sNameField.propTypes = {
+K8sNameInput.propTypes = {
   _ref: CustomPropTypes.ref,
   id: PropTypes.string,
   kind: PropTypes.string,
