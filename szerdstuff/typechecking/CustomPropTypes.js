@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 
-const CustomPropTypes = PropTypes.shape({ current: PropTypes.any });
+export const ref = PropTypes.shape({ current: PropTypes.any });
 
-export { CustomPropTypes };
+export default {
+  ref,
+};

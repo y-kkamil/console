@@ -6,6 +6,6 @@ import { GenericList } from './components/GenericList/GenericList';
 
 import { handleDelete } from './components/GenericList/actionHandlers/simpleDelete';
 
-import { CustomPropTypes } from './typechecking/CustomPropTypes';
+import CustomPropTypes from './typechecking/CustomPropTypes';
 
 export { CustomPropTypes, GenericList, K8sNameInput, handleDelete };
