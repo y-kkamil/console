@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import GenericList from '../../shared/components/GenericList/GenericList';
+import { GenericList } from 'react-shared';
+
 import CreateScenarios from './CreateScenario/CreateScenarioModal/CreateScenarioModal.container';
 
 class Scenarios extends React.Component {

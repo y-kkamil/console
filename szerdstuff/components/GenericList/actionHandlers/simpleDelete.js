@@ -16,7 +16,7 @@ function displayConfirmationMessage(entityType, entityName) {
   });
 }
 
-export default function handleDelete(
+export function handleDelete(
   entityType,
   entityId,
   entityName,

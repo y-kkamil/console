@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LuigiClient from '@kyma-project/luigi-client';
 
+import { GenericList } from 'react-shared';
+
 import StatusBadge from '../Shared/StatusBadge/StatusBadge';
-import GenericList from '../../shared/components/GenericList/GenericList';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../shared/constants';
-import handleDelete from '../../shared/components/GenericList/actionHandlers/simpleDelete';
+import { handleDelete } from 'react-shared';
 
 import ModalWithForm from '../../shared/components/ModalWithForm/ModalWithForm.container';
 import CreateRuntimeForm from './CreateRuntimeForm/CreateRuntimeForm.container';

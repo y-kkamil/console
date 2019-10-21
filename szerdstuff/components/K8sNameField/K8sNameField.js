@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustomPropTypes from '../../typechecking/CustomPropTypes';
+import { CustomPropTypes } from '../../typechecking/CustomPropTypes';
 import { InlineHelp } from 'fundamental-react';
 
 export const K8sNameField = ({ _ref, id, kind, onKeyDown }) => (

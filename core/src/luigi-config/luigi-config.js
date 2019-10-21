@@ -526,7 +526,7 @@ window.addEventListener('message', e => {
   }
   else if (e.data && e.data.msg === SHOW_SYSTEM_NAMESPACES_CHANGE_EVENT) {
     Luigi.customMessages().sendToAll({
-      id: SHOW_SYSTEM_NAMESPACES_CHANGE_EVENT, 
+      id: SHOW_SYSTEM_NAMESPACES_CHANGE_EVENT,
       showSystemNamespaces: e.data.showSystemNamespaces,
     });
   }

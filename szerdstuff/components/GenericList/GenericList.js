@@ -13,7 +13,7 @@ import {
 import { filterEntries } from './helpers';
 import { renderActionElement } from './internalRenderers';
 
-class GenericList extends React.Component {
+export class GenericList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -102,7 +102,6 @@ class GenericList extends React.Component {
     );
   }
 }
-export default GenericList;
 
 GenericList.propTypes = {
   title: PropTypes.string.isRequired,
