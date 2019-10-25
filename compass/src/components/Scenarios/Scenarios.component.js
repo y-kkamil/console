@@ -5,9 +5,20 @@ import { GenericList } from 'react-shared';
 import CreateScenarios from './CreateScenario/CreateScenarioModal/CreateScenarioModal.container';
 
 class Scenarios extends React.Component {
+  navigateToScenario(scenarioName) {
+    LuigiClient.linkManager().navigate(`details/${scenarioName}`);
+  }
+
   headerRenderer = () => ['Name'];
 
-  rowRenderer = scenario => [<span className="link">{scenario.name}</span>];
+  rowRenderer = scenario => [
+    <span
+      className="link"
+      onClick={() => this.navigateToScenario(scenario.name)}
+    >
+      {scenario.name}
+    </span>,
+  ];
 
   render() {
     const scenarioLabelDefinitionSchemaQuery = this.props.scenarioLabelSchema;
