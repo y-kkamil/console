@@ -8,6 +8,10 @@ module.exports = {
     library: '',
     libraryTarget: 'umd',
   },
+  externals: {
+    react: 'react',
+    'react-dom': 'react-dom',
+  },
   module: {
     rules: [
       {
