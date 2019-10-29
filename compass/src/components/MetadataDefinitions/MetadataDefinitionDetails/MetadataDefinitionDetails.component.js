@@ -15,7 +15,7 @@ import LuigiClient from '@kyma-project/luigi-client';
 import '../../../shared/styles/header.scss';
 import ResourceNotFound from '../../Shared/ResourceNotFound.component';
 import JSONEditorComponent from '../../Shared/JSONEditor';
-import handleDelete from 'react-shared';
+import { handleDelete } from 'react-shared';
 
 const Ajv = require('ajv');
 const ajv = new Ajv();
