@@ -15,6 +15,8 @@ resolve:
 
 .PHONY: test
 test:
+    pwd
+    ls -la
 	CI=true npm run test
 
 .PHONY: build
