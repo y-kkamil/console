@@ -17,7 +17,7 @@ resolve:
 test:
 	pwd
 	ls -la src
-	CI=true npm run test
+	CI=true NODE_PATH=src npm run test
 
 .PHONY: build
 build:
