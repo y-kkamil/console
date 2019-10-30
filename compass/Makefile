@@ -6,18 +6,15 @@ all: resolve test pre-build-image build-image push-image
 ci-pr: resolve test pre-build-image pull-licenses build-image push-image
 ci-master:  resolve test pre-build-image pull-licenses build-image push-image
 
-
 .PHONY: resolve
 resolve:
-	cd .. && npm ci
+	cd .. && npm ci && cd szerdstuff && npm ci && npm run build
 	cd ../components/react && npm ci && npm run build
 	npm ci
 
 .PHONY: test
 test:
-	pwd
-	ls -la src
-	CI=true NODE_PATH=src npm run test
+	CI=true npm run test
 
 .PHONY: build
 build:
