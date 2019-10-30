@@ -2,9 +2,17 @@ IMG_NAME = compass-ui
 IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMG_NAME)
 TAG = $(DOCKER_TAG)
 
-all: resolve test pre-build-image build-image push-image
-ci-pr: resolve test pre-build-image pull-licenses build-image push-image
-ci-master:  resolve test pre-build-image pull-licenses build-image push-image
+all: root-pr resolve test pre-build-image build-image push-image
+ci-pr: root-pr resolve test pre-build-image pull-licenses build-image push-image
+ci-master: root-master resolve test pre-build-image pull-licenses build-image push-image
+
+.PHONY: root-pr
+root-pr:
+	make -C "../" ci-pr
+
+.PHONY: root-master
+root-master:
+	make -C "../" ci-master
 
 .PHONY: resolve
 resolve:
