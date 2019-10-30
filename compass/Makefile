@@ -9,7 +9,7 @@ ci-master:  resolve test pre-build-image pull-licenses build-image push-image
 .PHONY: resolve
 resolve:
 	cd .. && npm ci && cd szerdstuff && npm ci && npm run build
-	cd ../components/react && npm ci && npm run build
+	cd ../../components/react && npm ci && npm run build
 	npm ci
 
 .PHONY: test
