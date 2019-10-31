@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Token } from 'fundamental-react/Token';
 import { Counter } from 'fundamental-react/Badge';
 import LuigiClient from '@kyma-project/luigi-client';
 
@@ -8,35 +7,11 @@ import CreateApplicationModal from './CreateApplicationModal/CreateApplicationMo
 import StatusBadge from '../Shared/StatusBadge/StatusBadge';
 import { GenericList, handleDelete } from 'react-shared';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../shared/constants';
+import LabelsDisplay from './../Shared/LabelDisplay';
 
 class Applications extends React.Component {
   static propTypes = {
     applications: PropTypes.object.isRequired,
-  };
-
-  createLabels = labels => {
-    const separatedLabels = [];
-    /* eslint-disable no-unused-vars */
-    for (const key in labels) {
-      if (labels.hasOwnProperty(key) && labels[key].length > 0) {
-        labels[key].forEach(lab => {
-          if (lab === 'undefined') {
-            separatedLabels.push(key);
-          } else {
-            separatedLabels.push(key + '=' + lab);
-          }
-        });
-      }
-    }
-    /* eslint-enable no-unused-vars */
-    return separatedLabels.map((label, id) => (
-      <Token
-        key={id}
-        className="y-fd-token y-fd-token--no-button y-fd-token--gap"
-      >
-        {label}
-      </Token>
-    ));
   };
 
   headerRenderer = applications => [
@@ -58,9 +33,11 @@ class Applications extends React.Component {
       {application.name}
     </span>,
     application.description ? application.description : EMPTY_TEXT_PLACEHOLDER,
-    application.labels && Object.keys(application.labels).length
-      ? this.createLabels(application.labels)
-      : EMPTY_TEXT_PLACEHOLDER,
+    application.labels && Object.keys(application.labels).length ? (
+      <LabelsDisplay labels={application.labels} />
+    ) : (
+      EMPTY_TEXT_PLACEHOLDER
+    ),
     <Counter>{application.apis.totalCount}</Counter>,
     <Counter>{application.eventAPIs.totalCount}</Counter>,
     <StatusBadge
