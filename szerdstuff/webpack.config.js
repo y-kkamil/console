@@ -12,6 +12,7 @@ module.exports = function(env) {
     externals: {
       react: 'react',
       'react-dom': 'react-dom',
+      'fundamental-react': 'fundamental-react',
     },
     module: {
       rules: [
