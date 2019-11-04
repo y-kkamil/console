@@ -16,7 +16,7 @@ root-master:
 
 .PHONY: resolve
 resolve:
-	cd .. && npm ci && cd szerdstuff && npm ci && npm run build
+	cd .. && npm ci && cd shared && npm ci && npm run build
 	cd ../components/react && npm ci && npm run build
 	npm ci
 

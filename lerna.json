@@ -11,6 +11,6 @@
     "lambda",
     "logging",
     "core-ui",
-    "szerdstuff"
+    "shared"
   ]
 }

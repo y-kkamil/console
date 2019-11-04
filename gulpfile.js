@@ -17,7 +17,7 @@ const libraries = [
   'components/shared',
   'components/react',
   'components/generic-documentation',
-  'szerdstuff',
+  'shared',
 ];
 
 // Installing libraries
