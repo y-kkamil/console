@@ -1,6 +1,3 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-
 import { K8sNameInput } from './components/K8sNameInput/K8sNameInput';
 import { GenericList } from './components/GenericList/GenericList';
 
