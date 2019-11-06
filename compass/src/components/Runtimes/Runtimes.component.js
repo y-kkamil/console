@@ -5,7 +5,6 @@ import LuigiClient from '@kyma-project/luigi-client';
 import StatusBadge from '../Shared/StatusBadge/StatusBadge';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../shared/constants';
 import { handleDelete, GenericList } from 'react-shared';
-import LabelsDisplay from './../Shared/LabelDisplay';
 import ScenariosDisplay from './../Shared/ScenariosDisplay/ScenariosDisplay';
 
 import ModalWithForm from '../../shared/components/ModalWithForm/ModalWithForm.container';

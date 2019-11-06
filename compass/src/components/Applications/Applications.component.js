@@ -7,7 +7,6 @@ import CreateApplicationModal from './CreateApplicationModal/CreateApplicationMo
 import StatusBadge from '../Shared/StatusBadge/StatusBadge';
 import { GenericList, handleDelete } from 'react-shared';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../shared/constants';
-import LabelsDisplay from './../Shared/LabelDisplay';
 import ScenariosDisplay from './../Shared/ScenariosDisplay/ScenariosDisplay';
 
 class Applications extends React.Component {
