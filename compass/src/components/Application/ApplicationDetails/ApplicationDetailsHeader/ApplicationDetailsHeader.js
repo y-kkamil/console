@@ -10,6 +10,11 @@ import { handleDelete } from 'react-shared';
 import PanelEntry from '../../../../shared/components/PanelEntry/PanelEntry.component';
 import '../../../../shared/styles/header.scss';
 
+import ModalWithForm from './../../../../shared/components/ModalWithForm/ModalWithForm.container';
+import UpdateApplicationForm from './../UpdateApplicationForm/UpdateApplicationForm.container';
+
+import { ApplicationQueryContext } from './../ApplicationDetails.component';
+
 function navigateToApplications() {
   LuigiClient.linkManager()
     .fromContext('tenant')
@@ -17,11 +22,7 @@ function navigateToApplications() {
 }
 
 function connectApplication(applicationId) {
-  console.log('todo connect (#1042)', applicationId);
-}
-
-function editApplication(applicationId) {
-  console.log('todo edit (#1042)', applicationId);
+  console.log('todo connect', applicationId);
 }
 
 class ApplicationDetailsHeader extends React.Component {
@@ -57,9 +58,19 @@ class ApplicationDetailsHeader extends React.Component {
                 Connect Application
               </Button>
             )}
-            <Button onClick={() => editApplication(id)} option="light">
-              Edit
-            </Button>
+            <ApplicationQueryContext.Consumer>
+              {applicationQuery => (
+                <ModalWithForm
+                  title="Update Application"
+                  button={{ text: 'Edit', option: 'light' }}
+                  confirmText="Update"
+                  initialIsValid={true}
+                  performRefetch={applicationQuery.refetch}
+                >
+                  <UpdateApplicationForm application={this.props.application} />
+                </ModalWithForm>
+              )}
+            </ApplicationQueryContext.Consumer>
             <Button
               onClick={() => {
                 handleDelete(
