@@ -51,8 +51,8 @@ class CreateApplicationModal extends React.Component {
             ? { scenarios: selectedScenarios }
             : {},
       },
-      scenariosToSelect: scenariosToSelect,
-      selectedScenarios: selectedScenarios,
+      scenariosToSelect,
+      selectedScenarios,
     });
   };
 
