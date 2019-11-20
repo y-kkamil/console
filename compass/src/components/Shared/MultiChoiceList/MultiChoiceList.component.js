@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Button, Dropdown, Icon } from '@kyma-project/react-components';
 import { Menu } from 'fundamental-react';
 import './style.scss';
-import { areArraysEqual } from '../../../shared/utility';
 
 MultiChoiceList.propTypes = {
   placeholder: PropTypes.string,
