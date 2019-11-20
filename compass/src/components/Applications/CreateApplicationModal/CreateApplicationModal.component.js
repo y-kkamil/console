@@ -307,7 +307,7 @@ class CreateApplicationModal extends React.Component {
 
     return (
       <Modal
-        id="create-application-modal"
+        width={'681px'}
         title="Create application"
         type={'emphasized'}
         modalOpeningComponent={createApplicationButton}
