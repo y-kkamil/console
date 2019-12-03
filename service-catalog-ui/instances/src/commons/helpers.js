@@ -142,6 +142,7 @@ export class DocsProcessor {
 }
 
 function getServiceClass(instance) {
+  //instance is undefindd seometimes (when reloading on not exisiting)
   return instance.serviceClass
     ? instance.serviceClass
     : instance.clusterServiceClass;
@@ -149,10 +150,16 @@ function getServiceClass(instance) {
 
 export function isAddon(instance) {
   const serviceClass = getServiceClass(instance);
+  if (!serviceClass) {
+    return true;
+  }
   return serviceClass.labels && serviceClass.labels.local === 'true';
 }
 
 export function isService(instance) {
   const serviceClass = getServiceClass(instance);
+  if (!serviceClass) {
+    return false;
+  }
   return !serviceClass.labels || serviceClass.labels.local !== 'true';
 }

@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep';
 
-export const handleInstanceEvent = (obj = {}, event = {}) => {
+export const handleInstanceEventOnList = (obj = {}, event = {}) => {
   const currentItems = obj.serviceInstances || [];
   const instance = event.serviceInstance;
   if (!instance) {
@@ -40,6 +40,35 @@ export const handleInstanceEvent = (obj = {}, event = {}) => {
   }
 
   return { ...obj, serviceInstances: result };
+};
+
+export const handleInstanceEventOnDetails = (prevState = {}, event = {}) => {
+  const currentInstance = prevState.serviceInstance;
+  const eventInstance = event.serviceInstance;
+
+  if (!currentInstance || !eventInstance) {
+    return prevState;
+  }
+
+  if (currentInstance.name !== eventInstance.name) {
+    return prevState;
+  }
+
+  if (event.type === 'DELETE') {
+    debugger;
+    return {
+      serviceInstance: {
+        ...eventInstance,
+        status: {
+          type: 'DELETED',
+          message:
+            'This Service Instance has been deleted and is not available anymore.',
+        },
+      },
+    };
+  }
+
+  return { serviceInstance: { ...eventInstance } };
 };
 
 export const handleServiceBindingUsageEvent = (

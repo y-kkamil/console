@@ -56,7 +56,9 @@ const ServiceInstanceHeader = ({
 
       <Toolbar
         title={serviceInstance.name}
-        description={instanceClass.description}
+        description={
+          instanceClass ? instanceClass.description : 'No description available'
+        }
         nowrap="true"
       >
         <Modal
