@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
+import { serviceInstanceConstants } from '../../variables';
 
 export const handleInstanceEventOnList = (obj = {}, event = {}) => {
   const currentItems = obj.serviceInstances || [];
@@ -61,8 +62,7 @@ export const handleInstanceEventOnDetails = (prevState = {}, event = {}) => {
         ...eventInstance,
         status: {
           type: 'DELETED',
-          message:
-            'This Service Instance has been deleted and is not available anymore.',
+          message: serviceInstanceConstants.instanceDeleted,
         },
       },
     };

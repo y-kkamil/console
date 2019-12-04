@@ -26,7 +26,6 @@ import {
 } from '../../queries/subscriptions';
 import {
   handleInstanceEventOnDetails,
-  handleInstanceEventOnList,
   handleServiceBindingEvent,
   handleServiceBindingUsageEvent,
 } from '../../store/ServiceInstances/events';

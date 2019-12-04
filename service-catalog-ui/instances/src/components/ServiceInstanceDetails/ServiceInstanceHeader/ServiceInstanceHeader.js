@@ -35,7 +35,9 @@ const ServiceInstanceHeader = ({
       },
     });
     setTimeout(() => {
-      history.goBack();
+      LuigiClient.linkManager()
+        .fromContext('namespaces')
+        .navigate('cmf-instances');
     }, 100);
   };
 
@@ -57,7 +59,9 @@ const ServiceInstanceHeader = ({
       <Toolbar
         title={serviceInstance.name}
         description={
-          instanceClass ? instanceClass.description : 'No description available'
+          instanceClass
+            ? instanceClass.description
+            : serviceInstanceConstants.noDescription
         }
         nowrap="true"
       >
