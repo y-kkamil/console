@@ -142,7 +142,6 @@ export class DocsProcessor {
 }
 
 function getServiceClass(instance) {
-  //instance is undefindd seometimes (when reloading on not exisiting)
   return instance.serviceClass
     ? instance.serviceClass
     : instance.clusterServiceClass;
