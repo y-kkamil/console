@@ -12,7 +12,7 @@ ScenarioDetails.propTypes = {
 };
 
 export default function ScenarioDetails({ scenarioName }) {
-  const [applicationsCount, setApplicationsCount] = useState(null);
+  const [applicationsCount, setApplicationsCount] = useState(0);
 
   return (
     <ScenarioNameContext.Provider value={scenarioName}>

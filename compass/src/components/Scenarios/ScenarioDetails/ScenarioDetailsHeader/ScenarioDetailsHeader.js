@@ -52,14 +52,6 @@ export default function ScenarioDetailsHeader({ applicationsCount }) {
   }
 
   const canDelete = () => {
-    console.log(
-      'R: ',
-      nonDeletableScenarioNames.includes(scenarioName) ||
-        applicationsCount === 0,
-      nonDeletableScenarioNames.includes(scenarioName),
-      applicationsCount === 0,
-      applicationsCount,
-    );
     return (
       nonDeletableScenarioNames.includes(scenarioName) ||
       applicationsCount !== 0

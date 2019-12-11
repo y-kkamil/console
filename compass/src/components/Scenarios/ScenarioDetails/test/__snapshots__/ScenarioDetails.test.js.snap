@@ -5,7 +5,7 @@ exports[`ScenarioDetailsHeader Renders with minimal props 1`] = `
   value="scenario"
 >
   <ScenarioDetailsHeader
-    applicationsCount={null}
+    applicationsCount={0}
   />
   <ScenarioApplications
     updateApplicationsCount={[Function]}

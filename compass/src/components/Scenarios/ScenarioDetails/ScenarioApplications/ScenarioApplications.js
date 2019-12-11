@@ -44,7 +44,7 @@ export default function ScenarioApplications({ updateApplicationsCount }) {
     return <p>`Error! ${error.message}`;</p>;
   }
 
-  // updateApplicationsCount(applicationsForScenario.applications.totalCount);
+  updateApplicationsCount(applicationsForScenario.applications.totalCount);
 
   const deleteHandler = async application => {
     const showSuccessNotification = applicationName => {
@@ -77,7 +77,9 @@ export default function ScenarioApplications({ updateApplicationsCount }) {
       async () => {
         showSuccessNotification(application.name);
         await refetchApplications();
-        // updateApplicationsCount(applicationsForScenario.applications.totalCount);
+        updateApplicationsCount(
+          applicationsForScenario.applications.totalCount,
+        );
       },
     );
   };
