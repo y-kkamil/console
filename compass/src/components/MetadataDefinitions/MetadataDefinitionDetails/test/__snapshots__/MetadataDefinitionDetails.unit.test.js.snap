@@ -79,16 +79,17 @@ Array [
           className="fd-panel__actions"
         >
           <div
-            className="fd-form__item fd-form__item--check"
+            className="fd-form-item"
           >
             <label
-              className="fd-form__label"
+              className="fd-form-label"
             >
               <span
-                className="fd-toggle fd-form__control"
+                className="fd-toggle"
               >
                 <input
                   checked={false}
+                  className="fd-toggle__input"
                   onChange={[Function]}
                   type="checkbox"
                 />
@@ -97,6 +98,7 @@ Array [
                   role="presentation"
                 />
               </span>
+              
             </label>
           </div>
         </div>

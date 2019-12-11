@@ -17,7 +17,7 @@ export default function ScenarioApplications({ updateApplicationsCount }) {
   const scenarioName = useContext(ScenarioNameContext);
   const [sendNotification] = useMutation(SEND_NOTIFICATION);
 
-  const {
+  let {
     data: applicationsForScenario,
     error,
     loading,
@@ -75,11 +75,12 @@ export default function ScenarioApplications({ updateApplicationsCount }) {
       undefined,
       scenarioName,
       async () => {
-        showSuccessNotification(application.name);
-        await refetchApplications();
+        const refetched = await refetchApplications();
+        applicationsForScenario = refetched.data;
         updateApplicationsCount(
           applicationsForScenario.applications.totalCount,
         );
+        showSuccessNotification(application.name);
       },
     );
   };

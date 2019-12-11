@@ -56,8 +56,8 @@ const CreateRuntimeForm = ({
     <form
       onChange={onChange}
       ref={formElementRef}
-      style={{ width: '30em' }}
       onSubmit={handleFormSubmit}
+      className="create-runtime-form"
     >
       <div className="fd-form__set">
         <div className="fd-form__item">{nameField()}</div>
