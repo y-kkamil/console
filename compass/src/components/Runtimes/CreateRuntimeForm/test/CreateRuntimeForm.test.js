@@ -2,7 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import CreateRuntimeForm from '../CreateRuntimeForm.container';
-import { MockedProvider } from 'react-apollo/test-utils';
+import { MockedProvider } from '@apollo/react-testing';
 
 describe('CreateRuntimeForm', () => {
   const emptyFn = () => {};

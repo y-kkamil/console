@@ -1,4 +1,5 @@
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { compose } from 'recompose';
 
 import { CREATE_APPLICATION_MUTATION, CHECK_APPLICATION_EXISTS } from '../gql';
 import { SEND_NOTIFICATION } from '../../../gql';

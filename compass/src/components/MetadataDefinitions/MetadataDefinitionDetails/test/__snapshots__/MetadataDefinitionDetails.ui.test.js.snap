@@ -1,5 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MetadataDefinitionDetails UI Renders the name  1`] = `"Warning: Each child in a list should have a unique \\"key\\" prop. See https://fb.me/react-warning-keys for more information.%s"`;
+exports[`MetadataDefinitionDetails UI Renders the name  1`] = `
+"Warning: An update to %s inside a test was not wrapped in act(...).
 
-exports[`MetadataDefinitionDetails UI The schema is not provided Renders panel with toggle set to off 1`] = `"Warning: Each child in a list should have a unique \\"key\\" prop. See https://fb.me/react-warning-keys for more information.%s"`;
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act%s"
+`;
+
+exports[`MetadataDefinitionDetails UI The schema is not provided Renders panel with toggle set to off 1`] = `
+"Warning: An update to %s inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act%s"
+`;

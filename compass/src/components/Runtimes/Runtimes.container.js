@@ -1,4 +1,5 @@
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { compose } from 'recompose';
 import { GET_RUNTIMES, ADD_RUNTIME, DELETE_RUNTIME } from './gql';
 
 import Runtimes from './Runtimes.component';

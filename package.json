@@ -59,7 +59,7 @@
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-apollo": "2.5.8",
+    "react-apollo": "3.0.0",
     "react-dom": "^16.8.6",
     "react-moment": "^0.7.0",
     "react-router": "^4.2.0",
