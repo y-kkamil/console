@@ -52,11 +52,9 @@ export const GenericList = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    if (Array.isArray(entries)) {
-      setFilteredEntries(
-        filterEntries([...entries], searchQuery, textSearchProperties),
-      );
-    }
+    setFilteredEntries(
+      filterEntries([...entries], searchQuery, textSearchProperties),
+    );
   }, [searchQuery, setFilteredEntries, entries]);
 
   const headerActions = (
