@@ -89,7 +89,8 @@ export default function ScenarioApplications({ updateApplicationsCount }) {
 
   const rowRenderer = application => [
     application.name,
-    application.apis.totalCount + application.eventAPIs.totalCount,
+    application.apiDefinitions.totalCount +
+      application.eventDefinitions.totalCount,
   ];
 
   const actions = [

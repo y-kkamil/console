@@ -4,7 +4,11 @@ import { compose } from 'recompose';
 import { SEND_NOTIFICATION } from './../../../gql';
 
 import EditApi from './EditApi.component';
-import { GET_API_DATA, UPDATE_API, UPDATE_EVENT_API } from './gql';
+import {
+  GET_API_DATA,
+  UPDATE_API_DEFINITION,
+  UPDATE_EVENT_DEFINITION,
+} from './gql';
 export default compose(
   graphql(SEND_NOTIFICATION, {
     name: 'sendNotification',
@@ -19,9 +23,9 @@ export default compose(
       };
     },
   }),
-  graphql(UPDATE_API, {
+  graphql(UPDATE_API_DEFINITION, {
     props: ({ mutate }) => ({
-      updateAPI: async (id, input) => {
+      updateAPIDefinition: async (id, input) => {
         mutate({
           variables: {
             id,
@@ -31,9 +35,9 @@ export default compose(
       },
     }),
   }),
-  graphql(UPDATE_EVENT_API, {
+  graphql(UPDATE_EVENT_DEFINITION, {
     props: ({ mutate }) => ({
-      updateEventAPI: async (id, input) => {
+      updateEventDefinition: async (id, input) => {
         mutate({
           variables: {
             id,

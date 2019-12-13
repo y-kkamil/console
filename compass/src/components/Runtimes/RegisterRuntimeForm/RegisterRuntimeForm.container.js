@@ -1,12 +1,12 @@
 import { graphql } from 'react-apollo';
 import { compose } from 'recompose';
 
-import { ADD_RUNTIME } from '../gql';
+import { REGISTER_RUNTIME } from '../gql';
 
-import CreateRuntimeForm from './CreateRuntimeForm.component';
+import RegisterRuntimeForm from './RegisterRuntimeForm.component';
 
 export default compose(
-  graphql(ADD_RUNTIME, {
+  graphql(REGISTER_RUNTIME, {
     props: ({ mutate, error }) => ({
       addRuntime: data =>
         mutate({
@@ -16,4 +16,4 @@ export default compose(
         }),
     }),
   }),
-)(CreateRuntimeForm);
+)(RegisterRuntimeForm);
