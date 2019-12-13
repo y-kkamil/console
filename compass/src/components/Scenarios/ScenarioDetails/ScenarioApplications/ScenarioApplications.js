@@ -75,8 +75,7 @@ export default function ScenarioApplications({ updateApplicationsCount }) {
       undefined,
       scenarioName,
       async () => {
-        const refetched = await refetchApplications();
-        applicationsForScenario = refetched.data;
+        await refetchApplications();
         updateApplicationsCount(
           applicationsForScenario.applications.totalCount,
         );

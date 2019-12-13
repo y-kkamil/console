@@ -52,7 +52,7 @@ export const GenericList = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    if (entries && entries.length) {
+    if (Array.isArray(entries)) {
       setFilteredEntries(
         filterEntries([...entries], searchQuery, textSearchProperties),
       );
