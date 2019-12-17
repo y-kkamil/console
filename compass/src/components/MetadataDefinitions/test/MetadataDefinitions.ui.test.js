@@ -18,9 +18,7 @@ describe('MetadataDefinitions UI', () => {
 
   afterAll(() => {
     expect(console.error.mock.calls[0][0]).toMatchSnapshot();
-    if (console.warn.mock.calls.length) {
-      expect(console.warn.mock.calls[0][0]).toMatchSnapshot();
-    }
+    expect(console.warn).not.toHaveBeenCalled();
   });
 
   it(`Renders "loading" when there's no GQL response`, async () => {
