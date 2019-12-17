@@ -25,5 +25,6 @@ describe('RegisterRuntimeForm', () => {
     );
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
+    expect(console.warn).not.toHaveBeenCalled();
   });
 });
