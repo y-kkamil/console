@@ -9,6 +9,18 @@ import { render, fireEvent } from '@testing-library/react';
 import UpdateApplicationForm from '../UpdateApplicationForm.container';
 
 describe('UpdateApplicationForm UI', () => {
+  //for "Warning: componentWillReceiveProps has been renamed"
+  console.warn = jest.fn();
+
+  afterEach(() => {
+    console.warn.mockReset();
+  });
+
+  afterAll(() => {
+    if (console.warn.mock.calls.length) {
+      expect(console.warn.mock.calls[0][0]).toMatchSnapshot();
+    }
+  });
   const emptyRef = { current: null };
 
   it('Displays "loading" when there is no gql response', async () => {

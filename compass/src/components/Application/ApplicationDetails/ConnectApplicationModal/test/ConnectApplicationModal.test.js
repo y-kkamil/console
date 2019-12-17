@@ -1,9 +1,10 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, wait } from '@apollo/react-testing';
 import { mount } from 'enzyme';
 import { validMock, errorMock } from './mock';
 import { Modal } from 'fundamental-react';
 import { act } from 'react-dom/test-utils';
+import { render, fireEvent, queryByLabelText } from '@testing-library/react';
 
 import ConnectApplicationModal from '../ConnectApplicationModal.container';
 
@@ -21,39 +22,41 @@ describe('ConnectApplicationModal Container', () => {
     }
   });
 
-  const openModal = async component =>
-    await component
-      .findWhere(
-        t => t.type() == 'button' && t.text() === 'Connect Application',
-      )
-      .simulate('click');
+  const openModal = async getByRoleFn => {
+    const modalOpeningButton = getByRoleFn('button'); //get the only button around
+    expect(modalOpeningButton.textContent).toBe('Connect Application'); // make sure this is the right one
+    modalOpeningButton.click();
+  };
 
   it('Modal is initially closed and opens after button click', async () => {
-    const component = mount(
+    const { queryByLabelText, getByRole, unmount } = render(
       <MockedProvider addTypename={false} mocks={validMock}>
         <ConnectApplicationModal applicationId="app-id" />
       </MockedProvider>,
     );
 
-    expect(component.find(Modal).getDOMNode()).toBeFalsy();
+    expect(queryByLabelText('Connect Application')).not.toBeInTheDocument();
+    await openModal(getByRole);
 
-    await openModal(component);
+    expect(queryByLabelText('Connect Application')).toBeInTheDocument();
 
-    expect(component.find(Modal).getDOMNode()).toBeTruthy();
+    unmount();
   });
 
   it('Modal is in "loading" state after open', async () => {
-    const component = mount(
+    const { queryAllByRole, getByRole, unmount } = render(
       <MockedProvider addTypename={false} mocks={validMock}>
         <ConnectApplicationModal applicationId="app-id" />
       </MockedProvider>,
     );
+    //await wait(0);
+    await openModal(getByRole);
 
-    await openModal(component);
+    const loadings = queryAllByRole('textbox');
+    expect(loadings).toHaveLength(2);
 
-    const inputs = component
-      .findWhere(t => t.type() === 'input')
-      .map(i => i.instance().value);
-    expect(inputs).toMatchSnapshot();
+    expect(loadings[0].value).toBe('Loading...');
+    expect(loadings[1].value).toBe('Loading...');
+    unmount();
   });
 });
