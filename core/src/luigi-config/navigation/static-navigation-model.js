@@ -50,8 +50,8 @@ export function getStaticChildrenNodesForNamespace() {
       pathSegment: 'pods',
       navigationContext: 'pods',
       label: 'Pods',
-      viewUrl: config.coreModuleUrl + '/home/namespaces/:namespaceId/pods',
-      viewGroup: coreUIViewGroupName
+      viewUrl: '/consoleapp.html#/home/namespaces/:namespaceId/pods',
+      viewGroup: consoleViewGroupName
     },
     {
       category: 'Workloads',
@@ -66,8 +66,8 @@ export function getStaticChildrenNodesForNamespace() {
       pathSegment: 'deployments',
       navigationContext: 'deployments',
       label: 'Deployments',
-      viewUrl: config.coreModuleUrl + '/home/namespaces/:namespaceId/deployments',
-      viewGroup: coreUIViewGroupName
+      viewUrl: '/consoleapp.html#/home/namespaces/:namespaceId/deployments',
+      viewGroup: consoleViewGroupName
     },
     {
       category: {

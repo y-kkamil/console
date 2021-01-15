@@ -13,9 +13,6 @@ import ApiRules from 'components/ApiRules/ApiRules';
 import ApiRuleDetails from 'components/ApiRules/ApiRuleDetails/ApiRuleDetails';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 
-import Pods from 'components/Pods/Pods';
-import Deployments from 'components/Deployments/Deployments';
-
 import Services from 'components/Services/Services';
 import ServiceDetails from 'components/Services/ServiceDetails/ServiceDetails';
 
@@ -38,8 +35,6 @@ import {
   NAMESPACES_TITLE,
   SERVICES_TITLE,
   SECRETS_TITLE,
-  PODS_TITLE,
-  DEPLOYMENTS_TITLE,
 } from 'shared/constants';
 
 export default function App() {
@@ -53,17 +48,6 @@ export default function App() {
       <Route
         path="/namespaces"
         render={withTitle(NAMESPACES_TITLE, NamespaceList)}
-      />
-
-      <Route
-        exact
-        path="/home/namespaces/:namespaceId/pods"
-        render={withTitle(PODS_TITLE, RoutedPodList)}
-      />
-      <Route
-        exact
-        path="/home/namespaces/:namespaceId/deployments"
-        render={withTitle(DEPLOYMENTS_TITLE, RoutedDeploymentList)}
       />
 
       <Route
@@ -174,13 +158,6 @@ function RoutedOAuthClientDetails({ match }) {
       name={match.params.clientName}
     />
   );
-}
-function RoutedPodList({ match }) {
-  return <Pods namespace={match.params.namespaceId} />;
-}
-
-function RoutedDeploymentList({ match }) {
-  return <Deployments namespace={match.params.namespaceId} />;
 }
 
 function RoutedServicesList({ match }) {
