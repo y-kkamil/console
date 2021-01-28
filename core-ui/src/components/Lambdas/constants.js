@@ -618,6 +618,22 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
       TEXT: 'Custom',
       TOOLTIP_MESSAGE: 'This variable was provided by the user.',
     },
+    CONFIG_MAP: {
+      TEXT: 'ConfigMap',
+      TOOLTIP_MESSAGE: 'This variable was applied from a ConfigMap.',
+      ERRORS: {
+        NOT_EXIST: 'ConfigMap does not exist.',
+        KEY_NOT_EXIST: 'There is no such key in the ConfigMap.',
+      },
+    },
+    SECRET: {
+      TEXT: 'Secret',
+      TOOLTIP_MESSAGE: 'This variable was applied from a Secret.',
+      ERRORS: {
+        NOT_EXIST: 'Secret does not exist.',
+        KEY_NOT_EXIST: 'There is no such key in the Secret.',
+      },
+    },
     BINDING_USAGE: {
       TEXT: 'Service Binding',
       TOOLTIP_MESSAGE:

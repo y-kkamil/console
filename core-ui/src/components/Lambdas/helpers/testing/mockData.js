@@ -42,9 +42,18 @@ export const lambdaMock = {
     {
       name: 'PICO',
       valueFrom: {
-        type: 'Secret',
         name: 'secret',
         key: 'KEY',
+        type: 'Secret',
+        optional: false,
+      },
+    },
+    {
+      name: 'BAR',
+      valueFrom: {
+        name: 'cm',
+        key: 'KEY',
+        type: 'ConfigMap',
         optional: false,
       },
     },

@@ -86,17 +86,45 @@ export default function EditVariablesForm({
     setVariables(newVariables);
   }
 
-  function prepareVariablesMutationInput() {
+  function prepareVariablesMutationInput(variables) {
     return variables.map(variable => ({
       name: variable.name,
       value: variable.value,
     }));
   }
 
-  function handleFormSubmit() {
-    const preparedVariable = prepareVariablesMutationInput();
+  function prepareValueFromVariable(variable, type) {
+    return {
+      name: variable.name,
+      value: '',
+      valueFrom: {
+        type: type,
+        name: variable.resourceName,
+        key: variable.resourceKey,
+      },
+    };
+  }
+
+  function prepareValueFromVariablesMutationInput(customValueFromVariables) {
+    return customValueFromVariables.map(variable => {
+      if (variable.type === VARIABLE_TYPE.CONFIG_MAP) {
+        return prepareValueFromVariable(variable, 'ConfigMap');
+      } else if (variable.type === VARIABLE_TYPE.SECRET) {
+        return prepareValueFromVariable(variable, 'Secret');
+      } else {
+        return {};
+      }
+    });
+  }
+
+  function handleFormSubmit(variables, customValueFromVariables) {
+    const preparedVariable = prepareVariablesMutationInput(variables);
+    const preparedValueFromVariables = prepareValueFromVariablesMutationInput(
+      customValueFromVariables,
+    );
+
     updateLambdaVariables({
-      env: [...preparedVariable, ...customValueFromVariables],
+      env: [...preparedVariable, ...preparedValueFromVariables],
     });
   }
 
@@ -136,7 +164,9 @@ export default function EditVariablesForm({
   return (
     <form
       ref={formElementRef}
-      onSubmit={handleFormSubmit}
+      onSubmit={() => {
+        handleFormSubmit(variables, customValueFromVariables);
+      }}
       className="edit-lambda-variables-form"
     >
       <GenericList

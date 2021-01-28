@@ -11,6 +11,8 @@ import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 
 import LambdaVariables from '../LambdaVariables';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
+import { MockedProvider } from '@apollo/react-testing';
+import { act } from 'react-dom/test-utils';
 
 const timeout = 10000;
 
@@ -39,8 +41,36 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       value: 'bar',
     },
   });
+  const secretValueFromVariable = newVariableModel({
+    type: VARIABLE_TYPE.SECRET,
+    variable: {
+      name: 'BAZ',
+      value: '',
+      namespace: 'default',
+    },
+    additionalProps: {
+      resourceKey: 'test-key',
+      resourceName: 'test-secret',
+    },
+  });
+  const configMapValueFromVariable = newVariableModel({
+    type: VARIABLE_TYPE.CONFIG_MAP,
+    variable: {
+      name: 'QAZ',
+      value: '',
+      namespace: 'default',
+    },
+    additionalProps: {
+      resourceKey: 'test-key',
+      resourceName: 'test-cm',
+    },
+  });
 
   const customVariables = [customVariable1, customVariable2];
+  const valueFromVariables = [
+    secretValueFromVariable,
+    configMapValueFromVariable,
+  ];
   const injectedVariables = [
     newVariableModel({
       type: VARIABLE_TYPE.BINDING_USAGE,
@@ -109,6 +139,38 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
         ENVIRONMENT_VARIABLES_PANEL.WARNINGS.TEXT,
       );
       expect(rowsWithWarningText).toHaveLength(2);
+    },
+    timeout,
+  );
+
+  it(
+    'should render table with valueFrom variables',
+    async () => {
+      const { container, queryByRole, queryAllByRole, getAllByText } = render(
+        <MockedProvider>
+          <LambdaVariables
+            lambda={lambdaMock}
+            customVariables={[]}
+            customValueFromVariables={valueFromVariables}
+            injectedVariables={[]}
+          />
+        </MockedProvider>,
+      );
+
+      const table = queryByRole('table');
+      expect(table).toBeInTheDocument();
+
+      expect(queryAllByRole('row')).toHaveLength(3); // header + 2 element - cm and secret;
+
+      const secretVars = getAllByText(
+        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TEXT,
+      );
+      expect(secretVars).toHaveLength(1);
+
+      const cmVars = getAllByText(
+        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TEXT,
+      );
+      expect(cmVars).toHaveLength(1);
     },
     timeout,
   );
